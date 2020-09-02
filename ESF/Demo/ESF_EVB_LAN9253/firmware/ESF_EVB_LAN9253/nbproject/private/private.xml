@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/SOC_Portable/SAMD51/ESF_APIHook.h</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/Source/SSC/ecatslv.c</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/Source/SSC/ecatappl.c</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/Source/SSC/ecat_def.h</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/SOC_Portable/SAMD51/Drivers.c</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/Source/ESC/LAN925x.c</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/Demo/ESF_EVB_LAN9253/firmware/src/Developer_Test.h</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/Demo/ESF_EVB_LAN9253/firmware/src/config/default/tasks.c</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/Source/SSC/sample_app.c</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/Source/ESC/ESC_Utils.h</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/Demo/ESF_EVB_LAN9253/firmware/src/Developer_Test.c</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/SOC_Portable/SAMD51/Drivers.h</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/Source/ESC/LAN925x.h</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/Demo/ESF_EVB_LAN9253/firmware/src/main.c</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/SOC_Portable/SAMD51/ESF_Config.h</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/Demo/ESF_EVB_LAN9253/firmware/src/app.c</file>
+            <file>file:/D:/git_comit/ethercat-software-framework-public/ESF/Source/SSC/esc.h</file>
+        </group>
+    </open-files>
+</project-private>
