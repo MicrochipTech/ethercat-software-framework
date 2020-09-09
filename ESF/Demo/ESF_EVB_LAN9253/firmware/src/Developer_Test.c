@@ -502,7 +502,7 @@ void Entire_PDRAM_Access()
 
 /*******************************************************************************
 This test case verifies whether entire 8KB PDRAM space is accessible
-Note: Disable all syncmanagers before this test
+Note: Disable all sync managers before this test
 *******************************************************************************/
 void Indirect_Entire_PDRAM_Access()
 {
@@ -558,7 +558,7 @@ void Get_ByteOrderReg()
 /*******************************************************************************
 This test case verifies if entire 8KB Ether CAT core Process Data RAM space
 can be accessed via direct mapped register mode with different start addresses
-and different lengths using HBI Demultiplexed modes.
+and different lengths.
 *******************************************************************************/
 void PDRAM_Diff_Addr_And_Len()
 {

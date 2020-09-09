@@ -147,6 +147,10 @@ extern "C" {
     void    ESF_gpioSet(UINT8 u8port,UINT8 u8pin);
     void    ESF_gpioClear(UINT8 u8port,UINT8 u8pin);
 	void    ESF_PDI_Init();
+
+    void ESC_IRQ_cb(uintptr_t context);
+    void ESC_Sync0_cb(uintptr_t context);
+    void ESC_Sync1_cb(uintptr_t context);
 #ifdef __cplusplus
 }
 #endif
