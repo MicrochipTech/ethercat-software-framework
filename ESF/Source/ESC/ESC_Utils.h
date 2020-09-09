@@ -67,39 +67,18 @@
 #define CMD_DUAL_DATA_WRITE                         0x32
 #define CMD_DUAL_ADDR_DATA_WRITE                    0xB2
 #define CMD_QUAD_DATA_WRITE                         0x62
-#define CMD_QUAD_ADDR_DARA_WRITE                    0xE2
+#define CMD_QUAD_ADDR_DATA_WRITE                    0xE2
 #define CMD_ENABLE_SQI                              0x38
 #define CMD_RESET_SQI                               0xFF
 
-#define CMD_SERIAL_READ_DUMMY                       0
-#define CMD_SQI_SETCFG_DUMMY                        0
 #define CMD_SPI_FAST_READ_DUMMY                     1
-#define CMD_SQI_FAST_READ_DUMMY                     3
-#define CMD_DUAL_OP_READ_DUMMY                      1
-#define CMD_DUAL_IO_READ_DUMMY                      2
-#define CMD_QUAD_OP_READ_DUMMY                      1
-#define CMD_QUAD_IO_READ_DUMMY                      4
-#define CMD_SERIAL_WRITE_DUMMY                      0
-#define CMD_DUAL_DATA_WRITE_DUMMY                   0
-#define CMD_DUAL_ADDR_DATA_WRITE_DUMMY              0
-#define CMD_QUAD_DATA_WRITE_DUMMY                   0
-#define CMD_QUAD_ADDR_DARA_WRITE_DUMMY              0
 
 #define QSPI_SPI_ONE_BYTE_CLK_COUNT                 8
 #define QSPI_SQI_ONE_BYTE_CLK_COUNT                 2
 
-#define ESC_CSR_CMD_REG                             0x304
-#define ESC_CSR_DATA_REG                            0x300
 #define ESC_WRITE_BYTE                              0x80
 #define ESC_READ_BYTE                               0xC0
 #define ESC_CSR_BUSY                                0x80
-
-#define LAN9253_ECAT_PRAM_RD_ADDR_LENGTH_REG		0x308 
-#define LAN9253_ECAT_PRAM_RD_CMD_REG				0x30C 
-#define LAN9253_ECAT_PRAM_WR_ADDR_LENGTH_REG		0x310
-#define LAN9253_ECAT_PRAM_WR_CMD_REG				0x314
-#define LAN9253_ECAT_PRAM_WR_DATA_FIFO_REG          0x20
-#define LAN9253_ECAT_PRAM_RD_DATA_FIFO_REG          0x04
 
 #define SETCFG_MAX_DATA_BYTES                       39
 #define ONE_BYTE_MAX_XFR_LEN                        127
@@ -168,9 +147,5 @@ UINT8 GetDummyBytesRequired (UINT8 u8SPIType, UINT16 u16IAT, UINT16 u16SPIClkCou
 void PDI_IRQ_Interrupt();
 void PDI_Init_SYNC_Interrupts();
 void ESC_Init();
-
-void ESC_IRQ_cb(uintptr_t context);
-void ESC_Sync0_cb(uintptr_t context);
-void ESC_Sync1_cb(uintptr_t context);
 
 #endif /* ESC_UTILS_H_ */
