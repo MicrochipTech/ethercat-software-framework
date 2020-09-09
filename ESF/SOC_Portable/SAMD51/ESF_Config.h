@@ -41,7 +41,7 @@
 /*
  * ESF_PDI - EtherCAT Software Framework Process Data Interface
  * The PDI can be selected as per the user.
- * The PDI can be as SPI, QSPI & HBI, etc.,
+ * The PDI can be as SPI, QSPI etc.,
  * All the ESF Hooks API's work based on the PDI selection
  */
 
