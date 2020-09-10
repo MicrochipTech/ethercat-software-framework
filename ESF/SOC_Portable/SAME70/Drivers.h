@@ -14,8 +14,6 @@
 #include <stdint.h>
 #include "definitions.h"
 
-#define ESC_CSR_CMD_REG                             0x304
-#define ESC_CSR_DATA_REG                            0x300
 #define ESC_WRITE_BYTE                              0x80
 #define ESC_READ_BYTE                               0xC0
 #define ESC_CSR_BUSY                                0x80
@@ -70,9 +68,9 @@ extern "C" {
     void SMC_ProcessRAMRead(uint8_t **pData, uint16_t address, uint16_t length);
     void SMC_Indirect_ProcessRAMWrite(uint8_t *pData, uint16_t address, uint16_t length);
     
-    void ether_cat_sync1_cb(PIO_PIN pin, uintptr_t context);
-    void ether_cat_sync0_cb(PIO_PIN pin, uintptr_t context);
-    void ether_cat_escirq_cb(PIO_PIN pin, uintptr_t context);
+    void ESC_Sync1_cb(PIO_PIN pin, uintptr_t context);
+    void ESC_Sync0_cb(PIO_PIN pin, uintptr_t context);
+    void ESC_IRQ_cb(PIO_PIN pin, uintptr_t context);
     
 #ifdef ESF_HBI_DEBUG
     void SMC_SystemCSR_Write_DWord(uint32_t writeData, uint16_t Address);
