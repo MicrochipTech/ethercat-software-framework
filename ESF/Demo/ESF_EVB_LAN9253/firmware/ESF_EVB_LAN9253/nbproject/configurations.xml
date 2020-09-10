@@ -128,6 +128,7 @@
           <logicalFolder name="f1" displayName="ESC" projectFiles="true">
             <itemPath>../../../../Source/ESC/ESC_Utils.h</itemPath>
             <itemPath>../../../../Source/ESC/LAN925x.h</itemPath>
+            <itemPath>../../../../Source/ESC/ProjectVersion.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f2" displayName="SSC" projectFiles="true">
             <itemPath>../../../../Source/SSC/applInterface.h</itemPath>
