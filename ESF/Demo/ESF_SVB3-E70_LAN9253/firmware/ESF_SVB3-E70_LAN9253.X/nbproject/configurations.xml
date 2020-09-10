@@ -126,7 +126,6 @@
             <itemPath>../../../../Source/SSC/ecatcoe.h</itemPath>
             <itemPath>../../../../Source/SSC/ecatfoe.h</itemPath>
             <itemPath>../../../../Source/SSC/ecatslv.h</itemPath>
-            <itemPath>../../../../Source/SSC/eeprom.h</itemPath>
             <itemPath>../../../../Source/SSC/emcy.h</itemPath>
             <itemPath>../../../../Source/SSC/esc.h</itemPath>
             <itemPath>../../../../Source/SSC/foeappl.h</itemPath>
@@ -235,7 +234,7 @@
         <targetDevice>ATSAME70Q21B</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>noID</platformTool>
+        <platformTool></platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>2.30</languageToolchainVersion>
         <platform>3</platform>
@@ -936,7 +935,7 @@
         <targetDevice>ATSAME70Q21B</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>noID</platformTool>
+        <platformTool></platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>2.30</languageToolchainVersion>
         <platform>3</platform>
@@ -1637,7 +1636,7 @@
         <targetDevice>ATSAME70Q21B</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>noID</platformTool>
+        <platformTool></platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>2.30</languageToolchainVersion>
         <platform>3</platform>

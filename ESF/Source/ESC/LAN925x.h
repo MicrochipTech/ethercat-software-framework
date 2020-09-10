@@ -58,6 +58,12 @@
         #define LAN925x_CSR_INT_STS			0x3058
         #define LAN925x_POWER_MGMT_CTL		0x3084
     #endif
+#elif (ESF_PDI == HBI)
+    #define LAN925x_BYTE_ORDER_REG		0x64
+    #define LAN925x_CSR_INT_CONF		0x54
+    #define LAN925x_CSR_INT_EN			0x5C
+    #define LAN925x_CSR_INT_STS			0x58
+    #define LAN925x_POWER_MGMT_CTL		0x84
 #endif
 
 #define LAN925x_ECAT_PRAM_RD_ADDR_LENGTH_REG		0x308
@@ -91,6 +97,16 @@
 
 #define PRAM_READ_FIFO_REG			0x04
 #define PRAM_WRITE_FIFO_REG			0x20
+
+#define HBI_INDEXED_DATA0_REG		0x04
+#define HBI_INDEXED_DATA1_REG		0x0c
+#define HBI_INDEXED_DATA2_REG		0x14
+
+#define HBI_INDEXED_INDEX0_REG		0x00
+#define HBI_INDEXED_INDEX1_REG		0x08
+#define HBI_INDEXED_INDEX2_REG		0x10
+
+#define HBI_INDEXED_PRAM_READ_WRITE_FIFO 0x18
 
 #define PRAM_RW_ABORT_MASK			(1 << 30)
 #define PRAM_RW_BUSY_32B			(1 << 31)
