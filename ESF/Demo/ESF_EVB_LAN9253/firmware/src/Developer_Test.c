@@ -258,7 +258,7 @@ void PDRAM_1_2_4_8_Byte_Access()
 		HW_EscWrite((MEM_ADDR *)(&wData), pdramAddress, 4);
 		
 		wData = 0xAA;
-		UINT32 readval;
+		UINT32 readval = 0;
 		HW_EscWrite((MEM_ADDR *)(&wData), pdramAddress, 1);
 		HW_EscRead((MEM_ADDR *)&readval, pdramAddress, 1);
 
@@ -270,6 +270,7 @@ void PDRAM_1_2_4_8_Byte_Access()
 		}
 		
 		wData = 0x112233;
+        readval = 0;
 		HW_EscWrite((MEM_ADDR *)(&wData), pdramAddress, 3);
 		HW_EscRead((MEM_ADDR *)&readval, pdramAddress, 3);
 
@@ -282,6 +283,7 @@ void PDRAM_1_2_4_8_Byte_Access()
 		
 		
 		wData = 0xBBBB;
+        readval = 0;
 		HW_EscWrite((MEM_ADDR *)&wData, pdramAddress, 2);
 		HW_EscRead((MEM_ADDR *)&readval, pdramAddress,2);
 		status = memcmp(&wData, &readval, 2);
@@ -292,6 +294,7 @@ void PDRAM_1_2_4_8_Byte_Access()
 		}
 		
 		wData = 0xCCCCCCCC;
+        readval = 0;
 		HW_EscWrite((MEM_ADDR *)&wData, pdramAddress, 4);
 		HW_EscRead((MEM_ADDR *)&readval, pdramAddress, 4);
 		status = memcmp(&wData, &readval, 4);
@@ -634,7 +637,10 @@ void Indirect_PDRAM_Diff_Addr_And_Len()
 
 void test_direct_mode()
 {
-	
+    Get_ByteOrderReg();
+    
+	Get_BeckoffIP();
+    
 	Get_ChipID();
 
 	ECAT_PDRAM_SystemCSR_Access();
@@ -643,11 +649,6 @@ void test_direct_mode()
 	
 	Entire_ECAT_core_Access();
 
-	Get_BeckoffIP();
- 
-	Get_ByteOrderReg();
-	
-	
 	PDRAM_Diff_Addr_And_Len();
 }
 
