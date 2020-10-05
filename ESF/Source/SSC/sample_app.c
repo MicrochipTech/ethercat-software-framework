@@ -16,7 +16,7 @@
 *******************************************************************************/
 
 /*****************************************************************************
- Copyright (C) 2010 Microchip Technology Inc. and its subsidiaries.
+ Copyright (C) 2020 Microchip Technology Inc. and its subsidiaries.
 
 Microchip Technology Inc. and its subsidiaries.
 
