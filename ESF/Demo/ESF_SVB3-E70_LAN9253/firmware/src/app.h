@@ -18,8 +18,31 @@
     are defined here for convenience.
 *******************************************************************************/
 
-#ifndef _APP_H
-#define _APP_H
+/*******************************************************************************
+* Copyright (C) 2010 Microchip Technology Inc. and its subsidiaries.
+*
+* Subject to your compliance with these terms, you may use Microchip software
+* and any derivatives exclusively with Microchip products. It is your
+* responsibility to comply with third party license terms applicable to your
+* use of third party software (including open source software) that may
+* accompany Microchip software.
+*
+* THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER
+* EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE, INCLUDING ANY IMPLIED
+* WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A
+* PARTICULAR PURPOSE.
+*
+* IN NO EVENT WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE,
+* INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND
+* WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS
+* BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE. TO THE
+* FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN
+* ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
+* THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
+*******************************************************************************/
+
+#ifndef _APP_H_
+#define _APP_H_
 
 // *****************************************************************************
 // *****************************************************************************
@@ -46,7 +69,23 @@ extern "C" {
 // Section: Type Definitions
 // *****************************************************************************
 // *****************************************************************************
+// ATSAMD51 BANK B start address 
+#define APP_NVM_BANKB_START_ADDRESS     0x40000
+// Number of pages for BANK B for the device ATSAM E70    
+#define APP_FLASH_PAGES_BANKB           FLASH_PAGE_SIZE/2
 
+// Total size for the BANK B 
+#define APP_MAX_NVM_BANK_SIZE           0x40000
+    
+// Bootloader space size reserved     
+#define APP_BOOTLOADER_SIZE             0
+// Application Page size
+#define APP_PAGE_SIZE                   IFLASH_PAGE_SIZE
+#define APP_ERASE_BLOCK_SIZE            8192
+#define APP_PAGES_IN_ERASE_BLOCK        APP_ERASE_BLOCK_SIZE/APP_PAGE_SIZE
+
+#define APP_DATA_SIZE                   APP_ERASE_BLOCK_SIZE
+#define WORDS(x)                        ((int)((x) / sizeof(uint32_t)))    
 // *****************************************************************************
 /* Application states
 
@@ -170,9 +209,33 @@ void APP_Initialize ( void );
 
 void APP_Tasks( void );
 
+/*******************************************************************************
+  Function:
+void APP_FlashWrite( UINT32 startAddress, UINT8 *flash_data )
 
+  Summary:
+    MPLAB Harmony NVM write  application function
 
-#endif /* _APP_H */
+  Description:
+    This routine is used to write the flash data to the specific BANK address 
+    location. This routine writes 8192 bytes at a time.
+
+  Precondition:
+    The system and application initialization ("SYS_Initialize") should be
+    called before calling this.
+
+  Parameters:
+    None.
+
+  Returns:
+    None.
+
+  Remarks:
+    This routine is called from the slave stack sample application FoE write
+    function.
+ */
+void APP_FlashWrite( uint32_t startAddress, uint8_t *flash_data );
+
 
 //DOM-IGNORE-BEGIN
 #ifdef __cplusplus
@@ -180,6 +243,7 @@ void APP_Tasks( void );
 #endif
 //DOM-IGNORE-END
 
+#endif /* _APP_H_ */
 /*******************************************************************************
  End of File
  */

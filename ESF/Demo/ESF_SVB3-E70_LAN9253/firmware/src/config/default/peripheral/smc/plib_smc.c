@@ -41,7 +41,7 @@
 *******************************************************************************/
 #include "plib_smc.h"
 #include "device.h"
-
+#include "ESF_Config.h"
 
 /* Function:
     void SMC_Initialize( void )
@@ -62,20 +62,32 @@ void SMC_Initialize( void )
 
     /* Chip Select CS0 Timings */
     /* Setup SMC SETUP register */
-    SMC_REGS->SMC_CS_NUMBER[0].SMC_SETUP= SMC_SETUP_NWE_SETUP(16) | SMC_SETUP_NCS_WR_SETUP(16) | SMC_SETUP_NRD_SETUP(16) | SMC_SETUP_NCS_RD_SETUP(16);
-
+    SMC_REGS->SMC_CS_NUMBER[0].SMC_SETUP= SMC_SETUP_NWE_SETUP(1) | SMC_SETUP_NCS_WR_SETUP(1) | SMC_SETUP_NRD_SETUP(1) | SMC_SETUP_NCS_RD_SETUP(1);
     /* Setup SMC CYCLE register */
-    SMC_REGS->SMC_CS_NUMBER[0].SMC_CYCLE= SMC_CYCLE_NWE_CYCLE(3) | SMC_CYCLE_NRD_CYCLE(3);
-
+    SMC_REGS->SMC_CS_NUMBER[0].SMC_CYCLE= SMC_CYCLE_NWE_CYCLE(60) | SMC_CYCLE_NRD_CYCLE(60);
     /* Setup SMC_PULSE register */
-    SMC_REGS->SMC_CS_NUMBER[0].SMC_PULSE= SMC_PULSE_NWE_PULSE(16) | SMC_PULSE_NCS_WR_PULSE(16) | SMC_PULSE_NRD_PULSE(16) | SMC_PULSE_NCS_RD_PULSE(16);
-
+   SMC_REGS->SMC_CS_NUMBER[0].SMC_PULSE= SMC_PULSE_NWE_PULSE(20) | SMC_PULSE_NCS_WR_PULSE(25) | SMC_PULSE_NRD_PULSE(20) | SMC_PULSE_NCS_RD_PULSE(25);
     /* Setup SMC MODE register */
+#ifdef _IS_HBI_DEMUX_16BIT_SUPPORT
+#ifdef DIRECT_MODE
+    SMC_REGS->SMC_CS_NUMBER[0].SMC_MODE= SMC_MODE_EXNW_MODE_FROZEN    \
+            | SMC_MODE_WRITE_MODE_Msk | SMC_MODE_READ_MODE_Msk  | SMC_MODE_DBW_16_BIT | SMC_MODE_BAT_BYTE_SELECT;
+    SMC_REGS->SMC_CS_NUMBER[0].SMC_MODE |= SMC_MODE_DBW_Msk;
+#else
     SMC_REGS->SMC_CS_NUMBER[0].SMC_MODE= SMC_MODE_EXNW_MODE_DISABLED    \
-                                          | SMC_MODE_WRITE_MODE_Msk | SMC_MODE_READ_MODE_Msk  | SMC_MODE_DBW_16_BIT | SMC_MODE_BAT_BYTE_SELECT;
-
-
-
+            | SMC_MODE_WRITE_MODE_Msk | SMC_MODE_READ_MODE_Msk  | SMC_MODE_DBW_16_BIT | SMC_MODE_BAT_BYTE_SELECT;
+#endif
+#endif
+#ifdef _IS_HBI_DEMUX_8BIT_SUPPORT
+#ifdef DIRECT_MODE
+    SMC_REGS->SMC_CS_NUMBER[0].SMC_MODE= SMC_MODE_EXNW_MODE_FROZEN    \
+                                          | SMC_MODE_WRITE_MODE_Msk | SMC_MODE_READ_MODE_Msk  | SMC_MODE_DBW_8_BIT | SMC_MODE_BAT_BYTE_SELECT;
+    SMC_REGS->SMC_CS_NUMBER[0].SMC_MODE &= ~SMC_MODE_DBW_Msk;
+#else
+    SMC_REGS->SMC_CS_NUMBER[0].SMC_MODE= SMC_MODE_EXNW_MODE_DISABLED    \
+                                          | SMC_MODE_WRITE_MODE_Msk | SMC_MODE_READ_MODE_Msk  | SMC_MODE_DBW_8_BIT | SMC_MODE_BAT_BYTE_SELECT;
+#endif
+#endif
 
 
 } /* SMC_Initialize */
@@ -120,16 +132,16 @@ uint32_t SMC_ReadDWord(uint16_t Addr)
 void SMC_Write(uint8_t * WriteBuffer, uint16_t Addr, uint16_t count)
 {
 	//Assuming SMC device is connected to EBI_CS0
-	uint8_t *ptrToWrite =(uint8_t *)(EBI_CS0_ADDR + Addr);
+	volatile uint8_t *ptrToWrite =(uint8_t *)(EBI_CS0_ADDR + Addr);
 
-	memcpy(ptrToWrite, (uint8_t *)WriteBuffer, count);
+	memcpy((void *)ptrToWrite, (void *)WriteBuffer, count);
 
 }
 
 void SMC_WriteByte(uint8_t data, uint16_t Addr)
 {
 	//Assuming SMC device is connected to EBI_CS0
-	uint32_t *ptrToWrite = (uint32_t *)(EBI_CS0_ADDR + Addr);
+	volatile uint32_t *ptrToWrite = (uint32_t *)(EBI_CS0_ADDR + Addr);
 	
 	*((uint8_t *)ptrToWrite) = data;
 }

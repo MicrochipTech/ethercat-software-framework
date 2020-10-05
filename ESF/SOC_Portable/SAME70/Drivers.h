@@ -1,9 +1,39 @@
-/*
- * Drivers.h
- *
- * Created: 1/30/2020 9:23:54 AM
- *  Author: I52915
- */ 
+/*******************************************************************************
+ SOC portable drivers header file
+
+  Company:
+    Microchip Technology Inc.
+
+  File Name:
+    Drivers.h
+
+  Description:
+    This file contains the macro's and function prototype's
+    which are used in Drivers.c (SOC portable)
+*******************************************************************************/
+
+/*******************************************************************************
+* Copyright (C) 2010 Microchip Technology Inc. and its subsidiaries.
+*
+* Subject to your compliance with these terms, you may use Microchip software
+* and any derivatives exclusively with Microchip products. It is your
+* responsibility to comply with third party license terms applicable to your
+* use of third party software (including open source software) that may
+* accompany Microchip software.
+*
+* THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER
+* EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE, INCLUDING ANY IMPLIED
+* WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A
+* PARTICULAR PURPOSE.
+*
+* IN NO EVENT WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE,
+* INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND
+* WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS
+* BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE. TO THE
+* FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN
+* ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
+* THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
+*******************************************************************************/
 
 
 #ifndef DRIVERS_H_
@@ -14,22 +44,12 @@
 #include <stdint.h>
 #include "definitions.h"
 
-#define ESC_WRITE_BYTE                              0x80
-#define ESC_READ_BYTE                               0xC0
-#define ESC_CSR_BUSY                                0x80
-
-#define SETCFG_MAX_DATA_BYTES                       39
-#define ONE_BYTE_MAX_XFR_LEN                        127
-
-#define DWORD_LENGTH                                4
-
-/* Wait signal states */
-#define WAIT FALSE
-#define ACK  TRUE
-
-#define SYNC0                                       PIO_PIN_PB1
-#define SYNC1                                       PIO_PIN_PB2
-#define ESCIRQ                                      PIO_PIN_PB0
+/* Configured PA20 and PA21 pins 
+ * 
+ * Can be modified with appropriate pins for specific use 
+ */
+#define GPIO_T_PDI                                  0
+#define GPIO_T_MCU                                  0
 
 
 #ifdef __cplusplus
@@ -53,9 +73,11 @@ extern "C" {
 
 	} UINT32_VAL;
 
+	void	ESC_BYTE_TEST_Register_Read(UINT8 *pu8Data);
     void    CRITICAL_SECTION_ENTER(void);
     void    CRITICAL_SECTION_LEAVE(void);
 
+    void    ESF_PDI_Init();
 	UINT16	PDI_GetTimer();
 	void	PDI_ClearTimer(void);
 	void    PDI_Timer_Interrupt(void);
@@ -65,6 +87,8 @@ extern "C" {
     
     void SMC_SytemCSR_Write(uint8_t * WriteBuffer, uint16_t Addr, uint16_t count);
     void SMC_SyetemCSR_Read(uint8_t * ReadBuffer, uint16_t Addr, uint16_t count);
+    void SMC_ECAT_Write(uint8_t * WriteBuffer, uint16_t Addr, uint16_t count);
+    void SMC_ECAT_Read(uint8_t * ReadBuffer, uint16_t Addr, uint16_t count);
     void SMC_ProcessRAMRead(uint8_t **pData, uint16_t address, uint16_t length);
     void SMC_Indirect_ProcessRAMWrite(uint8_t *pData, uint16_t address, uint16_t length);
     
@@ -72,7 +96,7 @@ extern "C" {
     void ESC_Sync0_cb(PIO_PIN pin, uintptr_t context);
     void ESC_IRQ_cb(PIO_PIN pin, uintptr_t context);
     
-#ifdef ESF_HBI_DEBUG
+#ifdef DEVELOPER_TEST_EN
     void SMC_SystemCSR_Write_DWord(uint32_t writeData, uint16_t Address);
     uint32_t SMC_SystemCSR_Read_DWord(uint16_t Address);
     bool SMC_VerifyByteOrderRegister();

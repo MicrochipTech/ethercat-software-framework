@@ -52,10 +52,9 @@
 
 #include "configuration.h"
 #include "definitions.h"
+#include "app.h"
 #include "ESF_Config.h"
 #include "Drivers.h"
-
-
 
 // *****************************************************************************
 // *****************************************************************************
@@ -82,24 +81,8 @@ void SYS_Tasks ( void )
     
 
     /* Maintain the application's state machine. */
-        /* Call Application task APP. */
-#ifdef ESF_HBI_DEBUG
-#ifdef ESC_INIT_TEST
-    SMC_VerifyByteOrderRegister();
-#endif
-#ifdef ESC_PDRAM_TEST
-    SMC_VerifyAccess_PDRAM();
-#endif
-#ifdef PDI_ACCESS_TEST
-    SMC_VerifyAccess_SystemCSR();
-#endif
-#ifdef ESC_ACCESS_TEST
-    SMC_VerifyAccess_ECATCore();
-#endif
-#else
+    /* Call Application task APP. */
     APP_Tasks();
-#endif
-
 
 }
 

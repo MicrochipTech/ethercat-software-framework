@@ -1,14 +1,14 @@
 /*******************************************************************************
-  NVIC PLIB Implementation
+  MPU PLIB Implementation
 
   Company:
     Microchip Technology Inc.
 
   File Name:
-    plib_nvic.c
+    plib_mpu.h
 
   Summary:
-    NVIC PLIB Source File
+    MPU PLIB Source File
 
   Description:
     None
@@ -38,33 +38,57 @@
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
 
-#include "device.h"
-#include "plib_nvic.h"
+#include "plib_mpu.h"
+#include "plib_mpu_local.h"
 
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: NVIC Implementation
+// Section: MPU Implementation
 // *****************************************************************************
 // *****************************************************************************
 
-void NVIC_Initialize( void )
+void MPU_Initialize(void)
 {
-    /* Priority 0 to 7 and no sub-priority. 0 is the highest priority */
-    NVIC_SetPriorityGrouping( 0x04 );
+    /*** Disable MPU            ***/
+    MPU->CTRL = 0;
 
-    /* Enable NVIC Controller */
-    __DMB();
-    __enable_irq();
+    /*** Configure MPU Regions  ***/
+    /* Region 0 Name: EBI_SMC, Base Address: 0x60000000, Size: 256MB  */
+    MPU->RBAR = MPU_REGION(0, 0x60000000);
+    MPU->RASR = MPU_REGION_SIZE(27) | MPU_RASR_AP(MPU_RASR_AP_READWRITE_Val) | MPU_ATTR_STRONGLY_ORDERED \
+                | MPU_ATTR_ENABLE | MPU_ATTR_EXECUTE_NEVER ;
 
-    /* Enable the interrupt sources and configure the priorities as configured
-     * from within the "Interrupt Manager" of MHC. */
-    NVIC_SetPriority(PIOB_IRQn, 7);
-    NVIC_EnableIRQ(PIOB_IRQn);
-    NVIC_SetPriority(TC0_CH0_IRQn, 7);
-    NVIC_EnableIRQ(TC0_CH0_IRQn);
+    /* Region 1 Name: DTCM, Base Address: 0x20000000, Size: 4MB  */
+    MPU->RBAR = MPU_REGION(1, 0x20000000);
+    MPU->RASR = MPU_REGION_SIZE(21) | MPU_RASR_AP(MPU_RASR_AP_READWRITE_Val) | MPU_ATTR_NORMAL \
+                | MPU_ATTR_ENABLE  ;
+
+    /* Region 2 Name: SRAM, Base Address: 0x20400000, Size: 8MB  */
+    MPU->RBAR = MPU_REGION(2, 0x20400000);
+    MPU->RASR = MPU_REGION_SIZE(22) | MPU_RASR_AP(MPU_RASR_AP_READWRITE_Val) | MPU_ATTR_NORMAL_WB_WA \
+                | MPU_ATTR_ENABLE  ;
 
 
 
-    return;
+
+
+
+
+
+
+
+
+
+
+
+    /* Enable Memory Management Fault */
+    SCB->SHCSR |= (SCB_SHCSR_MEMFAULTENA_Msk);
+
+    /* Enable MPU */
+    MPU->CTRL = MPU_CTRL_ENABLE_Msk  | MPU_CTRL_PRIVDEFENA_Msk;
+
+    __DSB();
+    __ISB();
 }
+

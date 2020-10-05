@@ -1,50 +1,44 @@
-/*
- * Drivers.c
- *
- * Created: 1/30/2020 9:21:35 AM
- *  Author: I52915
- */ 
+/*******************************************************************************
+ SOC portable Drivers source file
 
-/**
- * \file
- *
- * \brief Application implement
- *
- * Copyright (c) 2018 Microchip Technology Inc. and its subsidiaries.
- *
- * \asf_license_start
- *
- * \page License
- *
- * Subject to your compliance with these terms, you may use Microchip
- * software and any derivatives exclusively with Microchip products.
- * It is your responsibility to comply with third party license terms applicable
- * to your use of third party software (including open source software) that
- * may accompany Microchip software.
- *
- * THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES,
- * WHETHER EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE,
- * INCLUDING ANY IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY,
- * AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL MICROCHIP BE
- * LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, INCIDENTAL OR CONSEQUENTIAL
- * LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND WHATSOEVER RELATED TO THE
- * SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS BEEN ADVISED OF THE
- * POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.	TO THE FULLEST EXTENT
- * ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN ANY WAY
- * RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
- * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
- *
- * \asf_license_stop
- *
- */
-/*
- * Support and FAQ: visit <a href="https://www.microchip.com/support/">Microchip Support</a>
- */
+  Company:
+    Microchip Technology Inc.
 
-#include "Drivers.h"
+  File Name:
+    Drivers.c
+
+  Description:
+    This file provides the access API's to ESC through PDI
+    Each API has implementation for each PDI type with resect to SOC.
+    The API's acts as interface to the ESC APIs and actual hardware drivers 
+*******************************************************************************/
+
+/*******************************************************************************
+* Copyright (C) 2010 Microchip Technology Inc. and its subsidiaries.
+*
+* Subject to your compliance with these terms, you may use Microchip software
+* and any derivatives exclusively with Microchip products. It is your
+* responsibility to comply with third party license terms applicable to your
+* use of third party software (including open source software) that may
+* accompany Microchip software.
+*
+* THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER
+* EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE, INCLUDING ANY IMPLIED
+* WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A
+* PARTICULAR PURPOSE.
+*
+* IN NO EVENT WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE,
+* INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND
+* WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS
+* BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE. TO THE
+* FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN
+* ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
+* THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
+*******************************************************************************/
+
 #include "LAN925x.h"
 #include "ecatslv.h"
-#include "ESF_APIHook.h"
+#include "ESC_Utils.h"
 
 #define TIMER_INTERVAL 1 // ms
 
@@ -55,27 +49,23 @@ void ECAT_SysTick_Handler(TC_TIMER_STATUS status, uintptr_t context);
 void CRITICAL_SECTION_ENTER(void)
 {
     //processorStatus = SYS_INT_Disable();
-    //processorStatus_eic0 =  SYS_INT_SourceDisable(EIC_EXTINT_0_IRQn);
-   // processorStatus_eic7 =  SYS_INT_SourceDisable(EIC_EXTINT_7_IRQn);
     __set_BASEPRI(4 << (8 - __NVIC_PRIO_BITS));
 }
 
 void CRITICAL_SECTION_LEAVE(void)
 {
     //SYS_INT_Restore( processorStatus );
-    //SYS_INT_SourceRestore(EIC_EXTINT_0_IRQn,processorStatus_eic0);
-    //SYS_INT_SourceRestore(EIC_EXTINT_7_IRQn,processorStatus_eic7);
     __set_BASEPRI(0U); // remove the BASEPRI masking
 }
 
 /*******************************************************************************
     Function:
-        void ether_cat_sync0_cb()
+        void ESC_Sync0_cb()
 
     Summary:
         Interrupt service routine for the interrupt from SYNC0
 *******************************************************************************/
-void ether_cat_sync0_cb(PIO_PIN pin, uintptr_t context)
+void ESC_Sync0_cb(PIO_PIN pin, uintptr_t context)
 {
 	//MCHP_ESF_CRITICAL_SECTION_ENTER();
 	Sync0_Isr();
@@ -84,12 +74,12 @@ void ether_cat_sync0_cb(PIO_PIN pin, uintptr_t context)
 
 /*******************************************************************************
     Function:
-        void ether_cat_sync1_cb()
+        void ESC_Sync1_cb()
 
     Summary:
         Interrupt service routine for the interrupt from SYNC1
 *******************************************************************************/
-void ether_cat_sync1_cb(PIO_PIN pin, uintptr_t context)
+void ESC_Sync1_cb(PIO_PIN pin, uintptr_t context)
 {
 	//MCHP_ESF_CRITICAL_SECTION_ENTER();
 	Sync1_Isr();
@@ -103,11 +93,17 @@ void ether_cat_sync1_cb(PIO_PIN pin, uintptr_t context)
     Summary:
         Interrupt service routine for the interrupt from ESC
 *******************************************************************************/
-void ether_cat_escirq_cb(PIO_PIN pin, uintptr_t context)
+void ESC_IRQ_cb(PIO_PIN pin, uintptr_t context)
 {
-	//MCHP_ESF_CRITICAL_SECTION_ENTER();
+    MCHP_ESF_CRITICAL_SECTION_ENTER();
+#ifdef MEASURE_CYCLE_TIME
+    MCHP_ESF_GPIO_SET(GPIO_T_MCU);
+#endif
 	PDI_Isr();
-	//MCHP_ESF_CRITICAL_SECTION_LEAVE();
+#ifdef MEASURE_CYCLE_TIME
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MCU);
+#endif
+	MCHP_ESF_CRITICAL_SECTION_LEAVE();
 }
 
 /*******************************************************************************
@@ -166,9 +162,7 @@ void PDI_Timer_Interrupt(void)
 void ECAT_SysTick_Handler(TC_TIMER_STATUS status, uintptr_t context)
 {
     MCHP_ESF_CRITICAL_SECTION_ENTER();
-	//EtherCATTestPinSet();
 	ECAT_CheckTimer();
-	//EtherCATTestPinClr();
     MCHP_ESF_CRITICAL_SECTION_LEAVE();
 }
 
@@ -215,7 +209,12 @@ void start_timer(void)
 
 void ESF_PDI_Init()
 {
-    
+#ifdef MEASURE_CYCLE_TIME
+    /* These GPIO's used to measure the Tpdi and Tmcu */
+    MCHP_ESF_GPIO_OUTPUT_EN(GPIO_T_PDI);
+    MCHP_ESF_GPIO_OUTPUT_EN(GPIO_T_MCU);
+#endif
+
 }
 
 void SMC_SytemCSR_Write(uint8_t * WriteBuffer, uint16_t Addr, uint16_t count)
@@ -245,6 +244,16 @@ void SMC_SyetemCSR_Read(uint8_t * ReadBuffer, uint16_t Addr, uint16_t count)
 #endif
 }
 
+void SMC_ECAT_Write(uint8_t * WriteBuffer, uint16_t Addr, uint16_t count)
+{
+	SMC_Write(WriteBuffer, Addr, count);
+}
+
+void SMC_ECAT_Read(uint8_t * ReadBuffer, uint16_t Addr, uint16_t count)
+{
+	SMC_Read(ReadBuffer, Addr, count);
+}
+
 void SMC_ProcessRAMRead(uint8_t **pData, uint16_t address, uint16_t length)
 {
 	uint8_t startAlignSize, endAlignSize;
@@ -260,6 +269,7 @@ void SMC_ProcessRAMRead(uint8_t **pData, uint16_t address, uint16_t length)
 		/* Read the FIFO using PDRAM Read Data FIFO, so that valid data will be read from PDRAM */
 		//*pData = (uint8_t *)malloc((length+startAlignSize+endAlignSize) * sizeof(uint8_t));
 		SMC_Read(*pData, address-startAlignSize, length+startAlignSize+endAlignSize);
+        *pData = (*pData)+startAlignSize;
 	#else
 		/* Write Address and length in PDRAM Read address and length register */
 
@@ -272,13 +282,15 @@ void SMC_ProcessRAMRead(uint8_t **pData, uint16_t address, uint16_t length)
 		SMC_Write((uint8_t*)&wPtr, LAN925x_ECAT_PRAM_RD_CMD_REG, 4);
 		
 		/* Read the FIFO using PDRAM Read Data FIFO, so that valid data will be read from PDRAM */
-		//*pData = (uint8_t *)malloc((length+startAlignSize+endAlignSize) * sizeof(uint8_t));
-		SMC_Read(*pData, 0x04, length+startAlignSize+endAlignSize);
+        UINT8 *pTempData = (uint8_t *)malloc((length+startAlignSize+endAlignSize) * sizeof(uint8_t));
+        SMC_Read(pTempData, 0x04, length+startAlignSize+endAlignSize);
+
+        memcpy(*pData, pTempData+startAlignSize, length);
+        //*pData = (*pData)+startAlignSize;
+
+        free(pTempData);
 	#endif
 	
-
-	*pData = (*pData)+startAlignSize;
-
 }
 
 void SMC_Indirect_ProcessRAMWrite(uint8_t *pData, uint16_t address, uint16_t length)
@@ -322,124 +334,3 @@ void SMC_Indirect_ProcessRAMWrite(uint8_t *pData, uint16_t address, uint16_t len
 		SMC_Read((uint8_t *)&isWriteBusy, LAN925x_ECAT_PRAM_WR_CMD_REG, 4);
 	}while(isWriteBusy & 0x80000000);
 }
-
-#ifdef ESF_HBI_DEBUG
-
-void SMC_SystemCSR_Write_DWord(uint32_t writeData, uint16_t Address)
-{
-#ifdef DEBUG_HBI_DIRECT_MODE
-	if(!(Address>= 0x300 && Address<= 0x317))
-	{
-		//Since registers 0x300 to 0x314 are unused in direct mode
-		SMC_WriteDWord(writeData, (0x3000+Address));
-	}
-#else
-	SMC_WriteDWord(writeData, Address);
-#endif
-}
-
-uint32_t SMC_SystemCSR_Read_DWord(uint16_t Address)
-{
-#ifdef DEBUG_HBI_DIRECT_MODE
-	if(Address>= 0x300 && Address<= 0x317)
-	{
-		//Since registers 0x300 to 0x314 are unused in direct mode
-		return 0xffffffff;	
-	}
-	else
-	{
-		return SMC_ReadDWord((0x3000+Address));
-			
-	}
-#else
-	return SMC_ReadDWord(Address);
-#endif
-}
-
-bool SMC_VerifyByteOrderRegister()
-{
-	volatile uint32_t ReadData;
-	
-	SMC_ECATCore_Read((uint8_t *)&ReadData, 0x140, 2);
-	
-	ReadData = SMC_SystemCSR_Read_DWord(0x64);
-
-	if(0x87654321!= ReadData)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-}
-
-void SMC_VerifyAccess_PDRAM()
-{
-	uint32_t writePtr;
-	writePtr = 0x18273645;
-	
-//	SMC_ProcessRAMWrite((uint8_t*)(&writePtr), 0x1001, 4);
-	
-	uint8_t *readPtr;
-	int status =1;
-	do
-	{
-		SMC_ProcessRAMRead(&readPtr, 0x1001, 4);
-		status = memcmp(&writePtr, readPtr, 4);
-	} while (status != 0);
-	
-	
-}
-
-void SMC_VerifyAccess_SystemCSR()
-{
-	uint32_t writeData = 0x8bcddcba, readData;
-	
-	SMC_SystemCSR_Write_DWord(writeData, 0x8C);
-	
-	
-	readData = SMC_SystemCSR_Read_DWord(0x8C);
-	
-	while((writeData & 0x2000ffff) != readData)
-	{
-		
-	}
-}
-
-void SMC_VerifyAccess_ECATCore()
-{
-	uint32_t writePtr;
-	writePtr = 0x18273645;
-	
-	SMC_ECATCore_Write((uint8_t*)(&writePtr), 0x204, 4);
-	uint8_t *readPtr = (uint8_t *)malloc(sizeof(uint8_t)*4);
-	int status =1;
-	do
-	{
-		SMC_ECATCore_Read(readPtr, 0x204, 4);
-		status = memcmp(&writePtr, readPtr, 4);
-	} while (status != 0);
-	
-	//HW_EscRead(readPtr, 0x204, 4);
-}
-
-void SMC_ECATCore_Write(uint8_t* pWriteBuf, uint16_t Address, uint16_t length)
-{
-#ifdef HBI_DIRECT_MODE
-	SMC_Write(pWriteBuf, Address, length);
-#else
-	HW_EscWrite((MEM_ADDR *)pWriteBuf, Address, length);
-#endif
-}
-
-void SMC_ECATCore_Read(uint8_t* pReadBuf, uint16_t Address, uint16_t length)
-{
-#ifdef HBI_DIRECT_MODE
-	SMC_Read(pReadBuf, Address, length);
-#else
-	HW_EscRead((MEM_ADDR *)pReadBuf, Address, length);
-#endif
-}
-
-#endif
