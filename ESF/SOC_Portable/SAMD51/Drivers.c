@@ -2035,10 +2035,9 @@ void LAN9252SQI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT8 u8Len)
 
     QSPI_MemoryRead(&qspi_xfer, (UINT32 *)&gau8rx_data[0], u8Len + u8Dummy, u32InstrAddr);
 
-    if((u16Addr & 0x3) != 0)
-    {
-        u8Dummy += (u16Addr & 0x3);
-    }
+    //https://jira.microchip.com/browse/UNG_JUTLAND2-278
+    //Fix is added for odd address failure
+    u8Dummy += (u16Addr & 0x3);
     
     memcpy (pu8Data, gau8rx_data + u8Dummy, u8Len);
 }
@@ -2082,6 +2081,8 @@ void LAN9252SQI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT16 u16Len)
     
 	MCHP_ESF_PDI_READ(LAN925x_ECAT_PRAM_RD_DATA_FIFO_REG, u32Val.v, u16Len+u8StartAlignSize+u8EndAlignSize);
     
+    //https://jira.microchip.com/browse/UNG_JUTLAND2-278
+    //Fix is added for odd address failure
     for (u8Itr = 0; u8Itr < u16Len; u8Itr++)
     {
        *pu8Data++ = u32Val.v[u8Itr+((u16Addr & 0x3))];
@@ -2120,6 +2121,7 @@ void LAN9252SQI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT16 u16Len)
 	MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_WR_CMD_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
     
     u8StartAlignSize = (u16Addr & 0x3);
+    //https://jira.microchip.com/browse/UNG_JUTLAND2-279
     u8EndAlignSize = (u16Len + u8StartAlignSize) & 0x3;
 	if (u8EndAlignSize & 0x3){
 		u8EndAlignSize = (((u8EndAlignSize + 4) & 0xC) - u8EndAlignSize);
@@ -2281,10 +2283,10 @@ void LAN9253SQI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 
     QSPI_MemoryRead(&qspi_xfer, (UINT32 *)&gau8rx_data[0], u32Length + u8Dummy, u32InstrAddr);
     
-    if((u16Addr & 0x3) != 0)
-    {
-        u8Dummy += (u16Addr & 0x3);
-    }
+   //https://jira.microchip.com/browse/UNG_JUTLAND2-278
+   //Fix is added for odd address failure
+    u8Dummy += (u16Addr & 0x3);
+    
     memcpy (pu8data, gau8rx_data + u8Dummy, u32Length);
 }
 
