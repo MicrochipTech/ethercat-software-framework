@@ -1,22 +1,19 @@
 /*******************************************************************************
-  NVIC PLIB Implementation
+ Developer Test header file
 
   Company:
     Microchip Technology Inc.
 
   File Name:
-    plib_nvic.c
-
-  Summary:
-    NVIC PLIB Source File
+    Developer_Test.h
 
   Description:
-    None
-
+    This file provides the test API's declarations which are used for 
+    developer testing.
 *******************************************************************************/
 
 /*******************************************************************************
-* Copyright (C) 2018 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2010 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -38,33 +35,13 @@
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
 
-#include "device.h"
-#include "plib_nvic.h"
+#ifndef DEVELOPER_TEST_H_
+#define DEVELOPER_TEST_H_
 
+#include "ESF_Config.h"
 
-// *****************************************************************************
-// *****************************************************************************
-// Section: NVIC Implementation
-// *****************************************************************************
-// *****************************************************************************
-
-void NVIC_Initialize( void )
-{
-    /* Priority 0 to 7 and no sub-priority. 0 is the highest priority */
-    NVIC_SetPriorityGrouping( 0x04 );
-
-    /* Enable NVIC Controller */
-    __DMB();
-    __enable_irq();
-
-    /* Enable the interrupt sources and configure the priorities as configured
-     * from within the "Interrupt Manager" of MHC. */
-    NVIC_SetPriority(PIOB_IRQn, 7);
-    NVIC_EnableIRQ(PIOB_IRQn);
-    NVIC_SetPriority(TC0_CH0_IRQn, 7);
-    NVIC_EnableIRQ(TC0_CH0_IRQn);
-
-
-
-    return;
-}
+#ifdef DEVELOPER_TEST_EN
+void test_direct_mode();
+void test_indirect_mode();
+#endif
+#endif /* DEVELOPER_TEST_H_ */

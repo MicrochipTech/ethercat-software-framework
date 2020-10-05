@@ -21,19 +21,114 @@
     files.
  *******************************************************************************/
 
-// *****************************************************************************
-// *****************************************************************************
-// Section: Included Files
-// *****************************************************************************
-// *****************************************************************************
+/*******************************************************************************
+* Copyright (C) 2010 Microchip Technology Inc. and its subsidiaries.
+*
+* Subject to your compliance with these terms, you may use Microchip software
+* and any derivatives exclusively with Microchip products. It is your
+* responsibility to comply with third party license terms applicable to your
+* use of third party software (including open source software) that may
+* accompany Microchip software.
+*
+* THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS". NO WARRANTIES, WHETHER
+* EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE, INCLUDING ANY IMPLIED
+* WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A
+* PARTICULAR PURPOSE.
+*
+* IN NO EVENT WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE,
+* INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND
+* WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS
+* BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE. TO THE
+* FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN
+* ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
+* THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
+*******************************************************************************/
+
+/*****************************************************************************
+ *****************************************************************************
+ Section: Included Files
+ *****************************************************************************
+ *****************************************************************************/
 
 #include "app.h"
+#include "ESC_Utils.h"
+#include "Drivers.h"
+#include "applInterface.h"
+#include "sample_app.h"
+#include "Developer_Test.h"
 
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
 // *****************************************************************************
 // *****************************************************************************
+
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <string.h>
+
+#if defined(ETHERCAT_USE_FOE)  
+//-----------------------------------------------------------------------------
+const uint32_t gAppBankBOffsetAddr = APP_NVM_BANKB_START_ADDRESS;
+// Bank B application need to started from this below location.
+const uint32_t gApplicationStartAddr   = (uint32_t)(APP_NVM_BANKB_START_ADDRESS + APP_BOOTLOADER_SIZE);
+
+void APP_FlashWrite( uint32_t startAddress,uint8_t *flash_data )
+{
+    uint32_t   flashStartAddress=0;
+    int         pageCnt=0;
+    
+    flashStartAddress = gAppBankBOffsetAddr+startAddress;
+	while(EFC_IsBusy()){}
+
+    /* Erase the block */
+    EFC_SectorErase((uint32_t)flashStartAddress);
+
+    while(EFC_IsBusy()){}
+
+    for (pageCnt=0; pageCnt < APP_PAGES_IN_ERASE_BLOCK; pageCnt++)
+	{
+        /* If write mode is manual, */
+        /* Program 512 byte page */
+        EFC_PageWrite((uint32_t *)flash_data, (uint32_t)flashStartAddress);
+        while(EFC_IsBusy()){}
+
+        flash_data = flash_data + APP_PAGE_SIZE;
+        flashStartAddress = flashStartAddress + APP_PAGE_SIZE;        
+	}
+}
+
+static void APP_BankSwitch(void)
+{
+	/* wait until it is ready to accept a new command */
+	while (EFC_IsBusy());
+	
+	/* execute the command BKSWRST (Bank swap and system reset) */
+	//EFC_BankSwap();  // not supported
+	
+	/* wait until command done */
+	while (EFC_IsBusy());    
+    
+	/* At the end of this command, code starts running from 0x00000 upon reset*/
+}
+
+//-----------------------------------------------------------------------------
+static void APP_RunApplication(void)
+{
+	uint32_t msp = *(uint32_t *)(gApplicationStartAddr);
+	uint32_t reset_vector = *(uint32_t *)(gApplicationStartAddr + 4);
+
+	if (0xffffffff == msp)
+    {
+        return;
+    }
+
+	__set_MSP(msp);
+
+	asm("bx %0"::"r" (reset_vector));
+}
+#endif
 
 // *****************************************************************************
 /* Application Data
@@ -52,32 +147,6 @@
 
 APP_DATA appData;
 
-// *****************************************************************************
-// *****************************************************************************
-// Section: Application Callback Functions
-// *****************************************************************************
-// *****************************************************************************
-
-/* TODO:  Add any necessary callback functions.
-*/
-
-// *****************************************************************************
-// *****************************************************************************
-// Section: Application Local Functions
-// *****************************************************************************
-// *****************************************************************************
-
-
-/* TODO:  Add any necessary local functions.
-*/
-
-
-// *****************************************************************************
-// *****************************************************************************
-// Section: Application Initialization and State Machine Functions
-// *****************************************************************************
-// *****************************************************************************
-
 /*******************************************************************************
   Function:
     void APP_Initialize ( void )
@@ -89,13 +158,7 @@ APP_DATA appData;
 void APP_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
-    appData.state = APP_STATE_INIT;
-
-
-
-    /* TODO: Initialize your application's state machine and other
-     * parameters.
-     */
+    appData.state = APP_STATE_INIT;   
 }
 
 
@@ -116,36 +179,60 @@ void APP_Tasks ( void )
         /* Application's initial state. */
         case APP_STATE_INIT:
         {
-            bool appInitialized = true;
-
-
-            if (appInitialized)
-            {
-
-                appData.state = APP_STATE_SERVICE_TASKS;
-            }
+            ESF_PDI_Init();
+#ifdef DEVELOPER_TEST_EN
+            test_direct_mode();
+        #ifdef ESC_INIT_TEST
+            SMC_VerifyByteOrderRegister();
+        #endif
+        #ifdef ESC_PDRAM_TEST
+            SMC_VerifyAccess_PDRAM();
+        #endif
+        #ifdef PDI_ACCESS_TEST
+            SMC_VerifyAccess_SystemCSR();
+        #endif
+        #ifdef ESC_ACCESS_TEST
+            SMC_VerifyAccess_ECATCore();
+        #endif
+#endif
+            /* EtherCAT Initialization after NVIC initialization */
+            ESC_Init();
+            MainInit();
+#if defined(ETHERCAT_USE_FOE)  
+            BL_FOE_Application();
+                
+            bRunApplication = TRUE;
+#endif           
+            /*Create basic mapping*/
+            APPL_GenerateMapping(&nPdInputSize,&nPdOutputSize);
+            appData.state = APP_STATE_SERVICE_TASKS;
             break;
         }
 
         case APP_STATE_SERVICE_TASKS:
         {
+			do
+            {		
+#if defined(ETHERCAT_USE_FOE)                
+                if(APP_FW_GetDownloadStateFinished() == 1)
+                {
+                    APP_BankSwitch();
+                    APP_RunApplication();
+                }
+#endif                
+                MainLoop();
 
+            } while (bRunApplication == TRUE);
             break;
         }
-
-        /* TODO: implement your application state machine.*/
-
 
         /* The default state should never be executed. */
         default:
         {
-            /* TODO: Handle error in application's state machine. */
             break;
         }
     }
 }
-
-
 /*******************************************************************************
  End of File
  */

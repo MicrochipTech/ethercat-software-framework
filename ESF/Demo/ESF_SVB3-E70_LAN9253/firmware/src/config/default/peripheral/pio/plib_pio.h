@@ -62,6 +62,39 @@
 // *****************************************************************************
 
 
+/*** Macros for SYNC0_IRQ pin ***/
+#define SYNC0_IRQ_Set()               (PIOB_REGS->PIO_SODR = (1<<1))
+#define SYNC0_IRQ_Clear()             (PIOB_REGS->PIO_CODR = (1<<1))
+#define SYNC0_IRQ_Toggle()            (PIOB_REGS->PIO_ODSR ^= (1<<1))
+#define SYNC0_IRQ_Get()               ((PIOB_REGS->PIO_PDSR >> 1) & 0x1)
+#define SYNC0_IRQ_OutputEnable()      (PIOB_REGS->PIO_OER = (1<<1))
+#define SYNC0_IRQ_InputEnable()       (PIOB_REGS->PIO_ODR = (1<<1))
+#define SYNC0_IRQ_InterruptEnable()   (PIOB_REGS->PIO_IER = (1<<1))
+#define SYNC0_IRQ_InterruptDisable()  (PIOB_REGS->PIO_IDR = (1<<1))
+#define SYNC0_IRQ_PIN                  PIO_PIN_PB1
+
+/*** Macros for ESC_IRQ pin ***/
+#define ESC_IRQ_Set()               (PIOB_REGS->PIO_SODR = (1<<0))
+#define ESC_IRQ_Clear()             (PIOB_REGS->PIO_CODR = (1<<0))
+#define ESC_IRQ_Toggle()            (PIOB_REGS->PIO_ODSR ^= (1<<0))
+#define ESC_IRQ_Get()               ((PIOB_REGS->PIO_PDSR >> 0) & 0x1)
+#define ESC_IRQ_OutputEnable()      (PIOB_REGS->PIO_OER = (1<<0))
+#define ESC_IRQ_InputEnable()       (PIOB_REGS->PIO_ODR = (1<<0))
+#define ESC_IRQ_InterruptEnable()   (PIOB_REGS->PIO_IER = (1<<0))
+#define ESC_IRQ_InterruptDisable()  (PIOB_REGS->PIO_IDR = (1<<0))
+#define ESC_IRQ_PIN                  PIO_PIN_PB0
+
+/*** Macros for SYNC1_IRQ pin ***/
+#define SYNC1_IRQ_Set()               (PIOB_REGS->PIO_SODR = (1<<2))
+#define SYNC1_IRQ_Clear()             (PIOB_REGS->PIO_CODR = (1<<2))
+#define SYNC1_IRQ_Toggle()            (PIOB_REGS->PIO_ODSR ^= (1<<2))
+#define SYNC1_IRQ_Get()               ((PIOB_REGS->PIO_PDSR >> 2) & 0x1)
+#define SYNC1_IRQ_OutputEnable()      (PIOB_REGS->PIO_OER = (1<<2))
+#define SYNC1_IRQ_InputEnable()       (PIOB_REGS->PIO_ODR = (1<<2))
+#define SYNC1_IRQ_InterruptEnable()   (PIOB_REGS->PIO_IER = (1<<2))
+#define SYNC1_IRQ_InterruptDisable()  (PIOB_REGS->PIO_IDR = (1<<2))
+#define SYNC1_IRQ_PIN                  PIO_PIN_PB2
+
 
 // *****************************************************************************
 /* PIO Port

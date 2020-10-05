@@ -20,15 +20,15 @@
             </sourceRootList>
             <confList>
                 <confElem>
-                    <name>SAME70_HBI_DIRECT_MODE</name>
+                    <name>HBI_DIRECT_MODE</name>
                     <type>2</type>
                 </confElem>
                 <confElem>
-                    <name>SAME70_HBI_INDIRECT_MODE</name>
+                    <name>HBI_INDIRECT_MODE</name>
                     <type>2</type>
                 </confElem>
                 <confElem>
-                    <name>SAME70_HBI_DEBUG_MODE</name>
+                    <name>HBI_DEBUG_MODE</name>
                     <type>2</type>
                 </confElem>
             </confList>

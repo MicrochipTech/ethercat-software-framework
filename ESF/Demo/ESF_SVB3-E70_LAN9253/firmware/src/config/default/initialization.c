@@ -46,7 +46,7 @@
 #include "configuration.h"
 #include "definitions.h"
 #include "device.h"
-
+#include "app.h"
 
 
 // ****************************************************************************
@@ -108,32 +108,24 @@ void SYS_Initialize ( void* data )
   
     CLOCK_Initialize();
 	PIO_Initialize();
-
-
-
+    
+    
+    TC0_CH0_TimerInitialize();
+    
     SMC_Initialize();
 
 	RSWDT_REGS->RSWDT_MR = RSWDT_MR_WDDIS_Msk;	// Disable RSWDT 
 
 	WDT_REGS->WDT_MR = WDT_MR_WDDIS_Msk; 		// Disable WDT 
-
-  
-
- 
-    TC0_CH0_TimerInitialize(); 
-     
+   
+    //PIO_ext_irq_init ();
     
-
-
-
-
     APP_Initialize();
 
 
     NVIC_Initialize();
 
 }
-
 
 /*******************************************************************************
  End of File
