@@ -1,4 +1,17 @@
 /*******************************************************************************
+  Project Version Header
+ 
+  Company:
+    Microchip Technology Inc.
+
+  File Name:
+    ProjectVersion.h
+
+  Description:
+    This header file maintains the FW release version of ESF
+ ******************************************************************************/
+
+/*******************************************************************************
 * Copyright (C) 2020 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
@@ -21,17 +34,18 @@
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
 
-#ifndef TOOLCHAIN_SPECIFICS_H
-#define TOOLCHAIN_SPECIFICS_H
+#ifndef _PROJECT_VERSION_H
+#define	_PROJECT_VERSION_H
 
+#ifdef	__cplusplus
+extern "C" {
+#endif
 
-#include <sys/types.h>
-#define NO_INIT        __attribute__((section(".no_init")))
-#define SECTION(a)     __attribute__((__section__(a)))
+#define SYSTEM_FW_REV     0x0101U //v1.01 release
 
-#define CACHE_LINE_SIZE    (16u)
-#define CACHE_ALIGN        __ALIGNED(CACHE_LINE_SIZE)
+#ifdef	__cplusplus
+}
+#endif
 
-
-#endif // end of header
+#endif	/* _PROJECT_VERSION_H */
 
