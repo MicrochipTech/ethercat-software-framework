@@ -12,7 +12,7 @@
 *******************************************************************************/
 
 /*******************************************************************************
-* Copyright (C) 2010 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2020 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -51,6 +51,7 @@
  * Frequency value should be given in MHz.
  */
 #define ESF_PDI_FREQUENCY 20
+#define IS_SUPPORT_DUMMY_CYCLE
 
 #endif
 
