@@ -44,12 +44,13 @@
 #include <stdint.h>
 #include "definitions.h"
 
-/* Configured PA20 and PA21 pins 
- * 
+/* Configured PA11 and PA12 pins 
+ * PA11 - QCS, J34 header 9th pin
+ * PA12 - QIO1, J34 header 5th pin
  * Can be modified with appropriate pins for specific use 
  */
-#define GPIO_T_PDI                                  0
-#define GPIO_T_MCU                                  0
+#define GPIO_T_PDI                                  PIO_PIN_PA11
+#define GPIO_T_MCU                                  PIO_PIN_PA12
 
 
 #ifdef __cplusplus

@@ -40,8 +40,6 @@
 #include "ecatslv.h"
 #include "ESC_Utils.h"
 
-#define TIMER_INTERVAL 1 // ms
-
 /* Function declarations */
 static void PDI_Init_SYSTick_Interrupt();
 void ECAT_SysTick_Handler(TC_TIMER_STATUS status, uintptr_t context);

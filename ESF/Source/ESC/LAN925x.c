@@ -654,7 +654,7 @@ void HW_EscRead(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
 
             while (u16Len > 0) {
                 PDI_Disable_Global_Interrupt();
-#if 1
+#if 0
                 if((u16Address & 0x1) | (u16Len == 1))	//Odd address or 1 byte
                 {
                         //*pu8Data = *(UINT8 *)(EBI_CS0_ADDR + u16Address);
@@ -1013,7 +1013,7 @@ void HW_EscReadIsr(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
             UINT8 *pu8Data = (UINT8 *)pmData;
 
             while (u16Len > 0) {
-#if 1
+#if 0
                 if((u16Address & 0x1) | (u16Len == 1))	//Odd address or 1 byte
                 {
                     //*pu8Data = *(UINT8 *)(EBI_CS0_ADDR + u16Address);
