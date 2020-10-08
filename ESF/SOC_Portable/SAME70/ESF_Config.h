@@ -49,9 +49,14 @@
 
 #define HBI_DIRECT_MODE
 
-//#define _IS_HBI_DEMUX_8BIT_SUPPORT
-#define _IS_HBI_DEMUX_16BIT_SUPPORT
+#endif
 
+#ifdef HBI_DEMUX_8BIT
+#define _IS_HBI_DEMUX_8BIT_SUPPORT
+#endif
+
+#ifdef HBI_DEMUX_16BIT
+#define _IS_HBI_DEMUX_16BIT_SUPPORT
 #endif
 
 #ifdef DEVELOPER_TEST_EN
