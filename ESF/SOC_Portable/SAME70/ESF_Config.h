@@ -49,8 +49,8 @@
 
 #define HBI_DIRECT_MODE
 
-#define _IS_HBI_DEMUX_8BIT_SUPPORT
-//#define _IS_HBI_DEMUX_16BIT_SUPPORT
+//#define _IS_HBI_DEMUX_8BIT_SUPPORT
+#define _IS_HBI_DEMUX_16BIT_SUPPORT
 
 #endif
 
@@ -77,6 +77,6 @@
 //#define _IS_EEPROM_EMULATION_SUPPORT               1
 
 /* Cycle Time measurement for PDI */
-//#define MEASURE_CYCLE_TIME
+#define MEASURE_CYCLE_TIME
 
 #endif /* ESF_CONFIG_H */
