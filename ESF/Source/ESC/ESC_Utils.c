@@ -137,8 +137,8 @@ void ESC_Init()
 *******************************************************************************/
 void PDI_Init_SYNC_Interrupts()
 {
-	MCHP_ESF_IRQ_REGISTER_CB(SYNC0_IRQ_PIN, ESC_Sync0_cb);
-	MCHP_ESF_IRQ_REGISTER_CB(SYNC1_IRQ_PIN, ESC_Sync1_cb);
+	MCHP_ESF_IRQ_REGISTER_CB(SYNC0, ESC_Sync0_cb);
+	MCHP_ESF_IRQ_REGISTER_CB(SYNC1, ESC_Sync1_cb);
 }
 #endif // DC_SUPPORTED
 
@@ -151,5 +151,5 @@ void PDI_Init_SYNC_Interrupts()
 *******************************************************************************/
 void PDI_IRQ_Interrupt()
 {
-	MCHP_ESF_IRQ_REGISTER_CB(ESC_IRQ_PIN, ESC_IRQ_cb);
+	MCHP_ESF_IRQ_REGISTER_CB(ESCIRQ, ESC_IRQ_cb);
 }

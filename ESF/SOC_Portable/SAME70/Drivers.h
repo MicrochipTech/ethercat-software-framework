@@ -44,6 +44,10 @@
 #include <stdint.h>
 #include "definitions.h"
 
+#define SYNC0                                       SYNC0_IRQ_PIN
+#define SYNC1                                       SYNC1_IRQ_PIN
+#define ESCIRQ                                      ESC_IRQ_PIN
+
 /* Configured PA11 and PA12 pins 
  * PA11 - QCS, J34 header 9th pin
  * PA12 - QIO1, J34 header 5th pin
