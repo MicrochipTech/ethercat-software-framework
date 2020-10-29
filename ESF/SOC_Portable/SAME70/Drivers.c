@@ -42,7 +42,7 @@
 
 /* Function declarations */
 static void PDI_Init_SYSTick_Interrupt();
-void ECAT_SysTick_Handler(TC_TIMER_STATUS status, uintptr_t context);
+void ECAT_SysTick_Handler(uintptr_t context);
 
 void CRITICAL_SECTION_ENTER(void)
 {
@@ -115,7 +115,7 @@ void ESC_IRQ_cb(PIO_PIN pin, uintptr_t context)
 *******************************************************************************/
 UINT16 PDI_GetTimer()
 {
-	return TC0_CH0_TimerCounterGet();
+	return (0);
 }
 
 /*******************************************************************************
@@ -157,7 +157,7 @@ void PDI_Timer_Interrupt(void)
         This routine load the SysTick LOAD register and perform EtherCAT check opration.
 *******************************************************************************/
 
-void ECAT_SysTick_Handler(TC_TIMER_STATUS status, uintptr_t context)
+void ECAT_SysTick_Handler(uintptr_t context)
 {
     MCHP_ESF_CRITICAL_SECTION_ENTER();
 	ECAT_CheckTimer();
@@ -173,8 +173,8 @@ void ECAT_SysTick_Handler(TC_TIMER_STATUS status, uintptr_t context)
 *******************************************************************************/
 static void PDI_Init_SYSTick_Interrupt()
 {
-    TC0_CH0_TimerCallbackRegister(ECAT_SysTick_Handler,(uintptr_t) NULL);
-    TC0_CH0_TimerStart();
+    SYSTICK_TimerCallbackSet(ECAT_SysTick_Handler,(uintptr_t) NULL);
+    SYSTICK_TimerStart();
 }
 
 /*******************************************************************************
@@ -252,7 +252,7 @@ void SMC_ECAT_Read(uint8_t * ReadBuffer, uint16_t Addr, uint16_t count)
 	SMC_Read(ReadBuffer, Addr, count);
 }
 
-void SMC_ProcessRAMRead(uint8_t **pData, uint16_t address, uint16_t length)
+void SMC_ProcessRAMRead(uint8_t *pData, uint16_t address, uint16_t length)
 {
 	uint8_t startAlignSize, endAlignSize;
 	
@@ -263,38 +263,36 @@ void SMC_ProcessRAMRead(uint8_t **pData, uint16_t address, uint16_t length)
 		endAlignSize = (((endAlignSize + 4) & 0xC) - endAlignSize);
 	}
 	
-	#ifdef DIRECT_MODE
-		/* Read the FIFO using PDRAM Read Data FIFO, so that valid data will be read from PDRAM */
-		//*pData = (uint8_t *)malloc((length+startAlignSize+endAlignSize) * sizeof(uint8_t));
-		SMC_Read(*pData, address-startAlignSize, length+startAlignSize+endAlignSize);
-        *pData = (*pData)+startAlignSize;
-	#else
-		/* Write Address and length in PDRAM Read address and length register */
+	/* Write Address and length in PDRAM Read address and length register */
 
-		uint32_t wPtr = ((length<<16)|address);
+	uint32_t wPtr = ((length<<16)|address);
 
-		SMC_Write((uint8_t*)&wPtr, LAN925x_ECAT_PRAM_RD_ADDR_LENGTH_REG, 4);
+	SMC_Write((uint8_t*)&wPtr, LAN925x_ECAT_PRAM_RD_ADDR_LENGTH_REG, 4);
 	
-		/* Write Read command in PDRAM Read command register */
-		wPtr = 0x80000000;
-		SMC_Write((uint8_t*)&wPtr, LAN925x_ECAT_PRAM_RD_CMD_REG, 4);
-		
-		/* Read the FIFO using PDRAM Read Data FIFO, so that valid data will be read from PDRAM */
-        UINT8 *pTempData = (uint8_t *)malloc((length+startAlignSize+endAlignSize) * sizeof(uint8_t));
-        SMC_Read(pTempData, 0x04, length+startAlignSize+endAlignSize);
+	/* Write Read command in PDRAM Read command register */
+	wPtr = 0x80000000;
+	SMC_Write((uint8_t*)&wPtr, LAN925x_ECAT_PRAM_RD_CMD_REG, 4);
 
-        memcpy(*pData, pTempData+startAlignSize, length);
-        //*pData = (*pData)+startAlignSize;
+    uint32_t isDataAvailable =0;
+	do
+	{
+		SMC_Read((uint8_t *)&isDataAvailable, LAN925x_ECAT_PRAM_RD_CMD_REG, 4);
+	}while((isDataAvailable & 1) !=1);
+    ESF_delay(100);
+	/* Read the FIFO using PDRAM Read Data FIFO, so that valid data will be read from PDRAM */
+    UINT8 *pTempData = (uint8_t *)malloc((length+startAlignSize+endAlignSize) * sizeof(uint8_t));
+    SMC_Read(pTempData, LAN925x_ECAT_PRAM_RD_DATA_FIFO_REG, length+startAlignSize+endAlignSize);
 
-        free(pTempData);
-	#endif
+    memcpy(pData, pTempData+startAlignSize, length);
+    //*pData = (*pData)+startAlignSize;
+
+    free(pTempData);
 	
 }
 
-void SMC_Indirect_ProcessRAMWrite(uint8_t *pData, uint16_t address, uint16_t length)
+void SMC_ProcessRAMWrite(uint8_t *pData, uint16_t address, uint16_t length)
 {
 	uint32_t startAlignSize, endAlignSize;
-	uint8_t *ptr;
 		
 	/* Calculate start align and end align sizes to sync with DWORD access */
 	startAlignSize = (address & 3);
@@ -302,9 +300,9 @@ void SMC_Indirect_ProcessRAMWrite(uint8_t *pData, uint16_t address, uint16_t len
 	if (endAlignSize & 3){
 		endAlignSize = (((endAlignSize + 4) & 0xC) - endAlignSize);
 	}
-		
-	ptr = (uint8_t*) pData;
-	ptr = ptr - startAlignSize;
+
+    UINT8 *pwr_Data = (uint8_t *)malloc((length+startAlignSize+endAlignSize) * sizeof(uint8_t));
+	memcpy(pwr_Data+startAlignSize, pData, length);
 
 	/* Write Address and length in PDRAM Write address and length register*/
 		
@@ -322,13 +320,15 @@ void SMC_Indirect_ProcessRAMWrite(uint8_t *pData, uint16_t address, uint16_t len
 	{
 		SMC_Read((uint8_t *)&isSpaceAvailable, LAN925x_ECAT_PRAM_WR_CMD_REG, 4);
 	}while((isSpaceAvailable & 1) !=1);
-		
+	ESF_delay(100);
 	/* Write the data in FIFO through PDRAM Write Data FIFO */
-	SMC_Write((uint8_t*)ptr, 0x20, length+startAlignSize+endAlignSize);
+	SMC_Write((uint8_t*)pwr_Data, LAN925x_ECAT_PRAM_WR_DATA_FIFO_REG, length+startAlignSize+endAlignSize);
 	
-	uint32_t isWriteBusy =1;
+    uint32_t isWriteBusy =1;
 	do
 	{
 		SMC_Read((uint8_t *)&isWriteBusy, LAN925x_ECAT_PRAM_WR_CMD_REG, 4);
 	}while(isWriteBusy & 0x80000000);
+
+    free(pwr_Data);
 }

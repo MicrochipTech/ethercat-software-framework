@@ -93,8 +93,8 @@ void ECAT_PDRAM_SystemCSR_Access()
 	HW_EscWrite(&wData, 0x305C, 4);
 	HW_EscRead(&rData, 0x305C, 4);
 #else
-    MCHP_ESF_PDI_WRITE(0x305C, &wData, 4);
-    MCHP_ESF_PDI_READ(0x305C, &rData, 4);
+    MCHP_ESF_PDI_WRITE(0x305C,(uint8_t *) &wData, 4);
+    MCHP_ESF_PDI_READ(0x305C, (uint8_t *)&rData, 4);
 #endif
 	
 	while(wData!= rData)
@@ -119,7 +119,7 @@ void ECAT_PDRAM_SystemCSR_Access()
 #ifdef DIRECT_MODE
 		HW_EscRead(&rData, 0x2000, 4);
 #else
-        MCHP_ESF_PDI_READ_PDRAM(0x2000, &rData, 4);
+        MCHP_ESF_PDI_READ_PDRAM((uint8_t *)&rData, 0x2000, 4);
 #endif
 		status = memcmp(&wData, &rData, 4);
 	} while (status != 0);
@@ -161,7 +161,7 @@ void Indirect_ECAT_PDRAM_SystemCSR_Access()
 	
 	do
 	{
-//		MCHP_ESF_PDI_READ_PDRAM((UINT8 *)&rData, 0x2000, 4) ;		
+		MCHP_ESF_PDI_READ_PDRAM((UINT8 *)&rData, 0x2000, 4) ;		
 		status = memcmp(&wData, &rData, 4);
 	} while (status != 0);
 	
@@ -195,7 +195,7 @@ void Indirect_PDRAM_1_2_4_8_Byte_Access()
 		wData = 0xAA;
         rData = 0;
 		MCHP_ESF_PDI_WRITE_PDRAM((uint8_t*)(&wData), pdramAddress, 1);
-//		MCHP_ESF_PDI_READ_PDRAM((UINT8 *)&rData, pdramAddress, 1);
+		MCHP_ESF_PDI_READ_PDRAM((UINT8 *)&rData, pdramAddress, 1);
 
 		int status = memcmp(&wData, &rData, 1);
 
@@ -207,7 +207,7 @@ void Indirect_PDRAM_1_2_4_8_Byte_Access()
 		wData = 0xBBBB;
         rData = 0;
 		MCHP_ESF_PDI_WRITE_PDRAM((UINT8 *)&wData, pdramAddress, 2);
-//		MCHP_ESF_PDI_READ_PDRAM((UINT8 *)&rData, pdramAddress,2);
+		MCHP_ESF_PDI_READ_PDRAM((UINT8 *)&rData, pdramAddress,2);
 		status = memcmp(&wData, &rData, 2);
 
 		while(status)
@@ -216,8 +216,9 @@ void Indirect_PDRAM_1_2_4_8_Byte_Access()
 		}
 		
 		wData = 0xCCCCCCCC;
+        rData = 0;
 		MCHP_ESF_PDI_WRITE_PDRAM((UINT8 *)&wData, pdramAddress, 4);
-//		MCHP_ESF_PDI_READ_PDRAM((UINT8 *)&rData, pdramAddress, 4);
+		MCHP_ESF_PDI_READ_PDRAM((UINT8 *)&rData, pdramAddress, 4);
 		status = memcmp(&wData, &rData, 4);
 
 		while(status)
@@ -227,7 +228,7 @@ void Indirect_PDRAM_1_2_4_8_Byte_Access()
 
 		
 		MCHP_ESF_PDI_WRITE_PDRAM(wPtr, pdramAddress, 8);
-//		MCHP_ESF_PDI_READ_PDRAM(rPtr, pdramAddress, 8);
+		MCHP_ESF_PDI_READ_PDRAM(rPtr, pdramAddress, 8);
 		status = memcmp(wPtr, rPtr, 8);
 		
 		while(status)
@@ -533,7 +534,7 @@ void Indirect_Entire_PDRAM_Access()
 	}
 	
 	MCHP_ESF_PDI_WRITE_PDRAM((UINT8 *)wPtr, 0x1000, 8192);
-//	MCHP_ESF_PDI_READ_PDRAM((UINT8 *)rPtr, 0x1000, 8192);
+	MCHP_ESF_PDI_READ_PDRAM((UINT8 *)rPtr, 0x1000, 8192);
 	int status = memcmp(wPtr, rPtr, 8192);
 	while(status)
 	{
@@ -635,7 +636,7 @@ void Indirect_PDRAM_Diff_Addr_And_Len()
 		for(UINT16 addr = 0x1000; (addr+len-1)<= 0x2FFF; addr+= len)
 		{
 			MCHP_ESF_PDI_WRITE_PDRAM((UINT8 *)writeBuf, addr, len);
-//			MCHP_ESF_PDI_READ_PDRAM((UINT8 *)readBuf, addr, len);
+			MCHP_ESF_PDI_READ_PDRAM((UINT8 *)readBuf, addr, len);
 			status = memcmp(writeBuf, readBuf, len);
 			while(status)
 			{
@@ -672,6 +673,8 @@ void test_indirect_mode()
 	
     Get_ByteOrderReg();
     
+    Get_BeckoffIP();
+    
 	Indirect_ECAT_PDRAM_SystemCSR_Access();
 	
 	Indirect_PDRAM_1_2_4_8_Byte_Access();
@@ -680,8 +683,6 @@ void test_indirect_mode()
 	
 	Indirect_Entire_PDRAM_Access();
 
-	Get_BeckoffIP();
-	
 	Indirect_PDRAM_Diff_Addr_And_Len();
 }
 
@@ -739,14 +740,14 @@ void SMC_VerifyAccess_PDRAM()
 	uint32_t writePtr;
 	writePtr = 0x18273645;
 	
-//	SMC_ProcessRAMWrite((uint8_t*)(&writePtr), 0x1001, 4);
+	MCHP_ESF_PDI_WRITE_PDRAM((uint8_t*)(&writePtr), 0x1001, 4);
 	
-	uint8_t *readPtr;
-	int status =1;
+	uint8_t r_data = 0;
+	int status = 1;
 	do
 	{
-		SMC_ProcessRAMRead(&readPtr, 0x1001, 4);
-		status = memcmp(&writePtr, readPtr, 4);
+		MCHP_ESF_PDI_READ_PDRAM(&r_data, 0x1001, 4);
+		status = memcmp(&writePtr, &r_data, 4);
 	} while (status != 0);
 	
 	

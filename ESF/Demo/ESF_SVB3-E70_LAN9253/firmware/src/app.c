@@ -181,7 +181,11 @@ void APP_Tasks ( void )
         {
             ESF_PDI_Init();
 #ifdef DEVELOPER_TEST_EN
+#ifdef DIRECT_MODE
             test_direct_mode();
+#else
+            test_indirect_mode();
+#endif
         #ifdef ESC_INIT_TEST
             SMC_VerifyByteOrderRegister();
         #endif
