@@ -32,7 +32,6 @@
 							<ResponseTimeout>2000</ResponseTimeout>
 						</Timeout>
 					</Mailbox>
-					<IdentificationReg134>true</IdentificationReg134>
 				</Info>
 				<GroupType>SSC_Device</GroupType>
 				<Profile>
@@ -44,8 +43,8 @@
 								<BitSize>24</BitSize>
 							</DataType>
 							<DataType>
-								<Name>STRING(20)</Name>
-								<BitSize>160</BitSize>
+								<Name>STRING(21)</Name>
+								<BitSize>168</BitSize>
 							</DataType>
 							<DataType>
 								<Name>USINT</Name>
@@ -626,10 +625,10 @@
 							<Object>
 								<Index>#x1008</Index>
 								<Name>Device name</Name>
-								<Type>STRING(20)</Type>
-								<BitSize>160</BitSize>
+								<Type>STRING(21)</Type>
+								<BitSize>168</BitSize>
 								<Info>
-									<DefaultData>504943333220457468657243415420536C617665</DefaultData>
+									<DefaultData>53414D45373020457468657243415420536C617665</DefaultData>
 								</Info>
 								<Flags>
 									<Access>ro</Access>
@@ -641,7 +640,7 @@
 								<Type>STRING(3)</Type>
 								<BitSize>24</BitSize>
 								<Info>
-									<DefaultData>302E37</DefaultData>
+									<DefaultData>312E30</DefaultData>
 								</Info>
 								<Flags>
 									<Access>ro</Access>
@@ -653,7 +652,7 @@
 								<Type>STRING(3)</Type>
 								<BitSize>24</BitSize>
 								<Info>
-									<DefaultData>312E33</DefaultData>
+									<DefaultData>312E30</DefaultData>
 								</Info>
 								<Flags>
 									<Access>ro</Access>
@@ -680,7 +679,7 @@
 									<SubItem>
 										<Name>Product code</Name>
 										<Info>
-											<DefaultData>52920000</DefaultData>
+											<DefaultData>54920000</DefaultData>
 										</Info>
 									</SubItem>
 									<SubItem>
@@ -992,7 +991,6 @@
 					</Entry>
 				</TxPdo>
 				<Mailbox DataLinkLayer="true">
-					<EoE />
 					<CoE SdoInfo="true" PdoAssign="false" PdoConfig="false" CompleteAccess="true" SegmentedSdo="true" />
 					<FoE />
 				</Mailbox>
@@ -1012,7 +1010,8 @@
 				</Dc>
 				<Eeprom>
 					<ByteSize>2048</ByteSize>
-					<ConfigData>970E81CC88130000000000800000</ConfigData>
+					<ConfigData>970E81CC88130000000040C00000</ConfigData>
+					<BootStrap>0010800080108000</BootStrap>
 				</Eeprom>
 				<ImageData16x14>424DF8010000000000003600000028000000100000000E0000000100100000000000C2010000120B0000120B00000000000000000000FF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7F397B8C75C6748474A5744A75947AFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7F8B7521746374847420706374837441746374FF7FFF7FFF7FFF7FFF7FFF7FFF7F00708374A47400709C7FA47463744274E674FF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7F00702074CD79FF7FFF7F00740070FF7FFF7FFF7FFF7FFF7FFF7F5A7FFF7FFF7F947A0070FF7FFF7FFF7F0070D67AFF7FFF7FD67AFF7FFF7FFF7F0070FF7FFF7F00709C7FFF7FFF7FCD796274FF7FFF7FFF7F00705A7FFF7FFF7F6274E774AD754975FF7FFF7FFF7F0070FF7FFF7FFF7FA5740875FF7FFF7FFF7F497541740070FF7FFF7FFF7F0070187FFF7FFF7FF77A2174FF7FFF7FFF7FFF7F937A217400709C7FFF7F317A0070C674FF7FFF7F00705A7FFF7FFF7FFF7FFF7FFF7F087541740070397B0070A4742170EF790775297DFF7FFF7FFF7FFF7FFF7FFF7FFF7FAC79007000708474A47484742170A57CFF7F7B6FFF7FFF7FFF7FFF7FFF7FFF7FFF7F397F8B75C6748474C574AC75FF7FD6561863FF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7FFF7F0000</ImageData16x14>
 			</Device>

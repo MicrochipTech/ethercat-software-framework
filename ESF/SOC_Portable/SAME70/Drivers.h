@@ -51,9 +51,13 @@
 /* Configured PA11 and PA12 pins 
  * PA11 - QCS, J34 header 9th pin
  * PA12 - QIO1, J34 header 5th pin
+ * PA17 - QIO2, J36 header 3rd pin
+ * PD31 - QIO3, J36 header 4th pin
  * Can be modified with appropriate pins for specific use 
  */
-#define GPIO_T_PDI                                  PIO_PIN_PA11
+#define GPIO_T_WR_PDI                               PIO_PIN_PA11
+#define GPIO_T_RD_PDI                               PIO_PIN_PA17
+#define GPIO_T_SYNC0                                PIO_PIN_PD31
 #define GPIO_T_MCU                                  PIO_PIN_PA12
 
 
@@ -94,8 +98,8 @@ extern "C" {
     void SMC_SyetemCSR_Read(uint8_t * ReadBuffer, uint16_t Addr, uint16_t count);
     void SMC_ECAT_Write(uint8_t * WriteBuffer, uint16_t Addr, uint16_t count);
     void SMC_ECAT_Read(uint8_t * ReadBuffer, uint16_t Addr, uint16_t count);
-    void SMC_ProcessRAMRead(uint8_t **pData, uint16_t address, uint16_t length);
-    void SMC_Indirect_ProcessRAMWrite(uint8_t *pData, uint16_t address, uint16_t length);
+    void SMC_ProcessRAMRead(uint8_t *pData, uint16_t address, uint16_t length);
+    void SMC_ProcessRAMWrite(uint8_t *pData, uint16_t address, uint16_t length);
     
     void ESC_Sync1_cb(PIO_PIN pin, uintptr_t context);
     void ESC_Sync0_cb(PIO_PIN pin, uintptr_t context);

@@ -26,6 +26,9 @@
             <logicalFolder name="f1" displayName="smc" projectFiles="true">
               <itemPath>../src/config/default/peripheral/smc/plib_smc.h</itemPath>
             </logicalFolder>
+            <logicalFolder name="f8" displayName="systick" projectFiles="true">
+              <itemPath>../src/config/default/peripheral/systick/plib_systick.h</itemPath>
+            </logicalFolder>
             <logicalFolder name="f6" displayName="tc" projectFiles="true">
               <itemPath>../src/config/default/peripheral/tc/plib_tc0.h</itemPath>
               <itemPath>../src/config/default/peripheral/tc/plib_tc_common.h</itemPath>
@@ -173,6 +176,9 @@
             <logicalFolder name="f1" displayName="smc" projectFiles="true">
               <itemPath>../src/config/default/peripheral/smc/plib_smc.c</itemPath>
             </logicalFolder>
+            <logicalFolder name="f8" displayName="sytick" projectFiles="true">
+              <itemPath>../src/config/default/peripheral/systick/plib_systick.c</itemPath>
+            </logicalFolder>
             <logicalFolder name="f6" displayName="tc" projectFiles="true">
               <itemPath>../src/config/default/peripheral/tc/plib_tc0.c</itemPath>
             </logicalFolder>
@@ -243,7 +249,7 @@
         <targetDevice>ATSAME70Q21B</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool></platformTool>
+        <platformTool>AtmelIceTool</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>2.30</languageToolchainVersion>
         <platform>3</platform>
@@ -945,7 +951,7 @@
         <targetDevice>ATSAME70Q21B</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool></platformTool>
+        <platformTool>AtmelIceTool</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>2.30</languageToolchainVersion>
         <platform>3</platform>
@@ -1647,7 +1653,7 @@
         <targetDevice>ATSAME70Q21B</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool></platformTool>
+        <platformTool>AtmelIceTool</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>2.30</languageToolchainVersion>
         <platform>3</platform>
@@ -1705,6 +1711,8 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0x400000-0x5fffff"/>
         <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmerToGoFilePath"
+                  value="D:/esf_new_git/same70/ethercat-software-framework-public-new/ESF/Demo/ESF_SVB3-E70_LAN9253/firmware/ESF_SVB3-E70_LAN9253.X/debug/HBI_DEBUG_MODE/ESF_SVB3-E70_LAN9253_ptg"/>
         <property key="programoptions.eraseb4program" value="false"/>
         <property key="programoptions.preservedataflash" value="false"/>
         <property key="programoptions.preservedataflash.ranges"
@@ -1740,7 +1748,7 @@
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
         <property key="preprocessor-macros"
-                  value="DIRECT_MODE;ESF_PDI=HBI;HBI=1;DC_SUPPORTED;DEVELOPER_TEST_EN;HBI_DEMUX_8BIT;_HBI_DEMUX_16BIT"/>
+                  value="nDIRECT_MODE;ESF_PDI=HBI;HBI=1;DC_SUPPORTED;DEVELOPER_TEST_EN;HBI_DEMUX_8BIT;_HBI_DEMUX_16BIT"/>
         <property key="strict-ansi" value="false"/>
         <property key="support-ansi" value="false"/>
         <property key="toplevel-reordering" value=""/>

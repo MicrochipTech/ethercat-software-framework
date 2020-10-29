@@ -39,7 +39,10 @@
 #define ESF_API_HOOK_H_
 
 #include "ESF_Config.h"
-
+#define ESF_delay(time) {\
+    uint32_t loop;\
+    for (loop = 0; loop < 1*time; loop++);\
+    }
 #define MCHP_ESF_PDI_EIRQ_INIT()						
 
 #define MCHP_ESF_PDI_INIT()								ESF_PDI_Init()
@@ -58,7 +61,7 @@
 #define MCHP_ESF_PDI_FASTREAD(addr, pdata)			
 #define MCHP_ESF_PDI_READ_PDRAM(pdata, addr, len)		SMC_ProcessRAMRead(pdata, addr, len)
 #define MCHP_ESF_PDI_FASTREAD_PDRAM(pdata, addr, len)	
-#define MCHP_ESF_PDI_WRITE_PDRAM(pdata, addr, len)      SMC_Indirect_ProcessRAMWrite(pdata, addr, len)
+#define MCHP_ESF_PDI_WRITE_PDRAM(pdata, addr, len)      SMC_ProcessRAMWrite(pdata, addr, len)
 #endif
 
 /* Timer functions */
