@@ -50,8 +50,18 @@
  * Configuration parameter for frequency selection
  * Frequency value should be given in MHz.
  */
-#define ESF_PDI_FREQUENCY 20
+#define ESF_PDI_FREQUENCY 40
 #define IS_SUPPORT_DUMMY_CYCLE
+
+/*
+ * The Dummy cycles needed for read transaction introduced by two methods
+ * - Dummy clock method - dummy clocks feed to SQI structure
+ * - Dummy read method  - dummy read happen and data extraction happen through application READ API
+ * 
+ * DUMMY_READ_EN - enables the Dummy read method, (define DUMMY_READ_EN to enable)
+ * Dummy clock method is selected by default, Undefine DUMMY_READ_EN to enable this method
+ */
+//#define DUMMY_READ_EN
 
 #endif
 
