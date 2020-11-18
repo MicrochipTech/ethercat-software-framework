@@ -231,6 +231,7 @@ void ESC_BYTE_TEST_Register_Read (UINT8 *pu8Data)
 void ReBuild_SQI_SetCfg_data ()
 {
     UINT16 u16SQIClkPeriod = 0, u16SQIClkfreq = 0;
+    UINT8 u8DummyBytes =0;
     
     u16SQIClkfreq = ESF_PDI_FREQUENCY;
     /* Get clock period in Nano seconds */
@@ -240,12 +241,21 @@ void ReBuild_SQI_SetCfg_data ()
     /* SQI Fast read, index from 33, 34, 35 
      * as initial, intra DWORD  inter DWORD
      */
-    gau8DummyCntArr[SQI_FASTREAD_INITIAL_OFFSET] = GetDummyBytesRequired (QUAD_SPI, IAT_DWRD, 0, u16SQIClkPeriod);
+    u8DummyBytes = GetDummyBytesRequired (QUAD_SPI, IAT_DWRD, 0, u16SQIClkPeriod);
+#ifdef DUMMY_READ_EN
+    if (u8DummyBytes % 4 != 0) {
+        /* As SQI , we make sure the dummy bytes required should be multiple of 4*/
+        u8DummyBytes += (u8DummyBytes % 4);
+        gau8DummyCntArr[SQI_FASTREAD_INITIAL_OFFSET] = u8DummyBytes;
+    }
+#else
+    gau8DummyCntArr[SQI_FASTREAD_INITIAL_OFFSET] = u8DummyBytes;
+#endif
     /* SQI Write, index starts from 36, 37  38 
      * as Initial, Intra DWORD  Inter DWORD
      */
-    gau8DummyCntArr[SQI_WRITE_INITIAL_OFFSET] = GetDummyBytesRequired (QUAD_SPI, IAT_NULL, 0, u16SQIClkPeriod);
-    if (gau8DummyCntArr[SQI_WRITE_INITIAL_OFFSET] == 0x0) {
+    u8DummyBytes = GetDummyBytesRequired (QUAD_SPI, IAT_NULL, 0, u16SQIClkPeriod);
+    if (u8DummyBytes == 0x0) {
         /* Set minimum one dummy byte */
         /* SPECIAL CASE - Add 1 byte clock cycle count to byDummy
         * SAMD51 supports 24 bit and 32 bit addressing format
@@ -255,6 +265,8 @@ void ReBuild_SQI_SetCfg_data ()
         * so add the 1 byte dummy cycle from the requested.
         */
         gau8DummyCntArr[SQI_WRITE_INITIAL_OFFSET] = 0x1;
+    } else {
+        gau8DummyCntArr[SQI_WRITE_INITIAL_OFFSET] = u8DummyBytes;
     }
     
 }
@@ -323,7 +335,7 @@ void SQI_DisableQuadMode()
     /* Load the instruction */
 	qspi_xfer.instruction = CMD_RESET_SQI;
     /* Setting single bit SPI */
-    qspi_xfer.width = QUAD_CMD;
+    qspi_xfer.width = SINGLE_BIT_SPI;
     
     /* Sending address as 0, as we don't need to send address */
     QSPI_CommandWrite (&qspi_xfer, 0x0);
@@ -2158,7 +2170,7 @@ void LAN9253SQI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	UINT32 u32ModLen = 0;
     qspi_memory_xfer_t qspi_xfer;
 	UINT32 u32InstrAddr = 0;
-//    UINT8 u8Dummy = 0;    /* Disabled as write does not require dummy */
+    UINT8 u8Dummy = 0;    /* Disabled as write does not require dummy */
 
 	/* Core CSR and Process RAM accesses can have any alignment and length */
 	if (u16Addr < 0x3000)
@@ -2198,7 +2210,7 @@ void LAN9253SQI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	memset((void *)&qspi_xfer, 0, sizeof(qspi_memory_xfer_t));
 	qspi_xfer.instruction = CMD_SERIAL_WRITE;
 	qspi_xfer.width = QUAD_CMD;
-	qspi_xfer.dummy_cycles = 0 /*u8Dummy*/;
+//	qspi_xfer.dummy_cycles = 0 /*u8Dummy*/;
 
 	/* Get the dummy Byte count */
 	/* SPECIAL CASE - Reduce 1 byte clock cycle count from byDummy
@@ -2208,7 +2220,8 @@ void LAN9253SQI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
      * treating the extra address byte as dummy cycle, 
      * so reduce the 1 byte dummy cycle from the requested.
      */
-//    u8Dummy = (gau8DummyCntArr[36] - 1);
+    u8Dummy = (gau8DummyCntArr[36] - 1);
+    qspi_xfer.dummy_cycles = u8Dummy;
     u32InstrAddr = u16Addr;
     u32InstrAddr = u32InstrAddr << 8;
 
@@ -2274,20 +2287,39 @@ void LAN9253SQI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
     memset((void *)&qspi_xfer, 0, sizeof(qspi_memory_xfer_t));
 	qspi_xfer.instruction = CMD_FAST_READ;
     qspi_xfer.width = QUAD_CMD;
+
+#ifdef DUMMY_READ_EN
     qspi_xfer.dummy_cycles = u8Dummy;
-    
     /* Get the number of dummy cycle required */
     u8Dummy = gau8DummyCntArr[33];
+
     u32InstrAddr = u16Addr;
-    u32InstrAddr = (u32InstrAddr << 8) | u32Length;
+    u32InstrAddr = (u32InstrAddr << 8) | (u32Length + u8Dummy);
 
     QSPI_MemoryRead(&qspi_xfer, (UINT32 *)&gau8rx_data[0], u32Length + u8Dummy, u32InstrAddr);
     
    //https://jira.microchip.com/browse/UNG_JUTLAND2-278
    //Fix is added for odd address failure
     u8Dummy += (u16Addr & 0x3);
-    
+
     memcpy (pu8data, gau8rx_data + u8Dummy, u32Length);
+#else
+    /* Get the number of dummy cycle required */
+    u8Dummy = gau8DummyCntArr[33];
+    qspi_xfer.dummy_cycles = u8Dummy * QSPI_SQI_ONE_BYTE_CLK_COUNT;
+
+    u32InstrAddr = u16Addr;
+    u32InstrAddr = (u32InstrAddr << 8) | u32Length;
+
+    QSPI_MemoryRead(&qspi_xfer, (UINT32 *)&gau8rx_data[0], u32Length, u32InstrAddr);
+    
+   //https://jira.microchip.com/browse/UNG_JUTLAND2-278
+   //Fix is added for odd address failure
+   // u8Dummy += (u16Addr & 0x3);
+    
+    memcpy (pu8data, gau8rx_data, u32Length);
+#endif
+
 }
 
 #endif
