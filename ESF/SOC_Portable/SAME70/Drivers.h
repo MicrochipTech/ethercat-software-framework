@@ -55,8 +55,7 @@
  * PD31 - QIO3, J36 header 4th pin
  * Can be modified with appropriate pins for specific use 
  */
-#define GPIO_T_WR_PDI                               PIO_PIN_PA11
-#define GPIO_T_RD_PDI                               PIO_PIN_PA17
+#define GPIO_T_PDI                                  PIO_PIN_PA11
 #define GPIO_T_SYNC0                                PIO_PIN_PD31
 #define GPIO_T_MCU                                  PIO_PIN_PA12
 
