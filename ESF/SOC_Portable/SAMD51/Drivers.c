@@ -242,6 +242,9 @@ void ReBuild_SQI_SetCfg_data ()
      * as initial, intra DWORD  inter DWORD
      */
     u8DummyBytes = GetDummyBytesRequired (QUAD_SPI, IAT_DWRD, 0, u16SQIClkPeriod);
+    //https://jira.microchip.com/browse/UNG_JUTLAND2-299
+    //Fix is added to provide PDI counter error test
+    //making dummy bytes calculated as DWORD aligned
 #ifdef DUMMY_READ_EN
     if (u8DummyBytes % DWORD_LENGTH != 0) {
         /* As SQI , we make sure the dummy bytes required should be multiple of 4*/
@@ -2211,7 +2214,6 @@ void LAN9253SQI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	memset((void *)&qspi_xfer, 0, sizeof(qspi_memory_xfer_t));
 	qspi_xfer.instruction = CMD_SERIAL_WRITE;
 	qspi_xfer.width = QUAD_CMD;
-//	qspi_xfer.dummy_cycles = 0 /*u8Dummy*/;
 
 	/* Get the dummy Byte count */
 	/* SPECIAL CASE - Reduce 1 byte clock cycle count from byDummy
@@ -2289,6 +2291,9 @@ void LAN9253SQI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 	qspi_xfer.instruction = CMD_FAST_READ;
     qspi_xfer.width = QUAD_CMD;
 
+    //https://jira.microchip.com/browse/UNG_JUTLAND2-299
+    //Fix is added to provide PDI error counter test
+    //the transfer length should not contain dummy bytes length
 #ifdef DUMMY_READ_EN
     qspi_xfer.dummy_cycles = u8Dummy;
     /* Get the number of dummy cycle required */
