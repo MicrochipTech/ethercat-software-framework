@@ -243,9 +243,10 @@ void ReBuild_SQI_SetCfg_data ()
      */
     u8DummyBytes = GetDummyBytesRequired (QUAD_SPI, IAT_DWRD, 0, u16SQIClkPeriod);
 #ifdef DUMMY_READ_EN
-    if (u8DummyBytes % 4 != 0) {
+    if (u8DummyBytes % DWORD_LENGTH != 0) {
         /* As SQI , we make sure the dummy bytes required should be multiple of 4*/
-        u8DummyBytes += (u8DummyBytes % 4);
+        /* making round off to the next DWORD aligned value */
+        u8DummyBytes += (DWORD_LENGTH - (u8DummyBytes % DWORD_LENGTH));
         gau8DummyCntArr[SQI_FASTREAD_INITIAL_OFFSET] = u8DummyBytes;
     }
 #else
@@ -2291,10 +2292,10 @@ void LAN9253SQI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 #ifdef DUMMY_READ_EN
     qspi_xfer.dummy_cycles = u8Dummy;
     /* Get the number of dummy cycle required */
-    u8Dummy = gau8DummyCntArr[33];
+    u8Dummy = gau8DummyCntArr[SQI_FASTREAD_INITIAL_OFFSET];
 
     u32InstrAddr = u16Addr;
-    u32InstrAddr = (u32InstrAddr << 8) | (u32Length + u8Dummy);
+    u32InstrAddr = (u32InstrAddr << 8) | (u32Length);
 
     QSPI_MemoryRead(&qspi_xfer, (UINT32 *)&gau8rx_data[0], u32Length + u8Dummy, u32InstrAddr);
     

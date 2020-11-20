@@ -50,7 +50,7 @@
  * Configuration parameter for frequency selection
  * Frequency value should be given in MHz.
  */
-#define ESF_PDI_FREQUENCY 40
+#define ESF_PDI_FREQUENCY 60
 #define IS_SUPPORT_DUMMY_CYCLE
 
 /*
@@ -59,9 +59,9 @@
  * - Dummy read method  - dummy read happen and data extraction happen through application READ API
  * 
  * DUMMY_READ_EN - enables the Dummy read method, (define DUMMY_READ_EN to enable)
- * Dummy clock method is selected by default, Undefine DUMMY_READ_EN to enable this method
+ * Dummy read method is selected by default, Undefine DUMMY_READ_EN to enable dummy clock method
  */
-//#define DUMMY_READ_EN
+#define DUMMY_READ_EN
 
 #endif
 
