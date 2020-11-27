@@ -1,0 +1,329 @@
+<pbs:pbs xmlns:pbs="http://crownking/mplab_pbs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://crownking/mplab_pbs ../../schema/PluginBoardSupport.xsd">
+  <pbs:device name="*">
+    <pbs:board boardid="5" displayname="Power Monitor" name="POWERMODULE" rice="alpha" supportfwver="0x01.0x28.0x25" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX110F016B">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX110F016C">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX110F016D">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX120F032B">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX120F032C">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX120F032D">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX120F064H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX130F064B">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX130F064C">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX130F064D">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX130F128H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX130F128L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX150F128B">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX150F128C">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX150F128D">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX150F256H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX150F256L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX170F256B">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX170F256D">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX170F512H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX170F512L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX210F016B">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX210F016C">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX210F016D">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX220F032B">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX220F032C">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX220F032D">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX230F064B">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX230F064C">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX230F064D">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX230F128H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX230F128L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX250F128B">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX250F128C">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX250F128D">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX250F256H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX250F256L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX270F256B">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX270F256D">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX270F512H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX270F512L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX320F032H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX320F064H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX320F128H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX320F128L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX330F064H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX330F064L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX340F128H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX340F128L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX340F256H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX340F512H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX350F128H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX350F128L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX350F256H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX350F256L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX360F256L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX360F512L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX370F512H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX370F512L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX420F032H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX430F064H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX430F064L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX440F128H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX440F128L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX440F256H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX440F512H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX450F128H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX450F128L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX450F256H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX450F256L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX460F256L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX460F512L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX470F512H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX470F512L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX530F128H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX530F128L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX534F064H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX534F064L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX550F256H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX550F256L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX564F064H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX564F064L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX564F128H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX564F128L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX570F512H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX570F512L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX575F256H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX575F256L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX575F512H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX575F512L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX664F064H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX664F064L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX664F128H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX664F128L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX675F256H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX675F256L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX675F512H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX675F512L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX695F512H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX695F512L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX764F128H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX764F128L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX775F256H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX775F256L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX775F512H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX775F512L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX795F512H">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+  <pbs:device name="PIC32MX795F512L">
+    <pbs:board boardid="4" displayname="JTAG Driver Board" name="PIC32JTAG" rice="alpha" toolclass="RealICEPlatformTool"/>
+  </pbs:device>
+</pbs:pbs>

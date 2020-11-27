@@ -39,6 +39,7 @@
 #include "LAN925x.h"
 #include "definitions.h"
 
+#if (ESF_PDI == SPI) || (ESF_PDI == SQI)
 static UINT16 RoundUpMultipleOf (UINT16 u16X, UINT16 u16Type);
 /*
  * Make the u16X as multiple of 2 or 4 or 8, based on u16Type
@@ -120,6 +121,8 @@ UINT8 GetDummyBytesRequired (UINT8 u8SPIType, UINT16 u16IAT, UINT16 u16SPIClkCou
     }
     return u8DummyByte;
 }
+
+#endif
 
 void ESC_Init()
 {

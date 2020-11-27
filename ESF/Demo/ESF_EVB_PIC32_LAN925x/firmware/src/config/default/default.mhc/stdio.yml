@@ -1,0 +1,6 @@
+format_version: v1.0
+type: UniqueComponent
+attributes: {id: stdio}
+children:
+- type: ElementPosition
+  attributes: {x: '740', y: '20', id: stdio}

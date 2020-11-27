@@ -54,7 +54,9 @@ THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 #undef _SAMPLE_APP_
 
 #include "bootmode.h"
+#if (ESF_PDI == SPI) || (ESF_PDI == SQI)
 #include "configuration.h"
+#endif
 #include "app.h"
 
 

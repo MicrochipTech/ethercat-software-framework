@@ -48,9 +48,9 @@
 
 BOOL gbALEvtOpEnabled = FALSE;
 UALEVENT         gEscALEvent;
-
+#if (ESF_PDI == SPI) || (ESF_PDI == SQI)
 UINT8 gau8DummyCntArr[SETCFG_MAX_DATA_BYTES] = {0,0,0,1,0,0,1,0,0,2,0,0,1,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,1,0,0};
-
+#endif
 /*******************************************************************************
     Function:
         UINT8 LAN925x_Init(void)
@@ -477,11 +477,40 @@ UINT16 HW_GetALEventRegister_Isr(void)
 
 #endif
 #elif (ESF_PDI == HBI)
-	  UINT32_VAL u32Val;
-      
-      HW_EscReadIsr(&u32Val.Val, ESC_AL_EVENT_OFFSET, 4);
+    #ifdef _IS_HBI_MSP_16BIT_SUPPORT
+        #if _IS_HBI_DIRECT_MODE_ACCESS 
+             UINT32_VAL u32Val;
 
-	  return u32Val.w[0];
+            MCHP_ESF_PDI_READ(ESC_AL_EVENT_OFFSET, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+
+            return u32Val.w[0];
+        #else
+            UINT32_VAL u32Val;
+
+            u32Val.v[0] = 0x20;
+            u32Val.v[1] = 0x02;
+            u32Val.v[2] = 2;
+            u32Val.v[3] = ESC_READ_BYTE;
+
+            MCHP_ESF_PDI_WRITE(ESC_CSR_CMD_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+            MCHP_ESF_PDI_READ(ESC_CSR_DATA_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+
+            if (gbALEvtOpEnabled)
+            {
+                return gEscALEvent.Word;
+            }
+            else
+            {
+                return u32Val.w[0];
+            }
+        #endif
+    #else
+        UINT32_VAL u32Val;
+      
+        HW_EscReadIsr(&u32Val.Val, ESC_AL_EVENT_OFFSET, 4);
+
+        return u32Val.w[0];
+    #endif
 #elif (ESF_PDI == SQI)
 #if _IS_SQI_INDIRECT_MODE_ACCESS 
 	  UINT32_VAL u32Val;
@@ -644,8 +673,8 @@ void HW_EscRead(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
                 pu8Data++;
             }
             PDI_Restore_Global_Interrupt();
-        #else
-            UINT8 *pu8Data = (UINT8 *)pmData;
+		#elif _IS_HBI_DEMUX_16BIT_SUPPORT
+			UINT8 *pu8Data = (UINT8 *)pmData;
 
             while (u16Len > 0) {
                 PDI_Disable_Global_Interrupt();
@@ -654,7 +683,37 @@ void HW_EscRead(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
                 u16Address ++;
                 pu8Data++;
                 PDI_Restore_Global_Interrupt();	
-            }
+			}
+        #else
+            UINT32_VAL u32Val;
+			UINT8 u8ValidDataLen = 0, u8Itr = 0;
+			UINT8 *pu8Data = (UINT8 *)pmData;
+
+			while (u16Len > 0) {
+				u8ValidDataLen = (u16Len > 4) ? 4 : u16Len;
+
+				if (u16Address & 0x1) {
+					u8ValidDataLen = 1;
+				}
+				else if (u16Address & 0x2)
+				{
+					u8ValidDataLen = (u8ValidDataLen >= 2 ) ? 2 : 1;
+				}
+				else if (u8ValidDataLen < 4)
+				{
+					u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
+				}
+               
+                PDI_Disable_Global_Interrupt();
+				MCHP_ESF_PDI_READ(u16Address, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+				PDI_Restore_Global_Interrupt();
+
+				for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
+				*pu8Data++ = u32Val.v[u8Itr];
+
+				u16Address += u8ValidDataLen;
+				u16Len -= u8ValidDataLen;
+			}
         #endif	
     #else
         EscRead (pmData, u16Address, u16Len);
@@ -986,15 +1045,66 @@ void HW_EscReadIsr(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
                 u16Address++;
                 pu8Data++;
             }
-        #else
-            UINT8 *pu8Data = (UINT8 *)pmData;
+		#elif _IS_HBI_DEMUX_16BIT_SUPPORT
+			UINT32_VAL u32Val;
+			UINT8 u8ValidDataLen = 0, u8Itr = 0;
+			UINT8 *pu8Data = (UINT8 *)pmData;
 
-            while (u16Len > 0) {
-                SMC_ECAT_Read(pu8Data, u16Address, 1);
-                u16Len--;
-                u16Address++;
-                pu8Data++;
-            }
+			while (u16Len > 0) {
+				u8ValidDataLen = (u16Len > 4) ? 4 : u16Len;
+
+				if (u16Address & 0x1) {
+					u8ValidDataLen = 1;
+				}
+				else if (u16Address & 0x2)
+				{
+					u8ValidDataLen = (u8ValidDataLen >= 2 ) ? 2 : 1;
+				}
+				else if (u8ValidDataLen < 4)
+				{
+					u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
+				}
+
+				PDI_Disable_Global_Interrupt();
+				MCHP_ESF_PDI_READ(u16Address, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+				PDI_Restore_Global_Interrupt();
+
+				for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
+				*pu8Data++ = u32Val.v[u8Itr];
+
+				u16Address += u8ValidDataLen;
+				u16Len -= u8ValidDataLen;
+			}
+        #else
+            UINT32_VAL u32Val;
+			UINT8 u8ValidDataLen = 0, u8Itr = 0;
+			UINT8 *pu8Data = (UINT8 *)pmData;
+
+			while (u16Len > 0) {
+				u8ValidDataLen = (u16Len > 4) ? 4 : u16Len;
+
+				if (u16Address & 0x1) {
+					u8ValidDataLen = 1;
+				}
+				else if (u16Address & 0x2)
+				{
+					u8ValidDataLen = (u8ValidDataLen >= 2 ) ? 2 : 1;
+				}
+				else if (u8ValidDataLen < 4)
+				{
+					u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
+				}
+
+				PDI_Disable_Global_Interrupt();
+				MCHP_ESF_PDI_READ(u16Address, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+				PDI_Restore_Global_Interrupt();
+
+				for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
+				*pu8Data++ = u32Val.v[u8Itr];
+
+				u16Address += u8ValidDataLen;
+				u16Len -= u8ValidDataLen;
+			}
         #endif
     #else
         if(u16Address>0xFFF)
@@ -1210,26 +1320,69 @@ void HW_EscWrite(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
 #endif
 #elif (ESF_PDI == HBI)
     #ifdef HBI_DIRECT_MODE
-        UINT8 *pu8Data = (UINT8 *)pmData;
-        
-        while (u16Len > 0) {
-            PDI_Disable_Global_Interrupt();
-            if((u16Address & 0x1) | (u16Len == 1))	//Odd address or 1 byte
-            {
-                SMC_ECAT_Write(pu8Data, u16Address, 1);
-                u16Len--;
-                u16Address++;
-                pu8Data++;
-            }else
-            {
-                //Even address can always read 2 byes..not a problem!!!
-                SMC_ECAT_Write(pu8Data, u16Address, 2);
-                u16Len -= 2;
-                u16Address += 2;
-                pu8Data += 2;
-            }
-            PDI_Restore_Global_Interrupt();
-        }
+		#ifdef _IS_HBI_MSP_16BIT_SUPPORT
+			 UINT32_VAL u32Val;
+			UINT8 u8ValidDataLen = 0, u8Itr = 0;
+			UINT8 *pu8Data = (UINT8 *)pmData;
+
+			while (u16Len > 0) {
+				u8ValidDataLen = (u16Len > 4) ? 4 : u16Len;
+
+				if (u16Address & 0x1) {
+					u8ValidDataLen = 1;
+				}
+				else if (u16Address & 0x2)
+				{
+					u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
+				}
+				else if (u8ValidDataLen < 4)
+				{
+					u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
+				}
+
+				for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
+                {
+                    if((u8ValidDataLen < 4) && (u16Address < 0x1000))
+                    {
+                        u32Val.v[u8Itr+(u16Address & 0x03)] = *pu8Data++;
+                        u16Address -= (u16Address & 0x03);
+                    }
+                    else
+                    {
+                        u32Val.v[u8Itr] = *pu8Data++;
+                    }
+                }
+                
+
+				PDI_Disable_Global_Interrupt();
+				MCHP_ESF_PDI_WRITE(u16Address, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+				PDI_Restore_Global_Interrupt();
+                
+				u16Address += u8ValidDataLen;
+				u16Len -= u8ValidDataLen;
+			}
+		#else
+			UINT8 *pu8Data = (UINT8 *)pmData;
+			
+			while (u16Len > 0) {
+				PDI_Disable_Global_Interrupt();
+				if((u16Address & 0x1) | (u16Len == 1))	//Odd address or 1 byte
+				{
+					SMC_ECAT_Write(pu8Data, u16Address, 1);
+					u16Len--;
+					u16Address++;
+					pu8Data++;
+				}else
+				{
+					//Even address can always read 2 byes..not a problem!!!
+					SMC_ECAT_Write(pu8Data, u16Address, 2);
+					u16Len -= 2;
+					u16Address += 2;
+					pu8Data += 2;
+				}
+				PDI_Restore_Global_Interrupt();
+			}
+		#endif
     #else
         EscWrite (pmData, u16Address, u16Len);
 	#endif
@@ -1555,23 +1708,57 @@ void HW_EscWriteIsr(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
     }
 #elif (ESF_PDI == HBI)
     UINT8 *pu8Data = (UINT8 *)pmData;
-    #ifdef HBI_DIRECT_MODE   
-        while (u16Len > 0) {
-            if((u16Address & 0x1) | (u16Len == 1))	//Odd address or 1 byte
-            {
-                SMC_ECAT_Write(pu8Data, u16Address, 1);
-                u16Len--;
-                u16Address++;
-                pu8Data++;
-            }else
-            {
-                //Even address can always read 2 byes..not a problem!!!
-                SMC_ECAT_Write(pu8Data, u16Address, 2);
-                u16Len -= 2;
-                u16Address += 2;
-                pu8Data += 2;
-            }
-        }
+    #ifdef HBI_DIRECT_MODE 
+		#ifdef _IS_HBI_MSP_16BIT_SUPPORT
+			
+            if(u16Address>0xfff)
+			{
+				UINT32_VAL u32Val;
+				UINT8 u8ValidDataLen = 0, u8Itr = 0;
+
+				while (u16Len > 0) {
+					u8ValidDataLen = (u16Len > 4) ? 4 : u16Len;
+
+					if (u16Address & 0x1) {
+						u8ValidDataLen = 1;
+					}
+					else if (u16Address & 0x2)
+					{
+						u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
+					}
+					else if (u8ValidDataLen < 4)
+					{
+						u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
+					}
+
+					for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
+					u32Val.v[u8Itr] = *pu8Data++;
+
+					MCHP_ESF_PDI_WRITE(u16Address, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+
+					u16Address += u8ValidDataLen;
+					u16Len -= u8ValidDataLen;
+				}
+			}			
+		#else
+			while (u16Len > 0) {
+				if((u16Address & 0x1) | (u16Len == 1))	//Odd address or 1 byte
+				{
+					SMC_ECAT_Write(pu8Data, u16Address, 1);
+					u16Len--;
+					u16Address++;
+					pu8Data++;
+				}else
+				{
+					//Even address can always read 2 byes..not a problem!!!
+					SMC_ECAT_Write(pu8Data, u16Address, 2);
+					u16Len -= 2;
+					u16Address += 2;
+					pu8Data += 2;
+				}
+			}
+		#endif
+        
 	#else
         if(u16Address>=0x1000)
         {

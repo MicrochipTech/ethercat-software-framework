@@ -1,0 +1,65 @@
+<persfr:persfr xmlns:persfr="http://crownking/persfr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://crownking/persfr ../../schema/persfr/persfr.xsd">
+  <persfr:version major="0" minor="0" rev="0"/>
+  <persfr:peripheral name="Timer 0">
+    <persfr:sfr sfr="TMR0"/>
+    <persfr:sfr sfr="CM1?CON0" field="C(1|MP)OUT" critical="false"/>
+    <persfr:sfr sfr="OPTION(_REG)?" field="T0CS"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Oscillator">
+    <persfr:sfr sfr="OSCCAL"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Comparator 1">
+    <persfr:sfr sfr="CM1?CON0"/>
+    <persfr:sfr sfr="VRCON" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Comparator 2">
+    <persfr:sfr sfr="CM2CON0"/>
+    <persfr:sfr sfr="VRCON" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="General Purpose IO">
+    <persfr:sfr sfr="TRIS(GP)?(IO)?"/>
+    <persfr:sfr sfr="GPIO"/>
+    <persfr:sfr sfr="OPTION(_REG)?" field="nGPWU|nGPPU" critical="false"/>
+    <persfr:sfr sfr="STATUS" field="GPWUF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port A">
+    <persfr:sfr sfr="TRISA"/>
+    <persfr:sfr sfr="PORTA"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port B">
+    <persfr:sfr sfr="TRISB"/>
+    <persfr:sfr sfr="PORTB"/>
+    <persfr:sfr sfr="OPTION(_REG)?" field="nRBWU|nRBPU" critical="false"/>
+    <persfr:sfr sfr="STATUS" field="RBWUF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port C">
+    <persfr:sfr sfr="TRISC"/>
+    <persfr:sfr sfr="PORTC"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port D">
+    <persfr:sfr sfr="TRISD"/>
+    <persfr:sfr sfr="PORTD"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port E">
+    <persfr:sfr sfr="TRISE"/>
+    <persfr:sfr sfr="PORTE"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port F">
+    <persfr:sfr sfr="TRISF"/>
+    <persfr:sfr sfr="PORTF"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Analog-to-Digital Converter">
+    <persfr:sfr sfr="ADCON0"/>
+    <persfr:sfr sfr="ADRES"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Run Time Self Programming">
+    <persfr:sfr sfr="EECON"/>
+    <persfr:sfr sfr="EEDATA"/>
+    <persfr:sfr sfr="EEADR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Watchdog Timer">
+    <persfr:sfr sfr="STATUS" field="nTO" critical="false"/>
+    <persfr:sfr sfr="OPTION(_REG)?" field="PSA?" critical="false"/>
+    <persfr:sfr sfr="OPTION2" field="nSWDTEN"/>
+  </persfr:peripheral>
+</persfr:persfr>

@@ -1,0 +1,202 @@
+<sdm:sdm xmlns:sdm="http://crownking/sdm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://crownking/sdm ../../schema/sdm/sdm.xsd">
+  <sdm:version sdm:filename="sdmRealICE4.xml" sdm:major="0" sdm:minor="0" sdm:rev="0"/>
+  <sdm:devicecapabilities>
+    <sdm:device sdm:devicename="PIC32MX110F016B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX110F016C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX110F016D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX120F032B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX120F032C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX120F032D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX120F064H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX130F064B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX130F064C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX130F064D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX130F128H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX130F128L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX130F256B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX130F256D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX150F128B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX150F128C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX150F128D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX150F256H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX150F256L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX170F256B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX170F256D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX170F512H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX170F512L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX210F016B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX210F016C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX210F016D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX220F032B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX220F032C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX220F032D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX230F064B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX230F064C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX230F064D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX230F128H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX230F128L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX230F256B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX230F256D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX250F128B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX250F128C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX250F128D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX250F256H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX250F256L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX270F256B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX270F256D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX270F512H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX270F512L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX320F032H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX320F064H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX320F128H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX320F128L" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX330F064H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX330F064L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX340F128H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX340F128L" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX340F256H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX340F512H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX350F128H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX350F128L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX350F256H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX350F256L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX360F256L" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX360F512L" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX370F512H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX370F512L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX420F032H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX430F064H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX430F064L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX440F128H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX440F128L" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX440F256H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX440F512H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX450F128H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX450F128L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX450F256H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX450F256L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX460F256L" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX460F512L" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX470F512H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX470F512L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX530F128H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX530F128L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX534F064H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX534F064L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX550F256H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX550F256L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX564F064H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX564F064L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX564F128H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX564F128L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX570F512H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX570F512L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX575F256H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX575F256L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX575F512H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX575F512L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX664F064H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX664F064L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX664F128H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX664F128L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX675F256H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX675F256L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX675F512H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX675F512L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX695F512H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX695F512L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX764F128H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX764F128L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX775F256H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX775F256L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX775F512H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX775F512L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX795F512H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX795F512L" sdm:profile="ejtagbvci"/>
+  </sdm:devicecapabilities>
+  <sdm:devicechanges/>
+  <sdm:profiledef sdm:profilename="ejtagonly" sdm:profilesupported="yes">
+    <sdm:debuggermodule/>
+    <sdm:datastreams>
+      <sdm:stream sdm:type="generic">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="raw" sdm:request="powermonitor" sdm:resource="debuggermodule-datacapture"/>
+      </sdm:stream>
+    </sdm:datastreams>
+  </sdm:profiledef>
+  <sdm:profiledef sdm:profilename="ejtag" sdm:profilesupported="yes">
+    <sdm:debuggermodule>
+      <sdm:datacaptureformat sdm:datasize="4" sdm:idsize="1" sdm:iduse="always"/>
+      <sdm:appoutformat sdm:datasize="4" sdm:idsize="1" sdm:iduse="always"/>
+      <sdm:appinformat sdm:datasize="4" sdm:idsize="0" sdm:iduse="never"/>
+      <sdm:dmaformat sdm:datasize="variable" sdm:idsize="2" sdm:iduse="always"/>
+    </sdm:debuggermodule>
+    <sdm:datastreams>
+      <sdm:stream sdm:type="runtimewatch">
+        <sdm:canuse sdm:connection="2" sdm:decodescheme="dma" sdm:max="60" sdm:resource="dma"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="trace">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="iflowtrace" sdm:default="true" sdm:interleave="no" sdm:resource="iflowtrace" sdm:stallonfull="yes"/>
+      </sdm:stream>
+      <sdm:stream sdm:compilersupport="required" sdm:type="appout">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="ssm" sdm:interleave="yes" sdm:resource="debuggermodule-appout" sdm:reversedata="yes"/>
+      </sdm:stream>
+      <sdm:stream sdm:compilersupport="required" sdm:type="appin">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="appin" sdm:resource="debuggermodule-appin"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="memoryaccess">
+        <sdm:canuse sdm:connection="2" sdm:decodescheme="none" sdm:max="60" sdm:resource="dma"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="generic">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="raw" sdm:request="powermonitor" sdm:resource="debuggermodule-datacapture"/>
+      </sdm:stream>
+    </sdm:datastreams>
+  </sdm:profiledef>
+  <sdm:profiledef sdm:profilename="ejtagonlyplustrace" sdm:profilesupported="yes">
+    <sdm:debuggermodule/>
+    <sdm:datastreams>
+      <sdm:stream sdm:type="trace">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="iflowtrace" sdm:default="true" sdm:interleave="no" sdm:resource="iflowtrace" sdm:stallonfull="yes"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="generic">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="raw" sdm:request="powermonitor" sdm:resource="debuggermodule-datacapture"/>
+      </sdm:stream>
+    </sdm:datastreams>
+  </sdm:profiledef>
+  <sdm:profiledef sdm:profilename="ejtagbvci" sdm:profilesupported="yes">
+    <sdm:debuggermodule>
+      <sdm:datacaptureformat sdm:datasize="4" sdm:idsize="1" sdm:iduse="always"/>
+      <sdm:appoutformat sdm:datasize="4" sdm:idsize="1" sdm:iduse="always"/>
+      <sdm:appinformat sdm:datasize="4" sdm:idsize="0" sdm:iduse="never"/>
+      <sdm:dmaformat sdm:datasize="variable" sdm:idsize="2" sdm:iduse="always"/>
+    </sdm:debuggermodule>
+    <sdm:datastreams>
+      <sdm:stream sdm:type="runtimewatch">
+        <sdm:canuse sdm:connection="2" sdm:decodescheme="dma" sdm:max="60" sdm:resource="dma"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="datacapture">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="ssm" sdm:interleave="yes" sdm:resource="debuggermodule-datacapture" sdm:reversedata="yes"/>
+      </sdm:stream>
+      <sdm:stream sdm:compilersupport="required" sdm:type="instrumentedtrace">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="it_pic32_4byte" sdm:default="true" sdm:interleave="no" sdm:max="1" sdm:resource="debuggermodule-datacapture" sdm:symbolname="__DCWord"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="trace">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="iflowtrace" sdm:default="true" sdm:interleave="no" sdm:resource="iflowtrace" sdm:stallonfull="yes"/>
+      </sdm:stream>
+      <sdm:stream sdm:compilersupport="required" sdm:type="appout">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="ssm" sdm:interleave="yes" sdm:resource="debuggermodule-appout" sdm:reversedata="yes"/>
+      </sdm:stream>
+      <sdm:stream sdm:compilersupport="required" sdm:type="appin">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="appin" sdm:resource="debuggermodule-appin"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="memoryaccess">
+        <sdm:canuse sdm:connection="2" sdm:decodescheme="none" sdm:max="60" sdm:resource="dma"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="generic">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="raw" sdm:request="powermonitor" sdm:resource="debuggermodule-datacapture"/>
+      </sdm:stream>
+      <sdm:stream sdm:compilersupport="required" sdm:type="functionprofile">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="cp_ssm_pic32_4byte" sdm:default="true" sdm:interleave="no" sdm:max="1" sdm:resource="debuggermodule-datacapture" sdm:symbolname="__DCWord"/>
+      </sdm:stream>
+    </sdm:datastreams>
+  </sdm:profiledef>
+</sdm:sdm>

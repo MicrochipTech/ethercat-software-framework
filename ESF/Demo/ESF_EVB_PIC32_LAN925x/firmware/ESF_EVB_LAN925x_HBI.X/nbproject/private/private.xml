@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/peripheral/evic/plib_evic.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/ESC/LAN925x.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/initialization.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/ESC/LAN925x.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/app.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/ESC/ProjectVersion.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/SSC/sdoserv.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/app.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/peripheral/tmr/plib_tmr5.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/SSC/ecatslv.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/ESC/ESC_Utils.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/SSC/coeappl.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/Developer_Test.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/peripheral/tmr/plib_tmr_common.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/SSC/ecatslv.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/SSC/ecatappl.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/SOC_Portable/PIC32/ESF_APIHook.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/SSC/sample_app.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/device.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/peripheral/tmr/plib_tmr5.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/SSC/sample_app.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/interrupts.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/definitions.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/toolchain_specifics.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/SSC/ecatappl.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/SSC/LAN925x.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/SOC_Portable/PIC32/Drivers.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/SSC/ecat_def.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/main.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/SSC/LAN925x.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/SSC/mailbox.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/SSC/applInterface.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/peripheral/pmp/plib_pmp.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/Developer_Test.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/peripheral/gpio/plib_gpio.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/peripheral/clk/plib_clk.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/ESC/ESC_Utils.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/exceptions.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/SSC/sample_appObjects.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/tasks.c</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/SOC_Portable/PIC32/Drivers.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Source/SSC/ecatfoe.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/ESF_EVB_LAN925x_HBI.X/nbproject/Makefile-ESF_LAN925x_HBI_MSP_16BIT_DIRECT_MODE.mk</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/peripheral/gpio/plib_gpio.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/Demo/firmware/src/config/default/peripheral/evic/plib_evic.h</file>
+            <file>file:/D:/Perforce/depot_hw_jutland2/ethercat-software-framework-public-new/ESF/SOC_Portable/PIC32/ESF_Config.h</file>
+        </group>
+    </open-files>
+</project-private>

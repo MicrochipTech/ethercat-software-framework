@@ -1,0 +1,11 @@
+<sdm:sdm xmlns:sdm="http://crownking/sdm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://crownking/sdm ../../schema/sdm/sdm.xsd">
+  <sdm:version sdm:major="0" sdm:minor="0" sdm:rev="0" sdm:filename="sdmDebuggerMap.xml"/>
+  <sdm:debuggermap>
+    <sdm:mapentry sdm:debuggername="RealICEPlatformTool" sdm:filename="sdmRealICE.xml"/>
+    <sdm:mapentry sdm:debuggername="Simulator" sdm:filename="sdmSimulator.xml"/>
+    <sdm:mapentry sdm:debuggername="ICD3PlatformTool" sdm:filename="sdmICD3.xml"/>
+    <sdm:mapentry sdm:debuggername="RealICE4PlatformTool" sdm:filename="sdmRealICE4.xml"/>
+    <sdm:mapentry sdm:debuggername="ICD4Tool" sdm:filename="sdmICD4.xml"/>
+  </sdm:debuggermap>
+  <sdm:devicecapabilities/>
+</sdm:sdm>

@@ -1,0 +1,282 @@
+<persfr:persfr xmlns:persfr="http://crownking/persfr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://crownking/persfr ../../schema/persfr/persfr.xsd">
+  <persfr:version major="0" minor="0" rev="0"/>
+  <persfr:peripheral name="Analog Comparator Controller">
+    <persfr:sfr sfr="ACC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Advanced Encryption Standard">
+    <persfr:sfr sfr="AES_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Analog Front-End Controller">
+    <persfr:sfr sfr="AFEC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Analog-to-Digital Converter">
+    <persfr:sfr sfr="ADC_CR"/>
+    <persfr:sfr sfr="ADC_MR"/>
+    <persfr:sfr sfr="ADC_SEQR1"/>
+    <persfr:sfr sfr="ADC_CHER"/>
+    <persfr:sfr sfr="ADC_CHDR"/>
+    <persfr:sfr sfr="ADC_CHSR"/>
+    <persfr:sfr sfr="ADC_LCDR"/>
+    <persfr:sfr sfr="ADC_IER"/>
+    <persfr:sfr sfr="ADC_IDR"/>
+    <persfr:sfr sfr="ADC_IMR"/>
+    <persfr:sfr sfr="ADC_ISR"/>
+    <persfr:sfr sfr="ADC_LCTMR"/>
+    <persfr:sfr sfr="ADC_LCCWR"/>
+    <persfr:sfr sfr="ADC_OVER"/>
+    <persfr:sfr sfr="ADC_EMR"/>
+    <persfr:sfr sfr="ADC_CWR"/>
+    <persfr:sfr sfr="ADC_CDR"/>
+    <persfr:sfr sfr="ADC_WPMR"/>
+    <persfr:sfr sfr="ADC_WPSR"/>
+    <persfr:sfr sfr="ADC_RPR"/>
+    <persfr:sfr sfr="ADC_RCR"/>
+    <persfr:sfr sfr="ADC_RNPR"/>
+    <persfr:sfr sfr="ADC_RNCR"/>
+    <persfr:sfr sfr="ADC_PTCR"/>
+    <persfr:sfr sfr="ADC_PTSR"/>
+    <persfr:sfr sfr="ADCCMPCON[1-6]"/>
+    <persfr:sfr sfr="ADCFSTAT"/>
+    <persfr:sfr sfr="ADCFIFO"/>
+    <persfr:sfr sfr="ADCBASE"/>
+    <persfr:sfr sfr="ADCTRGSNS"/>
+    <persfr:sfr sfr="ADC[0-6]TIME"/>
+    <persfr:sfr sfr="ADCEIEN[1-2]"/>
+    <persfr:sfr sfr="ADCEISTAT[1-2]"/>
+    <persfr:sfr sfr="ADCANCON"/>
+    <persfr:sfr sfr="ADCSYSCFG[0-1]"/>
+    <persfr:sfr sfr="ADC[0-7]CFG"/>
+    <persfr:sfr sfr="ADCDATA[0-9]+"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Chip Identifier">
+    <persfr:sfr sfr="CHIPID_.*"/>
+    <persfr:sfr sfr="CHIPID_CIDR__EPROC"/>
+    <persfr:sfr sfr="CHIPID_CIDR__NVPSIZ"/>
+    <persfr:sfr sfr="CHIPID_CIDR__NVPSIZ2"/>
+    <persfr:sfr sfr="CHIPID_CIDR__SRAMSIZ"/>
+    <persfr:sfr sfr="CHIPID_CIDR__ARCH"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Embedded Flash Controller">
+    <persfr:sfr sfr="EEFC_FMR"/>
+    <persfr:sfr sfr="EEFC_FCR"/>
+    <persfr:sfr sfr="EEFC_FSR"/>
+    <persfr:sfr sfr="EEFC_FRR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Gigabit Ethernet MAC">
+    <persfr:sfr sfr="GMAC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="General Purpose Backup Registers">
+    <persfr:sfr sfr="GPBR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="AHB Bus Matrix">
+    <persfr:sfr sfr="MATRIX_MCFG[0-11]"/>
+    <persfr:sfr sfr="MATRIX_SCFG[0-8]"/>
+    <persfr:sfr sfr="MATRIX_PRAS[0-3]"/>
+    <persfr:sfr sfr="CCFG_SYSIO"/>
+    <persfr:sfr sfr="MATRIX_WPMR"/>
+    <persfr:sfr sfr="MATRIX_WPSR"/>
+    <persfr:sfr sfr="MATRIX_MRCR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="High Speed MultiMedia Card Interface">
+    <persfr:sfr sfr="HSMCI_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Synchronous Serial Controller">
+    <persfr:sfr sfr="SSC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Quad Serial Peripheral Interface">
+    <persfr:sfr sfr="QSPI_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Secure Digital MultiMedia Card Controller">
+    <persfr:sfr sfr="SDMMC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Serial Peripheral Interface">
+    <persfr:sfr sfr="SPI_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Synchronous Serial Controller">
+    <persfr:sfr sfr="SSC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Supply Controller Control Register">
+    <persfr:sfr sfr="SUPC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer Counter">
+    <persfr:sfr sfr="TC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="True Random Number Generator">
+    <persfr:sfr sfr="TRNG_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Two-wire Interface High Speed">
+    <persfr:sfr sfr="TWIHS_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Universal Asynchronous Receiver Transmitter">
+    <persfr:sfr sfr="UART_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Universal Synchronous Asynchronous Receiver Transmitter">
+    <persfr:sfr sfr="US_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="USB High-Speed Interface">
+    <persfr:sfr sfr="USBHS_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="USB Transmitter Interface Macrocell">
+    <persfr:sfr sfr="UTMI_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="USB Transmitter Interface Macrocell">
+    <persfr:sfr sfr="UTMI_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Watchdog Timer">
+    <persfr:sfr sfr="WDT_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Extensible DMA Controller">
+    <persfr:sfr sfr="XDMAC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="System Control Registers">
+    <persfr:sfr sfr="ACTLR"/>
+    <persfr:sfr sfr="CPUID"/>
+    <persfr:sfr sfr="ICSR"/>
+    <persfr:sfr sfr="VTOR"/>
+    <persfr:sfr sfr="AIRCR"/>
+    <persfr:sfr sfr="SCR"/>
+    <persfr:sfr sfr="CCR"/>
+    <persfr:sfr sfr="SHPR1"/>
+    <persfr:sfr sfr="SHPR2"/>
+    <persfr:sfr sfr="SHPR3"/>
+    <persfr:sfr sfr="SHCSR"/>
+    <persfr:sfr sfr="CFSR"/>
+    <persfr:sfr sfr="HFSR"/>
+    <persfr:sfr sfr="DFSR"/>
+    <persfr:sfr sfr="BFAR"/>
+    <persfr:sfr sfr="AFSR"/>
+    <persfr:sfr sfr="CPACR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="System timer">
+    <persfr:sfr sfr="CSR"/>
+    <persfr:sfr sfr="RVR"/>
+    <persfr:sfr sfr="CVR"/>
+    <persfr:sfr sfr="CALIB"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Nested Vectored Interrupt Controller">
+    <persfr:sfr sfr="NVICISER[0-3]"/>
+    <persfr:sfr sfr="NVICICER[0-3]"/>
+    <persfr:sfr sfr="NVICISPR[0-3]"/>
+    <persfr:sfr sfr="NVICICPR[0-3]"/>
+    <persfr:sfr sfr="NVICIABR[0-3]"/>
+    <persfr:sfr sfr="NVICIP[0-105]"/>
+    <persfr:sfr sfr="NVICSTIR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Memory Protection Unit Registers">
+    <persfr:sfr sfr="MPU_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Floating Point Unit Registers">
+    <persfr:sfr sfr="FPCCR"/>
+    <persfr:sfr sfr="FPCAR"/>
+    <persfr:sfr sfr="FPDSCR"/>
+    <persfr:sfr sfr="CALIB"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port A">
+    <persfr:sfr sfr="PORTA_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port B">
+    <persfr:sfr sfr="PORTB_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port C">
+    <persfr:sfr sfr="PORTC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port D">
+    <persfr:sfr sfr="PORTD_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port E">
+    <persfr:sfr sfr="PORTE_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Multiport DDR-SDRAM Controller">
+    <persfr:sfr sfr="MPDDRC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Advanced Encryption Standard Bridge">
+    <persfr:sfr sfr="AESB_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Advanced Interrupt Controller">
+    <persfr:sfr sfr="AIC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="AXI Matrix">
+    <persfr:sfr sfr="AXIMX_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Audio Class D Amplifier">
+    <persfr:sfr sfr="CLASSD_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Flexible Serial Communication Controller">
+    <persfr:sfr sfr="FLEXCOM_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Inter-IC Sound Controller">
+    <persfr:sfr sfr="I2SC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Integrity Check Monitor">
+    <persfr:sfr sfr="ICM_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Image Sensor Controller">
+    <persfr:sfr sfr="ISC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="L2 Cache Controller">
+    <persfr:sfr sfr="L2CC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="LCD Controller">
+    <persfr:sfr sfr="LCDC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Controller Area Network">
+    <persfr:sfr sfr="MCAN_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Pulse Density Modulation Interface Controller">
+    <persfr:sfr sfr="PDMIC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Parallel Input/Output Controller">
+    <persfr:sfr sfr="PIO_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Periodic Interval Timer">
+    <persfr:sfr sfr="PIT_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Power Management Controller">
+    <persfr:sfr sfr="PMC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Peripheral Touch Controller">
+    <persfr:sfr sfr="PTC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Pulse Width Modulation Controller">
+    <persfr:sfr sfr="PWM_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Reset Controller">
+    <persfr:sfr sfr="RSTC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Real-time Clock">
+    <persfr:sfr sfr="RTC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Low Power Asynchronous Receiver">
+    <persfr:sfr sfr="RXLP_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Slow Clock Controller">
+    <persfr:sfr sfr="SCKC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Security Module">
+    <persfr:sfr sfr="SECUMOD_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Secure Fuse Controller">
+    <persfr:sfr sfr="SFC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Special Function Registers">
+    <persfr:sfr sfr="SFR_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Special Function Registers Backup">
+    <persfr:sfr sfr="SFRBU_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Secure Hash Algorithm">
+    <persfr:sfr sfr="SHA_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Shutdown Controller">
+    <persfr:sfr sfr="SHDWC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Static Memory Controller">
+    <persfr:sfr sfr="SMC_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Triple Data Encryption Standard">
+    <persfr:sfr sfr="TDES_.*"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="USB High Speed Device Port">
+    <persfr:sfr sfr="UDPHS_.*"/>
+  </persfr:peripheral>
+</persfr:persfr>

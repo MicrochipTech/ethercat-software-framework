@@ -45,6 +45,7 @@
 #include <string.h>
 #include "ecat_def.h"
 
+#if (ESF_PDI == SPI) || (ESF_PDI == SQI)
 /* SPI/SQI Clock Period in nano seconds */
 #define CLK_PERIOD_1MHZ		(1000)
 
@@ -76,8 +77,7 @@
 #define QSPI_SPI_ONE_BYTE_CLK_COUNT                 8
 #define QSPI_SQI_ONE_BYTE_CLK_COUNT                 2
 
-#define ESC_WRITE_BYTE                              0x80
-#define ESC_READ_BYTE                               0xC0
+
 #define ESC_CSR_BUSY                                0x80
 
 #define SETCFG_MAX_DATA_BYTES                       39
@@ -85,8 +85,6 @@
 
 #define WAIT_STATE_BYTE                             0xFF
 #define READ_TERMINATION_BYTE                       0xFF
-
-#define DWORD_LENGTH                                4
 
 /* Beckhoff SPI Commands */
 #define ESC_RD                                      0x02
@@ -144,6 +142,12 @@ typedef enum _SET_CFG_DATA_BYTE_ORDER {
 extern UINT8 gau8DummyCntArr[SETCFG_MAX_DATA_BYTES];
 
 UINT8 GetDummyBytesRequired (UINT8 u8SPIType, UINT16 u16IAT, UINT16 u16SPIClkCount, UINT16 u16SPIClkPeriodns);
+#endif
+
+#define DWORD_LENGTH                                4
+#define ESC_READ_BYTE                               0xC0
+#define ESC_WRITE_BYTE                              0x80
+
 void PDI_IRQ_Interrupt();
 void PDI_Init_SYNC_Interrupts();
 void ESC_Init();
