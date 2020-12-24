@@ -181,16 +181,17 @@ void APP_Tasks ( void )
 #else
             test_indirect_mode();
 #endif
-        
 #endif
             /* EtherCAT Initialization after NVIC initialization */
             ESC_Init();
             MainInit();
 #if defined(ETHERCAT_USE_FOE)  
-            BL_FOE_Application();
+ 				BL_FOE_Application();
                 
             bRunApplication = TRUE;
-#endif                
+#endif           
+            /*Create basic mapping*/
+            APPL_GenerateMapping(&nPdInputSize,&nPdOutputSize);
             appData.state = APP_STATE_SERVICE_TASKS;
             break;
         }
@@ -200,7 +201,7 @@ void APP_Tasks ( void )
             do
             {		
 #if defined(ETHERCAT_USE_FOE)                
-                if(APP_FW_GetDownloadStateFinished() == 1)
+                if(1 == APP_FW_GetDownloadStateFinished())
                 {
                     APP_BankSwitch();
                     APP_RunApplication();

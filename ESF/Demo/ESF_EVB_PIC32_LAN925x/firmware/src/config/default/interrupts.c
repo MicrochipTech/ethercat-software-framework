@@ -58,32 +58,26 @@
 // *****************************************************************************
 
 
+void CORE_TIMER_InterruptHandler( void );
 void EXTERNAL_0_InterruptHandler( void );
-void EXTERNAL_1_InterruptHandler( void );
-void EXTERNAL_2_InterruptHandler( void );
-void TIMER_5_InterruptHandler( void );
+void CHANGE_NOTICE_InterruptHandler( void );
 
 
 
 /* All the handlers are defined here.  Each will call its PLIB-specific function. */
+void __ISR(_CORE_TIMER_VECTOR, ipl1SOFT) CORE_TIMER_Handler (void)
+{
+    CORE_TIMER_InterruptHandler();
+}
+
 void __ISR(_EXTERNAL_0_VECTOR, ipl7SRS) EXTERNAL_0_Handler (void)
 {
     EXTERNAL_0_InterruptHandler();
 }
 
-void __ISR(_EXTERNAL_1_VECTOR, ipl5SOFT) EXTERNAL_1_Handler (void)
+void __ISR(_CHANGE_NOTICE_VECTOR, ipl2SOFT) CHANGE_NOTICE_Handler (void)
 {
-    EXTERNAL_1_InterruptHandler();
-}
-
-void __ISR(_EXTERNAL_2_VECTOR, ipl4SOFT) EXTERNAL_2_Handler (void)
-{
-    EXTERNAL_2_InterruptHandler();
-}
-
-void __ISR(_TIMER_5_VECTOR, ipl3SOFT) TIMER_5_Handler (void)
-{
-    TIMER_5_InterruptHandler();
+    CHANGE_NOTICE_InterruptHandler();
 }
 
 

@@ -17,7 +17,7 @@
 
 // DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2019 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2020 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -45,8 +45,6 @@
 
 
 EXT_INT_PIN_CALLBACK_OBJ extInt0CbObj;
-EXT_INT_PIN_CALLBACK_OBJ extInt1CbObj;
-EXT_INT_PIN_CALLBACK_OBJ extInt2CbObj;
 // *****************************************************************************
 // *****************************************************************************
 // Section: IRQ Implementation
@@ -58,17 +56,14 @@ void EVIC_Initialize( void )
     INTCONSET = _INTCON_MVEC_MASK;
 
     /* Set up priority and subpriority of enabled interrupts */
+    IPC0SET = 0x4 | 0x0;  /* CORE_TIMER:  Priority 1 / Subpriority 0 */
     IPC0SET = 0x1c000000 | 0x0;  /* EXTERNAL_0:  Priority 7 / Subpriority 0 */
-    IPC1SET = 0x14000000 | 0x0;  /* EXTERNAL_1:  Priority 5 / Subpriority 0 */
-    IPC2SET = 0x10000000 | 0x0;  /* EXTERNAL_2:  Priority 4 / Subpriority 0 */
-    IPC5SET = 0xc | 0x0;  /* TIMER_5:  Priority 3 / Subpriority 0 */
+    IPC6SET = 0x80000 | 0x0;  /* CHANGE_NOTICE:  Priority 2 / Subpriority 0 */
 
     /* Initialize External interrupt 0 callback object */
     extInt0CbObj.callback = NULL;
-    /* Initialize External interrupt 1 callback object */
-    extInt1CbObj.callback = NULL;
-    /* Initialize External interrupt 2 callback object */
-    extInt2CbObj.callback = NULL;
+    
+    EVIC_ExternalInterruptEnable(EXTERNAL_INT_0);
 
 }
 
@@ -140,14 +135,6 @@ bool EVIC_ExternalInterruptCallbackRegister(
             extInt0CbObj.callback = callback;
             extInt0CbObj.context  = context;
             break;
-        case EXTERNAL_INT_1:
-            extInt1CbObj.callback = callback;
-            extInt1CbObj.context  = context;
-            break;
-        case EXTERNAL_INT_2:
-            extInt2CbObj.callback = callback;
-            extInt2CbObj.context  = context;
-            break;
         default:
             status = false;
             break;
@@ -170,42 +157,6 @@ void EXTERNAL_0_InterruptHandler()
     if(extInt0CbObj.callback != NULL)
         {
         extInt0CbObj.callback (EXTERNAL_INT_0, extInt0CbObj.context);
-        }
-    }
-
-// *****************************************************************************
-/* Function:
-    void EXTERNAL_1_InterruptHandler()
-  Summary:
-    Interrupt Handler for External Interrupt pin 1.
-  Remarks:
-	It is an internal function called from ISR, user should not call it directly.
-*/
-void EXTERNAL_1_InterruptHandler()
-{
-    IFS0CLR = _IFS0_INT1IF_MASK;
-
-    if(extInt1CbObj.callback != NULL)
-        {
-        extInt1CbObj.callback (EXTERNAL_INT_1, extInt1CbObj.context);
-        }
-    }
-
-// *****************************************************************************
-/* Function:
-    void EXTERNAL_2_InterruptHandler()
-  Summary:
-    Interrupt Handler for External Interrupt pin 2.
-  Remarks:
-	It is an internal function called from ISR, user should not call it directly.
-*/
-void EXTERNAL_2_InterruptHandler()
-{
-    IFS0CLR = _IFS0_INT2IF_MASK;
-
-    if(extInt2CbObj.callback != NULL)
-        {
-        extInt2CbObj.callback (EXTERNAL_INT_2, extInt2CbObj.context);
         }
     }
 

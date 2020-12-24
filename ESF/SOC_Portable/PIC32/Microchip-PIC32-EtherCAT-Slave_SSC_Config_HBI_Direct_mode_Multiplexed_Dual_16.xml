@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SscToolConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" SSCVersion="5.12" VendorID="#xE00004D8" VendorName="Microchip">
 	<Configurations>
-		<Configuration Name="Microchip - PIC32 EtherCAT Slave FoE" Version="0.0.1.1" Info="Shall be set if the Slave code executes on an Microchip development board for the PIC32 With Bootloader support">
+		<Configuration Name="Microchip - PIC32 EtherCAT Slave FoE dir ra" Version="0.0.1.1" Info="Shall be set if the Slave code executes on an Microchip development board for the PIC32 With Bootloader support">
 			<Setting CodeDefine="MCI_HW" Value="0">
 				<Flags Visible="True"/>
 			</Setting>
@@ -86,7 +86,7 @@
 			<Setting CodeDefine="EEPROM_WRITE_SIZE" Value="0x02"/>
 			<Setting CodeDefine="ESC_EEPROM_EMULATION" Value="0"/>
 			<Setting CodeDefine="USE_DEFAULT_MAIN" Value="0"/>
-			<Setting CodeDefine="ESC_CONFIG_DATA" Value="910E84CC88130000000040C00000"/>
+			<Setting CodeDefine="ESC_CONFIG_DATA" Value="930E84CC88130000000000800000"/>
 			<Setting CodeDefine="HW_ACCESS_FILE" Value="#include &quot;LAN925x.h&quot;"/>
 			<Setting CodeDefine="STRUCT_PACKED_END" Value="__attribute__((packed))"/>
 			<Setting CodeDefine="MBX_STRUCT_PACKED_END" Value="__attribute__((packed))"/>

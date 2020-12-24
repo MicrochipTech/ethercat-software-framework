@@ -49,19 +49,28 @@
 
 #define CORE_TIMER_FREQUENCY    40000000
 
+#define CORE_TIMER_INTERRUPT_PERIOD_VALUE    0x9c40
+#define CORE_TIMER_INTERRUPT_PERIOD_IN_US     1000
 
+typedef void (*CORETIMER_CALLBACK)(uint32_t status, uintptr_t context);
 
-#define CORE_TIMER_COMPARE_VALUE    0x9c40
+typedef struct
+{
+    CORETIMER_CALLBACK  callback;
+    uintptr_t           context;
+    volatile uint32_t   tickCounter;
+    uint32_t            period;
+} CORETIMER_OBJECT ;
 
 void CORETIMER_Initialize(void);
-void CORETIMER_DelayMs (uint32_t delay_ms);
-void CORETIMER_DelayUs (uint32_t delay_us);
+void CORETIMER_CallbackSet ( CORETIMER_CALLBACK callback, uintptr_t context );
+uint32_t CORETIMER_FrequencyGet (void);
+void CORETIMER_PeriodSet (uint32_t period);
 void CORETIMER_Start(void);
 void CORETIMER_Stop(void);
-uint32_t CORETIMER_FrequencyGet (void);
-void CORETIMER_CompareSet ( uint32_t compare);
-uint32_t CORETIMER_CounterGet (void);
-bool CORETIMER_CompareHasExpired(void);
+void CORETIMER_DelayMs (uint32_t delay_ms);
+
+
 
 #ifdef __cplusplus // Provide C++ Compatibility
  }

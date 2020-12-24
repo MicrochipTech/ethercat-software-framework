@@ -29,6 +29,22 @@
                     <name>ESF_LAN925x_HBI_MSP_16BIT_INDIRECT_MODE</name>
                     <type>2</type>
                 </confElem>
+                <confElem>
+                    <name>ESF_LAN925x_HBI_MDP_16BIT_DIRECT_MODE</name>
+                    <type>2</type>
+                </confElem>
+                <confElem>
+                    <name>ESF_LAN925x_HBI_MDP_16BIT_INDIRECT_MODE</name>
+                    <type>2</type>
+                </confElem>
+                <confElem>
+                    <name>ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE</name>
+                    <type>2</type>
+                </confElem>
+                <confElem>
+                    <name>ESF_LAN925x_HBI_MDP_8BIT_INDIRECT_MODE</name>
+                    <type>2</type>
+                </confElem>
             </confList>
             <formatting>
                 <project-formatting-style>false</project-formatting-style>

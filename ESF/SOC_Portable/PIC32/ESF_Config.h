@@ -52,40 +52,19 @@
 #endif
 
 #ifdef HBI_MSP_16BIT
-    #define _IS_HBI_MSP_16BIT_SUPPORT                1
     #define HBI_MODE MSP_16BIT
 #elif HBI_MDP_8BIT
-    #define _IS_HBI_MDP_8BIT_SUPPORT
     #define HBI_MODE MDP_8BIT
 #elif HBI_MDP_16BIT
-    #define _IS_HBI_MDP_16BIT_SUPPORT
     #define HBI_MODE MDP_16BIT
 #elif HBI_MSP_8BIT
-    #define _IS_HBI_MSP_8BIT_SUPPORT
     #define HBI_MODE MSP_8BIT
 #else
     #error "Set one of the HBI modes in project setting"
 #endif
 
 
-//#ifdef DEVELOPER_TEST_EN
-
-/* Enables the ESC init test code, Verify Byte order registers */
-//#define ESC_INIT_TEST
-
-/* Debug HBI Direct mode, Uncomment to enable */
-//#define DEBUG_HBI_DIRECT_MODE
-
-/* Enables the ESC PDRAM test code */
-//#define ESC_PDRAM_TEST
-
-/* Enables the PDI Access test code */
-//#define PDI_ACCESS_TEST
-
-/* Enables the ESC Access test code, read & write */
-//#define ESC_ACCESS_TEST
-    
-//#endif
+//#define DEVELOPER_TEST_EN                            1
 
 /* EEPROM Emulation Feature can be enabled by uncommenting below macro */
 //#define _IS_EEPROM_EMULATION_SUPPORT               1

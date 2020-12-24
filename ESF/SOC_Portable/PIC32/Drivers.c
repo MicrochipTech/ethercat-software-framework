@@ -49,15 +49,13 @@ void ECAT_SysTick_Handler(uint32_t status, uintptr_t context);
 
 void CRITICAL_SECTION_ENTER(void)
 {
-    //__builtin_disable_interrupts();
-    EVIC_SourceDisable(INT_SOURCE_EXTERNAL_0);
-    
+    __builtin_disable_interrupts();
 }
 
 void CRITICAL_SECTION_LEAVE(void)
 {
-    //__builtin_enable_interrupts();
-    EVIC_SourceEnable(INT_SOURCE_EXTERNAL_0);
+    __builtin_enable_interrupts();
+    
 }
 
 #if (ESF_PDI == HBI)
@@ -80,6 +78,7 @@ void ESF_PDI_Init()
 	{
 		MCHP_ESF_IS_PDI_FUNCTIONAL((UINT8 *)&u32data);
 	} while (0x87654321 != u32data);
+    
 }
 
 /*******************************************************************************
@@ -412,8 +411,8 @@ void ECAT_SysTick_Handler(uint32_t status, uintptr_t context)
 *******************************************************************************/
 static void PDI_Init_SYSTick_Interrupt()
 {
-    TMR5_CallbackRegister(ECAT_SysTick_Handler,(uintptr_t) NULL);
-    TMR5_Start();
+    CORETIMER_CallbackSet(ECAT_SysTick_Handler,(uintptr_t) NULL);
+    CORETIMER_Start();
 }
 
 /*******************************************************************************
@@ -428,7 +427,7 @@ static void PDI_Init_SYSTick_Interrupt()
 void stop_timer(void)
 {
 #if (ESF_PDI == HBI)
-    TMR5_Start();
+    CORETIMER_Stop();
 #else
     NVIC_DisableIRQ(SysTick_IRQn);
 #endif  
@@ -449,7 +448,7 @@ void stop_timer(void)
 void start_timer(void)
 {
 #if (ESF_PDI == HBI)
-    TMR5_Start();
+    CORETIMER_Start();
 #else
     NVIC_EnableIRQ(SysTick_IRQn);
 #endif    
@@ -509,7 +508,14 @@ void LAN925xHBI_Read(UINT16 u16Adddr, UINT8 *pu8Data, UINT32 u32Length)
         }
         else
         {
-            *pu8Data++ = param32_1.v[u8Itr+(u16Adddr & 0x1)];
+            if(HBI_MODE == MDP_8BIT )
+            {
+                *pu8Data++ = param32_1.v[u8Itr];
+            }
+            else
+            {
+                *pu8Data++ = param32_1.v[u8Itr+(u16Adddr & 0x1)];
+            }
         }
     }
 }
@@ -765,11 +771,10 @@ void PMPOpen(PMPMode pmpmode, RWType rwtype, Polarity pl)
     Summary:
         Interrupt service routine for the interrupt from SYNC0
 *******************************************************************************/
-void ESC_Sync0_cb(EXTERNAL_INT_PIN pin,uintptr_t context)
+void ESC_Sync0_cb(CN_PIN pin,uintptr_t context)
 {
 	//EVIC_ExternalInterruptDisable(EXTERNAL_INT_1);
     Sync0_Isr();
-    //EVIC_ExternalInterruptEnable(EXTERNAL_INT_1);
 }
 
 
@@ -781,12 +786,9 @@ void ESC_Sync0_cb(EXTERNAL_INT_PIN pin,uintptr_t context)
     Summary:
         Interrupt service routine for the interrupt from SYNC1
 *******************************************************************************/
-void ESC_Sync1_cb(EXTERNAL_INT_PIN pin,uintptr_t context)
+void ESC_Sync1_cb(CN_PIN pin,uintptr_t context)
 {
-    //EVIC_ExternalInterruptDisable(EXTERNAL_INT_2);
     Sync1_Isr();
-    //EVIC_ExternalInterruptEnable(EXTERNAL_INT_2);
-    
 }
 
 /*******************************************************************************

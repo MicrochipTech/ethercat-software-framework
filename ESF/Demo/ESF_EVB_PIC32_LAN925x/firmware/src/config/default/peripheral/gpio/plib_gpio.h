@@ -61,6 +61,28 @@
 // *****************************************************************************
 // *****************************************************************************
 
+/*** Macros for SYNC1_IRQ pin ***/
+#define SYNC1_IRQ_Set()               ((LATBSET = (1<<1)))
+#define SYNC1_IRQ_Clear()             (LATBCLR = (1<<1))
+#define SYNC1_IRQ_Toggle()            (LATBINV= (1<<1))
+#define SYNC1_IRQ_Get()               ((PORTB >> 1) & 0x1)
+#define SYNC1_IRQ_OutputEnable()      (TRISBCLR = (1<<1))
+#define SYNC1_IRQ_InputEnable()       (TRISBSET = (1<<1))          
+#define SYNC1_IRQ_InterruptEnable()   (CNENSET = 1<<3)
+#define SYNC1_IRQ_InterruptDisable()  (CNENCLR = 1<<3)
+#define SYNC1_IRQ_PIN                  GPIO_PIN_RB1        
+
+/*** Macros for SYNC0_IRQ pin ***/
+#define SYNC0_IRQ_Set()               (LATBSET = (1<<0))
+#define SYNC0_IRQ_Clear()             (LATBCLR = (1<<0))
+#define SYNC0_IRQ_Toggle()            (LATBINV= (1<<0))
+#define SYNC0_IRQ_Get()               ((PORTB >> 0) & 0x1)
+#define SYNC0_IRQ_OutputEnable()      (TRISBCLR = (1<<0))
+#define SYNC0_IRQ_InputEnable()       (TRISBSET = (1<<1))              
+#define SYNC0_IRQ_InterruptEnable()   (CNENSET = 1<<2)
+#define SYNC0_IRQ_InterruptDisable()  (CNENCLR = 1<<2)
+#define SYNC0_IRQ_PIN                  GPIO_PIN_RB0
+        
 
 /*** Macros for GPIO_RD2 pin ***/
 #define GPIO_RD2_Set()               (LATDSET = (1<<2))
@@ -70,7 +92,7 @@
 #define GPIO_RD2_InputEnable()       (TRISDSET = (1<<2))
 #define GPIO_RD2_Get()               ((PORTD >> 2) & 0x1)
 #define GPIO_RD2_PIN                  GPIO_PIN_RD2
-        
+
 /*** Macros for GPIO_RD3 pin ***/
 #define GPIO_RD3_Set()               (LATDSET = (1<<3))
 #define GPIO_RD3_Clear()             (LATDCLR = (1<<3))
@@ -79,8 +101,8 @@
 #define GPIO_RD3_InputEnable()       (TRISDSET = (1<<3))
 #define GPIO_RD3_Get()               ((PORTD >> 3) & 0x1)
 #define GPIO_RD3_PIN                  GPIO_PIN_RD3
-        
-            
+
+
         
 // *****************************************************************************
 /* GPIO Port
@@ -245,6 +267,7 @@ typedef enum
   CN21_PIN = 1 << 21,
 }CN_PIN;
 
+typedef  void (*GPIO_PIN_CALLBACK) ( CN_PIN cnPin, uintptr_t context);
 
 void GPIO_Initialize(void);
 
@@ -269,6 +292,35 @@ void GPIO_PortToggle(GPIO_PORT port, uint32_t mask);
 void GPIO_PortInputEnable(GPIO_PORT port, uint32_t mask);
 
 void GPIO_PortOutputEnable(GPIO_PORT port, uint32_t mask);
+
+void GPIO_PinInterruptEnable(CN_PIN cnPin);
+
+void GPIO_PinInterruptDisable(CN_PIN cnPin);
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Local Data types and Prototypes
+// *****************************************************************************
+// *****************************************************************************
+
+typedef struct {
+
+    /* CN Pin number */
+    CN_PIN                  cnPin;
+
+    /* Corresponding GPIO pin name */
+    GPIO_PIN                gpioPin;
+
+    /* previous port pin value, need to be stored to check if it has changed later */
+    bool                    prevPinValue;
+
+    /* Callback for event on target pin*/
+    GPIO_PIN_CALLBACK       callback;
+
+    /* Callback Context */
+    uintptr_t               context;
+
+} GPIO_PIN_CALLBACK_OBJ;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -316,6 +368,11 @@ static inline void GPIO_PinOutputEnable(GPIO_PIN pin)
     GPIO_PortOutputEnable((GPIO_PORT)(pin>>4), 0x1 << (pin & 0xF));
 }
 
+bool GPIO_PinInterruptCallbackRegister(
+    CN_PIN cnPin,
+    const   GPIO_PIN_CALLBACK callBack,
+    uintptr_t context
+);
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility

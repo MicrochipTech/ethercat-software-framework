@@ -44,8 +44,8 @@
 #include <stdint.h>
 #include "definitions.h"
 
-#define SYNC0                                       EXTERNAL_INT_1
-#define SYNC1                                       EXTERNAL_INT_2
+#define SYNC0                                       SYNC0_IRQ_PIN
+#define SYNC1                                       SYNC1_IRQ_PIN
 #define ESCIRQ                                      EXTERNAL_INT_0
 
 /* Configured PA20 and PA21 pins 
@@ -132,8 +132,8 @@ typedef enum {LGY, ESM, MM2, MM1} RWType;
 	void    ESF_PDI_Init();
 
     void ESC_IRQ_cb(EXTERNAL_INT_PIN pin,uintptr_t context);
-    void ESC_Sync0_cb(EXTERNAL_INT_PIN pin,uintptr_t context);
-    void ESC_Sync1_cb(EXTERNAL_INT_PIN pin,uintptr_t context);
+    void ESC_Sync0_cb(CN_PIN pin,uintptr_t context);
+    void ESC_Sync1_cb(CN_PIN pin,uintptr_t context);
     
 #ifdef __cplusplus
 }
