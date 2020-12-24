@@ -140,8 +140,9 @@ void ESC_Init()
 *******************************************************************************/
 void PDI_Init_SYNC_Interrupts()
 {
-    GPIO_PinInterruptCallbackRegister(CN2_PIN, ESC_Sync0_cb,(uintptr_t) NULL );
-    GPIO_PinInterruptCallbackRegister(CN3_PIN, ESC_Sync1_cb,(uintptr_t) NULL );
+    MCHP_ESF_IRQ_REGISTER_CB(SYNC0, ESC_Sync0_cb);
+    MCHP_ESF_IRQ_REGISTER_CB(SYNC1, ESC_Sync1_cb);
+    
 }
 #endif // DC_SUPPORTED
 
