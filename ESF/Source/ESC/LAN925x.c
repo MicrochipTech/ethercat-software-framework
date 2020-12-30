@@ -688,8 +688,6 @@ void HW_EscRead(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
 			UINT8 u8ValidDataLen = 0, u8Itr = 0;
 			UINT8 *pu8Data = (UINT8 *)pmData;
 
-            PDI_Disable_Global_Interrupt();
-            
 			while (u16Len > 0) {
 				u8ValidDataLen = (u16Len > 4) ? 4 : u16Len;
 
@@ -704,16 +702,17 @@ void HW_EscRead(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
 				{
 					u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
 				}
-                
-                MCHP_ESF_PDI_READ(u16Address, (UINT8*)&u32Val.Val, DWORD_LENGTH);
-				
+               
+                PDI_Disable_Global_Interrupt();
+				MCHP_ESF_PDI_READ(u16Address, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+				PDI_Restore_Global_Interrupt();
+
 				for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
 				*pu8Data++ = u32Val.v[u8Itr];
 
 				u16Address += u8ValidDataLen;
 				u16Len -= u8ValidDataLen;
 			}
-            PDI_Restore_Global_Interrupt();
         #endif	
     #else
         EscRead (pmData, u16Address, u16Len);
@@ -909,9 +908,7 @@ void EscRead(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
         UINT32_VAL u32param32_1;
         UINT8 u8validDataLen = 0, u8Itr = 0, u8length = 4;
         UINT8 *pu8Data = (UINT8 *)pmData;
-        
-        PDI_Disable_Global_Interrupt();
-        
+
         while (u16Len > 0) {
             u8validDataLen = (u16Len > 4) ? 4 : u16Len;
 
@@ -932,18 +929,18 @@ void EscRead(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
             u32param32_1.v[2] = u8validDataLen;
             u32param32_1.v[3] = ESC_READ_BYTE;
 
-            
+            PDI_Disable_Global_Interrupt();
             MCHP_ESF_PDI_WRITE(ESC_CSR_CMD_REG, (UINT8*)&u32param32_1.Val, u8length);
             ESF_delay(100);
             MCHP_ESF_PDI_READ(ESC_CSR_DATA_REG, (UINT8*)&u32param32_1.Val, u8length);
-            
+            PDI_Restore_Global_Interrupt();
+		
             for (u8Itr = 0; u8Itr < u8validDataLen; u8Itr++)
             *pu8Data++ = u32param32_1.v[u8Itr];
 
             u16Address += u8validDataLen;
             u16Len -= u8validDataLen;
         }
-        PDI_Restore_Global_Interrupt();
     #endif
 #elif (ESF_PDI == SQI)
     #if _IS_SQI_INDIRECT_MODE_ACCESS
@@ -1082,9 +1079,7 @@ void HW_EscReadIsr(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
 			UINT8 u8ValidDataLen = 0, u8Itr = 0;
 			UINT8 *pu8Data = (UINT8 *)pmData;
 
-			PDI_Disable_Global_Interrupt();
-            
-            while (u16Len > 0) {
+			while (u16Len > 0) {
 				u8ValidDataLen = (u16Len > 4) ? 4 : u16Len;
 
 				if (u16Address & 0x1) {
@@ -1099,15 +1094,16 @@ void HW_EscReadIsr(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
 					u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
 				}
 
+				PDI_Disable_Global_Interrupt();
 				MCHP_ESF_PDI_READ(u16Address, (UINT8*)&u32Val.Val, DWORD_LENGTH);
-				
-                for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
+				PDI_Restore_Global_Interrupt();
+
+				for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
 				*pu8Data++ = u32Val.v[u8Itr];
 
 				u16Address += u8ValidDataLen;
 				u16Len -= u8ValidDataLen;
 			}
-            PDI_Restore_Global_Interrupt();
         #endif
     #else
         if(u16Address>0xFFF)
@@ -1327,9 +1323,7 @@ void HW_EscWrite(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
 			 UINT32_VAL u32Val;
 			UINT8 u8ValidDataLen = 0, u8Itr = 0;
 			UINT8 *pu8Data = (UINT8 *)pmData;
-            
-            PDI_Disable_Global_Interrupt();
-            
+
 			while (u16Len > 0) {
 				u8ValidDataLen = (u16Len > 4) ? 4 : u16Len;
 
@@ -1358,12 +1352,14 @@ void HW_EscWrite(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
                     }
                 }
                 
-                MCHP_ESF_PDI_WRITE(u16Address, (UINT8*)&u32Val.Val, DWORD_LENGTH);
-				
-                u16Address += u8ValidDataLen;
+
+				PDI_Disable_Global_Interrupt();
+				MCHP_ESF_PDI_WRITE(u16Address, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+				PDI_Restore_Global_Interrupt();
+                
+				u16Address += u8ValidDataLen;
 				u16Len -= u8ValidDataLen;
 			}
-            PDI_Restore_Global_Interrupt();
 		#else
 			UINT8 *pu8Data = (UINT8 *)pmData;
 			
