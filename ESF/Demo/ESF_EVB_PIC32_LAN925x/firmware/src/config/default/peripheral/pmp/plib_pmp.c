@@ -68,7 +68,7 @@ void PMP_Initialize( void )
     /* Configure PMP operation mode */
     PMMODEbits.MODE = 0x2;
 
-    //PMMODEbits.IRQM = 1;
+    PMMODEbits.IRQM = 1;
    
    PMCONSET = _PMCON_PTRDEN_MASK;
 

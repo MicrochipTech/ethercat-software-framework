@@ -222,8 +222,8 @@ UINT8 LAN925x_Init(void)
 	} while (u32intMask != 0x93);
     
     u32intMask = 0;
-	HW_EscWriteDWord(u32intMask, ESC_AL_EVENTMASK_OFFSET);	
-    
+	HW_EscWriteDWord(u32intMask, ESC_AL_EVENTMASK_OFFSET);
+	
 	PDI_Disable_Global_Interrupt();
     // IRQ enable,IRQ polarity, IRQ buffer type in Interrupt Configuration
 	// register. Write 0x54 - 0x00000101
@@ -1082,7 +1082,9 @@ void HW_EscReadIsr(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
 			UINT8 u8ValidDataLen = 0, u8Itr = 0;
 			UINT8 *pu8Data = (UINT8 *)pmData;
 
-			while (u16Len > 0) {
+			PDI_Disable_Global_Interrupt();
+            
+            while (u16Len > 0) {
 				u8ValidDataLen = (u16Len > 4) ? 4 : u16Len;
 
 				if (u16Address & 0x1) {
@@ -1097,16 +1099,15 @@ void HW_EscReadIsr(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
 					u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
 				}
 
-				PDI_Disable_Global_Interrupt();
 				MCHP_ESF_PDI_READ(u16Address, (UINT8*)&u32Val.Val, DWORD_LENGTH);
-				PDI_Restore_Global_Interrupt();
-
-				for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
+				
+                for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
 				*pu8Data++ = u32Val.v[u8Itr];
 
 				u16Address += u8ValidDataLen;
 				u16Len -= u8ValidDataLen;
 			}
+            PDI_Restore_Global_Interrupt();
         #endif
     #else
         if(u16Address>0xFFF)

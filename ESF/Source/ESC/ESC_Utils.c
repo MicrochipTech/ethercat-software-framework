@@ -140,7 +140,7 @@ void ESC_Init()
 *******************************************************************************/
 void PDI_Init_SYNC_Interrupts()
 {
-    MCHP_ESF_IRQ_REGISTER_CB(SYNC0, ESC_Sync0_cb);
+	MCHP_ESF_IRQ_REGISTER_CB(SYNC0, ESC_Sync0_cb);
     MCHP_ESF_IRQ_REGISTER_CB(SYNC1, ESC_Sync1_cb);
     
 }

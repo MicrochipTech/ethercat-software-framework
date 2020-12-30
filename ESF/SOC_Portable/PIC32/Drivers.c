@@ -58,6 +58,17 @@ void CRITICAL_SECTION_LEAVE(void)
     
 }
 
+void PinInterruptCallbackRegister(CN_PIN pin)
+{
+    if(pin == SYNC0)
+    {
+        GPIO_PinInterruptCallbackRegister(pin,ESC_Sync0_cb,0);
+    }
+    else
+    {
+        GPIO_PinInterruptCallbackRegister(pin,ESC_Sync1_cb,0);
+    }
+}
 #if (ESF_PDI == HBI)
 
 void ESF_PDI_Init()
@@ -78,7 +89,6 @@ void ESF_PDI_Init()
 	{
 		MCHP_ESF_IS_PDI_FUNCTIONAL((UINT8 *)&u32data);
 	} while (0x87654321 != u32data);
-    
 }
 
 /*******************************************************************************

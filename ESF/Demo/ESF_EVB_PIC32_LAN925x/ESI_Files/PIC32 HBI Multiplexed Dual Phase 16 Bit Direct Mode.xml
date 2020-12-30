@@ -15,7 +15,7 @@
 		</Groups>
 		<Devices>
 			<Device Physics="YY">
-				<Type ProductCode="#x00009253" RevisionNo="#x1">PIC32 EtherCAT Slave</Type>
+				<Type ProductCode="#x00009254" RevisionNo="#x1">PIC32 EtherCAT Slave</Type>
 				<Name>PIC32 EtherCAT Slave</Name>
 				<Info>
 					<StateMachine>
@@ -679,7 +679,7 @@
 									<SubItem>
 										<Name>Product code</Name>
 										<Info>
-											<DefaultData>53920000</DefaultData>
+											<DefaultData>54920000</DefaultData>
 										</Info>
 									</SubItem>
 									<SubItem>

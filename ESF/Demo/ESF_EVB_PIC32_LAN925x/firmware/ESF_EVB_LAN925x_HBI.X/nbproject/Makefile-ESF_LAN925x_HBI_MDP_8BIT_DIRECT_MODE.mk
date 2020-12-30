@@ -58,17 +58,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=../src/config/default/stdio/xc32_monitor.c ../src/config/default/initialization.c ../src/config/default/interrupts.c ../src/config/default/exceptions.c ../src/config/default/tasks.c ../../../../SOC_Portable/PIC32/Drivers.c ../../../../Source/ESC/ESC_Utils.c ../../../../Source/ESC/LAN925x.c ../../../../Source/SSC/bootmode.c ../../../../Source/SSC/coeappl.c ../../../../Source/SSC/ecatappl.c ../../../../Source/SSC/ecatcoe.c ../../../../Source/SSC/ecatfoe.c ../../../../Source/SSC/ecatslv.c ../../../../Source/SSC/emcy.c ../../../../Source/SSC/foeappl.c ../../../../Source/SSC/mailbox.c ../../../../Source/SSC/objdef.c ../../../../Source/SSC/sample_app.c ../../../../Source/SSC/sdoserv.c ../src/main.c ../src/app.c ../src/Developer_Test.c ../src/config/default/peripheral/clk/plib_clk.c ../src/config/default/peripheral/coretimer/plib_coretimer.c ../src/config/default/peripheral/evic/plib_evic.c ../src/config/default/peripheral/gpio/plib_gpio.c ../src/config/default/peripheral/pmp/plib_pmp.c ../src/config/default/peripheral/tmr1/plib_tmr1.c
+SOURCEFILES_QUOTED_IF_SPACED=../src/config/default/peripheral/clk/plib_clk.c ../src/config/default/peripheral/coretimer/plib_coretimer.c ../src/config/default/peripheral/evic/plib_evic.c ../src/config/default/peripheral/gpio/plib_gpio.c ../src/config/default/peripheral/pmp/plib_pmp.c ../src/config/default/peripheral/tmr1/plib_tmr1.c ../src/config/default/peripheral/uart/plib_uart6.c ../src/config/default/stdio/xc32_monitor.c ../src/config/default/initialization.c ../src/config/default/interrupts.c ../src/config/default/exceptions.c ../src/config/default/tasks.c ../../../../SOC_Portable/PIC32/Drivers.c ../../../../Source/ESC/ESC_Utils.c ../../../../Source/ESC/LAN925x.c ../../../../Source/SSC/bootmode.c ../../../../Source/SSC/coeappl.c ../../../../Source/SSC/ecatappl.c ../../../../Source/SSC/ecatcoe.c ../../../../Source/SSC/ecatfoe.c ../../../../Source/SSC/ecatslv.c ../../../../Source/SSC/emcy.c ../../../../Source/SSC/foeappl.c ../../../../Source/SSC/mailbox.c ../../../../Source/SSC/objdef.c ../../../../Source/SSC/sample_app.c ../../../../Source/SSC/sdoserv.c ../src/main.c ../src/app.c ../src/Developer_Test.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/163028504/xc32_monitor.o ${OBJECTDIR}/_ext/1171490990/initialization.o ${OBJECTDIR}/_ext/1171490990/interrupts.o ${OBJECTDIR}/_ext/1171490990/exceptions.o ${OBJECTDIR}/_ext/1171490990/tasks.o ${OBJECTDIR}/_ext/610655027/Drivers.o ${OBJECTDIR}/_ext/108147519/ESC_Utils.o ${OBJECTDIR}/_ext/108147519/LAN925x.o ${OBJECTDIR}/_ext/108134065/bootmode.o ${OBJECTDIR}/_ext/108134065/coeappl.o ${OBJECTDIR}/_ext/108134065/ecatappl.o ${OBJECTDIR}/_ext/108134065/ecatcoe.o ${OBJECTDIR}/_ext/108134065/ecatfoe.o ${OBJECTDIR}/_ext/108134065/ecatslv.o ${OBJECTDIR}/_ext/108134065/emcy.o ${OBJECTDIR}/_ext/108134065/foeappl.o ${OBJECTDIR}/_ext/108134065/mailbox.o ${OBJECTDIR}/_ext/108134065/objdef.o ${OBJECTDIR}/_ext/108134065/sample_app.o ${OBJECTDIR}/_ext/108134065/sdoserv.o ${OBJECTDIR}/_ext/1360937237/main.o ${OBJECTDIR}/_ext/1360937237/app.o ${OBJECTDIR}/_ext/1360937237/Developer_Test.o ${OBJECTDIR}/_ext/60165520/plib_clk.o ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o ${OBJECTDIR}/_ext/1865200349/plib_evic.o ${OBJECTDIR}/_ext/1865254177/plib_gpio.o ${OBJECTDIR}/_ext/60178049/plib_pmp.o ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d ${OBJECTDIR}/_ext/1171490990/initialization.o.d ${OBJECTDIR}/_ext/1171490990/interrupts.o.d ${OBJECTDIR}/_ext/1171490990/exceptions.o.d ${OBJECTDIR}/_ext/1171490990/tasks.o.d ${OBJECTDIR}/_ext/610655027/Drivers.o.d ${OBJECTDIR}/_ext/108147519/ESC_Utils.o.d ${OBJECTDIR}/_ext/108147519/LAN925x.o.d ${OBJECTDIR}/_ext/108134065/bootmode.o.d ${OBJECTDIR}/_ext/108134065/coeappl.o.d ${OBJECTDIR}/_ext/108134065/ecatappl.o.d ${OBJECTDIR}/_ext/108134065/ecatcoe.o.d ${OBJECTDIR}/_ext/108134065/ecatfoe.o.d ${OBJECTDIR}/_ext/108134065/ecatslv.o.d ${OBJECTDIR}/_ext/108134065/emcy.o.d ${OBJECTDIR}/_ext/108134065/foeappl.o.d ${OBJECTDIR}/_ext/108134065/mailbox.o.d ${OBJECTDIR}/_ext/108134065/objdef.o.d ${OBJECTDIR}/_ext/108134065/sample_app.o.d ${OBJECTDIR}/_ext/108134065/sdoserv.o.d ${OBJECTDIR}/_ext/1360937237/main.o.d ${OBJECTDIR}/_ext/1360937237/app.o.d ${OBJECTDIR}/_ext/1360937237/Developer_Test.o.d ${OBJECTDIR}/_ext/60165520/plib_clk.o.d ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o.d ${OBJECTDIR}/_ext/1865200349/plib_evic.o.d ${OBJECTDIR}/_ext/1865254177/plib_gpio.o.d ${OBJECTDIR}/_ext/60178049/plib_pmp.o.d ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/60165520/plib_clk.o ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o ${OBJECTDIR}/_ext/1865200349/plib_evic.o ${OBJECTDIR}/_ext/1865254177/plib_gpio.o ${OBJECTDIR}/_ext/60178049/plib_pmp.o ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o ${OBJECTDIR}/_ext/1865657120/plib_uart6.o ${OBJECTDIR}/_ext/163028504/xc32_monitor.o ${OBJECTDIR}/_ext/1171490990/initialization.o ${OBJECTDIR}/_ext/1171490990/interrupts.o ${OBJECTDIR}/_ext/1171490990/exceptions.o ${OBJECTDIR}/_ext/1171490990/tasks.o ${OBJECTDIR}/_ext/610655027/Drivers.o ${OBJECTDIR}/_ext/108147519/ESC_Utils.o ${OBJECTDIR}/_ext/108147519/LAN925x.o ${OBJECTDIR}/_ext/108134065/bootmode.o ${OBJECTDIR}/_ext/108134065/coeappl.o ${OBJECTDIR}/_ext/108134065/ecatappl.o ${OBJECTDIR}/_ext/108134065/ecatcoe.o ${OBJECTDIR}/_ext/108134065/ecatfoe.o ${OBJECTDIR}/_ext/108134065/ecatslv.o ${OBJECTDIR}/_ext/108134065/emcy.o ${OBJECTDIR}/_ext/108134065/foeappl.o ${OBJECTDIR}/_ext/108134065/mailbox.o ${OBJECTDIR}/_ext/108134065/objdef.o ${OBJECTDIR}/_ext/108134065/sample_app.o ${OBJECTDIR}/_ext/108134065/sdoserv.o ${OBJECTDIR}/_ext/1360937237/main.o ${OBJECTDIR}/_ext/1360937237/app.o ${OBJECTDIR}/_ext/1360937237/Developer_Test.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/60165520/plib_clk.o.d ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o.d ${OBJECTDIR}/_ext/1865200349/plib_evic.o.d ${OBJECTDIR}/_ext/1865254177/plib_gpio.o.d ${OBJECTDIR}/_ext/60178049/plib_pmp.o.d ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o.d ${OBJECTDIR}/_ext/1865657120/plib_uart6.o.d ${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d ${OBJECTDIR}/_ext/1171490990/initialization.o.d ${OBJECTDIR}/_ext/1171490990/interrupts.o.d ${OBJECTDIR}/_ext/1171490990/exceptions.o.d ${OBJECTDIR}/_ext/1171490990/tasks.o.d ${OBJECTDIR}/_ext/610655027/Drivers.o.d ${OBJECTDIR}/_ext/108147519/ESC_Utils.o.d ${OBJECTDIR}/_ext/108147519/LAN925x.o.d ${OBJECTDIR}/_ext/108134065/bootmode.o.d ${OBJECTDIR}/_ext/108134065/coeappl.o.d ${OBJECTDIR}/_ext/108134065/ecatappl.o.d ${OBJECTDIR}/_ext/108134065/ecatcoe.o.d ${OBJECTDIR}/_ext/108134065/ecatfoe.o.d ${OBJECTDIR}/_ext/108134065/ecatslv.o.d ${OBJECTDIR}/_ext/108134065/emcy.o.d ${OBJECTDIR}/_ext/108134065/foeappl.o.d ${OBJECTDIR}/_ext/108134065/mailbox.o.d ${OBJECTDIR}/_ext/108134065/objdef.o.d ${OBJECTDIR}/_ext/108134065/sample_app.o.d ${OBJECTDIR}/_ext/108134065/sdoserv.o.d ${OBJECTDIR}/_ext/1360937237/main.o.d ${OBJECTDIR}/_ext/1360937237/app.o.d ${OBJECTDIR}/_ext/1360937237/Developer_Test.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/_ext/163028504/xc32_monitor.o ${OBJECTDIR}/_ext/1171490990/initialization.o ${OBJECTDIR}/_ext/1171490990/interrupts.o ${OBJECTDIR}/_ext/1171490990/exceptions.o ${OBJECTDIR}/_ext/1171490990/tasks.o ${OBJECTDIR}/_ext/610655027/Drivers.o ${OBJECTDIR}/_ext/108147519/ESC_Utils.o ${OBJECTDIR}/_ext/108147519/LAN925x.o ${OBJECTDIR}/_ext/108134065/bootmode.o ${OBJECTDIR}/_ext/108134065/coeappl.o ${OBJECTDIR}/_ext/108134065/ecatappl.o ${OBJECTDIR}/_ext/108134065/ecatcoe.o ${OBJECTDIR}/_ext/108134065/ecatfoe.o ${OBJECTDIR}/_ext/108134065/ecatslv.o ${OBJECTDIR}/_ext/108134065/emcy.o ${OBJECTDIR}/_ext/108134065/foeappl.o ${OBJECTDIR}/_ext/108134065/mailbox.o ${OBJECTDIR}/_ext/108134065/objdef.o ${OBJECTDIR}/_ext/108134065/sample_app.o ${OBJECTDIR}/_ext/108134065/sdoserv.o ${OBJECTDIR}/_ext/1360937237/main.o ${OBJECTDIR}/_ext/1360937237/app.o ${OBJECTDIR}/_ext/1360937237/Developer_Test.o ${OBJECTDIR}/_ext/60165520/plib_clk.o ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o ${OBJECTDIR}/_ext/1865200349/plib_evic.o ${OBJECTDIR}/_ext/1865254177/plib_gpio.o ${OBJECTDIR}/_ext/60178049/plib_pmp.o ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o
+OBJECTFILES=${OBJECTDIR}/_ext/60165520/plib_clk.o ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o ${OBJECTDIR}/_ext/1865200349/plib_evic.o ${OBJECTDIR}/_ext/1865254177/plib_gpio.o ${OBJECTDIR}/_ext/60178049/plib_pmp.o ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o ${OBJECTDIR}/_ext/1865657120/plib_uart6.o ${OBJECTDIR}/_ext/163028504/xc32_monitor.o ${OBJECTDIR}/_ext/1171490990/initialization.o ${OBJECTDIR}/_ext/1171490990/interrupts.o ${OBJECTDIR}/_ext/1171490990/exceptions.o ${OBJECTDIR}/_ext/1171490990/tasks.o ${OBJECTDIR}/_ext/610655027/Drivers.o ${OBJECTDIR}/_ext/108147519/ESC_Utils.o ${OBJECTDIR}/_ext/108147519/LAN925x.o ${OBJECTDIR}/_ext/108134065/bootmode.o ${OBJECTDIR}/_ext/108134065/coeappl.o ${OBJECTDIR}/_ext/108134065/ecatappl.o ${OBJECTDIR}/_ext/108134065/ecatcoe.o ${OBJECTDIR}/_ext/108134065/ecatfoe.o ${OBJECTDIR}/_ext/108134065/ecatslv.o ${OBJECTDIR}/_ext/108134065/emcy.o ${OBJECTDIR}/_ext/108134065/foeappl.o ${OBJECTDIR}/_ext/108134065/mailbox.o ${OBJECTDIR}/_ext/108134065/objdef.o ${OBJECTDIR}/_ext/108134065/sample_app.o ${OBJECTDIR}/_ext/108134065/sdoserv.o ${OBJECTDIR}/_ext/1360937237/main.o ${OBJECTDIR}/_ext/1360937237/app.o ${OBJECTDIR}/_ext/1360937237/Developer_Test.o
 
 # Source Files
-SOURCEFILES=../src/config/default/stdio/xc32_monitor.c ../src/config/default/initialization.c ../src/config/default/interrupts.c ../src/config/default/exceptions.c ../src/config/default/tasks.c ../../../../SOC_Portable/PIC32/Drivers.c ../../../../Source/ESC/ESC_Utils.c ../../../../Source/ESC/LAN925x.c ../../../../Source/SSC/bootmode.c ../../../../Source/SSC/coeappl.c ../../../../Source/SSC/ecatappl.c ../../../../Source/SSC/ecatcoe.c ../../../../Source/SSC/ecatfoe.c ../../../../Source/SSC/ecatslv.c ../../../../Source/SSC/emcy.c ../../../../Source/SSC/foeappl.c ../../../../Source/SSC/mailbox.c ../../../../Source/SSC/objdef.c ../../../../Source/SSC/sample_app.c ../../../../Source/SSC/sdoserv.c ../src/main.c ../src/app.c ../src/Developer_Test.c ../src/config/default/peripheral/clk/plib_clk.c ../src/config/default/peripheral/coretimer/plib_coretimer.c ../src/config/default/peripheral/evic/plib_evic.c ../src/config/default/peripheral/gpio/plib_gpio.c ../src/config/default/peripheral/pmp/plib_pmp.c ../src/config/default/peripheral/tmr1/plib_tmr1.c
+SOURCEFILES=../src/config/default/peripheral/clk/plib_clk.c ../src/config/default/peripheral/coretimer/plib_coretimer.c ../src/config/default/peripheral/evic/plib_evic.c ../src/config/default/peripheral/gpio/plib_gpio.c ../src/config/default/peripheral/pmp/plib_pmp.c ../src/config/default/peripheral/tmr1/plib_tmr1.c ../src/config/default/peripheral/uart/plib_uart6.c ../src/config/default/stdio/xc32_monitor.c ../src/config/default/initialization.c ../src/config/default/interrupts.c ../src/config/default/exceptions.c ../src/config/default/tasks.c ../../../../SOC_Portable/PIC32/Drivers.c ../../../../Source/ESC/ESC_Utils.c ../../../../Source/ESC/LAN925x.c ../../../../Source/SSC/bootmode.c ../../../../Source/SSC/coeappl.c ../../../../Source/SSC/ecatappl.c ../../../../Source/SSC/ecatcoe.c ../../../../Source/SSC/ecatfoe.c ../../../../Source/SSC/ecatslv.c ../../../../Source/SSC/emcy.c ../../../../Source/SSC/foeappl.c ../../../../Source/SSC/mailbox.c ../../../../Source/SSC/objdef.c ../../../../Source/SSC/sample_app.c ../../../../Source/SSC/sdoserv.c ../src/main.c ../src/app.c ../src/Developer_Test.c
 
 
 
@@ -108,412 +108,426 @@ endif
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/_ext/163028504/xc32_monitor.o: ../src/config/default/stdio/xc32_monitor.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/163028504" 
-	@${RM} ${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d 
-	@${RM} ${OBJECTDIR}/_ext/163028504/xc32_monitor.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d" -o ${OBJECTDIR}/_ext/163028504/xc32_monitor.o ../src/config/default/stdio/xc32_monitor.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/1171490990/initialization.o: ../src/config/default/initialization.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/initialization.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/initialization.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/initialization.o.d" -o ${OBJECTDIR}/_ext/1171490990/initialization.o ../src/config/default/initialization.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/initialization.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/1171490990/interrupts.o: ../src/config/default/interrupts.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/interrupts.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/interrupts.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/interrupts.o.d" -o ${OBJECTDIR}/_ext/1171490990/interrupts.o ../src/config/default/interrupts.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/interrupts.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/1171490990/exceptions.o: ../src/config/default/exceptions.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/exceptions.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/exceptions.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/exceptions.o.d" -o ${OBJECTDIR}/_ext/1171490990/exceptions.o ../src/config/default/exceptions.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/exceptions.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/1171490990/tasks.o: ../src/config/default/tasks.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/tasks.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/tasks.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/tasks.o.d" -o ${OBJECTDIR}/_ext/1171490990/tasks.o ../src/config/default/tasks.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/tasks.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/610655027/Drivers.o: ../../../../SOC_Portable/PIC32/Drivers.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/610655027" 
-	@${RM} ${OBJECTDIR}/_ext/610655027/Drivers.o.d 
-	@${RM} ${OBJECTDIR}/_ext/610655027/Drivers.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/610655027/Drivers.o.d" -o ${OBJECTDIR}/_ext/610655027/Drivers.o ../../../../SOC_Portable/PIC32/Drivers.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/610655027/Drivers.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108147519/ESC_Utils.o: ../../../../Source/ESC/ESC_Utils.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108147519" 
-	@${RM} ${OBJECTDIR}/_ext/108147519/ESC_Utils.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108147519/ESC_Utils.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108147519/ESC_Utils.o.d" -o ${OBJECTDIR}/_ext/108147519/ESC_Utils.o ../../../../Source/ESC/ESC_Utils.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108147519/ESC_Utils.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108147519/LAN925x.o: ../../../../Source/ESC/LAN925x.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108147519" 
-	@${RM} ${OBJECTDIR}/_ext/108147519/LAN925x.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108147519/LAN925x.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108147519/LAN925x.o.d" -o ${OBJECTDIR}/_ext/108147519/LAN925x.o ../../../../Source/ESC/LAN925x.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108147519/LAN925x.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/bootmode.o: ../../../../Source/SSC/bootmode.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/bootmode.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/bootmode.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/bootmode.o.d" -o ${OBJECTDIR}/_ext/108134065/bootmode.o ../../../../Source/SSC/bootmode.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/bootmode.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/coeappl.o: ../../../../Source/SSC/coeappl.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/coeappl.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/coeappl.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/coeappl.o.d" -o ${OBJECTDIR}/_ext/108134065/coeappl.o ../../../../Source/SSC/coeappl.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/coeappl.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/ecatappl.o: ../../../../Source/SSC/ecatappl.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatappl.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatappl.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatappl.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatappl.o ../../../../Source/SSC/ecatappl.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatappl.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/ecatcoe.o: ../../../../Source/SSC/ecatcoe.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatcoe.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatcoe.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatcoe.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatcoe.o ../../../../Source/SSC/ecatcoe.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatcoe.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/ecatfoe.o: ../../../../Source/SSC/ecatfoe.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatfoe.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatfoe.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatfoe.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatfoe.o ../../../../Source/SSC/ecatfoe.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatfoe.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/ecatslv.o: ../../../../Source/SSC/ecatslv.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatslv.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatslv.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatslv.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatslv.o ../../../../Source/SSC/ecatslv.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatslv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/emcy.o: ../../../../Source/SSC/emcy.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/emcy.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/emcy.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/emcy.o.d" -o ${OBJECTDIR}/_ext/108134065/emcy.o ../../../../Source/SSC/emcy.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/emcy.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/foeappl.o: ../../../../Source/SSC/foeappl.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/foeappl.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/foeappl.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/foeappl.o.d" -o ${OBJECTDIR}/_ext/108134065/foeappl.o ../../../../Source/SSC/foeappl.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/foeappl.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/mailbox.o: ../../../../Source/SSC/mailbox.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/mailbox.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/mailbox.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/mailbox.o.d" -o ${OBJECTDIR}/_ext/108134065/mailbox.o ../../../../Source/SSC/mailbox.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/mailbox.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/objdef.o: ../../../../Source/SSC/objdef.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/objdef.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/objdef.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/objdef.o.d" -o ${OBJECTDIR}/_ext/108134065/objdef.o ../../../../Source/SSC/objdef.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/objdef.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/sample_app.o: ../../../../Source/SSC/sample_app.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/sample_app.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/sample_app.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/sample_app.o.d" -o ${OBJECTDIR}/_ext/108134065/sample_app.o ../../../../Source/SSC/sample_app.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/sample_app.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/sdoserv.o: ../../../../Source/SSC/sdoserv.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/sdoserv.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/sdoserv.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/sdoserv.o.d" -o ${OBJECTDIR}/_ext/108134065/sdoserv.o ../../../../Source/SSC/sdoserv.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/sdoserv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/1360937237/main.o: ../src/main.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1360937237" 
-	@${RM} ${OBJECTDIR}/_ext/1360937237/main.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1360937237/main.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1360937237/main.o.d" -o ${OBJECTDIR}/_ext/1360937237/main.o ../src/main.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/1360937237/app.o: ../src/app.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1360937237" 
-	@${RM} ${OBJECTDIR}/_ext/1360937237/app.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1360937237/app.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1360937237/app.o.d" -o ${OBJECTDIR}/_ext/1360937237/app.o ../src/app.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/app.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/1360937237/Developer_Test.o: ../src/Developer_Test.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1360937237" 
-	@${RM} ${OBJECTDIR}/_ext/1360937237/Developer_Test.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1360937237/Developer_Test.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1360937237/Developer_Test.o.d" -o ${OBJECTDIR}/_ext/1360937237/Developer_Test.o ../src/Developer_Test.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/Developer_Test.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
 ${OBJECTDIR}/_ext/60165520/plib_clk.o: ../src/config/default/peripheral/clk/plib_clk.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/60165520" 
 	@${RM} ${OBJECTDIR}/_ext/60165520/plib_clk.o.d 
 	@${RM} ${OBJECTDIR}/_ext/60165520/plib_clk.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/60165520/plib_clk.o.d" -o ${OBJECTDIR}/_ext/60165520/plib_clk.o ../src/config/default/peripheral/clk/plib_clk.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/60165520/plib_clk.o.d" -o ${OBJECTDIR}/_ext/60165520/plib_clk.o ../src/config/default/peripheral/clk/plib_clk.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
 	@${FIXDEPS} "${OBJECTDIR}/_ext/60165520/plib_clk.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o: ../src/config/default/peripheral/coretimer/plib_coretimer.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/1249264884" 
 	@${RM} ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1249264884/plib_coretimer.o.d" -o ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o ../src/config/default/peripheral/coretimer/plib_coretimer.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1249264884/plib_coretimer.o.d" -o ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o ../src/config/default/peripheral/coretimer/plib_coretimer.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1249264884/plib_coretimer.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/_ext/1865200349/plib_evic.o: ../src/config/default/peripheral/evic/plib_evic.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/1865200349" 
 	@${RM} ${OBJECTDIR}/_ext/1865200349/plib_evic.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1865200349/plib_evic.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1865200349/plib_evic.o.d" -o ${OBJECTDIR}/_ext/1865200349/plib_evic.o ../src/config/default/peripheral/evic/plib_evic.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1865200349/plib_evic.o.d" -o ${OBJECTDIR}/_ext/1865200349/plib_evic.o ../src/config/default/peripheral/evic/plib_evic.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1865200349/plib_evic.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/_ext/1865254177/plib_gpio.o: ../src/config/default/peripheral/gpio/plib_gpio.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/1865254177" 
 	@${RM} ${OBJECTDIR}/_ext/1865254177/plib_gpio.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1865254177/plib_gpio.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1865254177/plib_gpio.o.d" -o ${OBJECTDIR}/_ext/1865254177/plib_gpio.o ../src/config/default/peripheral/gpio/plib_gpio.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1865254177/plib_gpio.o.d" -o ${OBJECTDIR}/_ext/1865254177/plib_gpio.o ../src/config/default/peripheral/gpio/plib_gpio.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1865254177/plib_gpio.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/_ext/60178049/plib_pmp.o: ../src/config/default/peripheral/pmp/plib_pmp.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/60178049" 
 	@${RM} ${OBJECTDIR}/_ext/60178049/plib_pmp.o.d 
 	@${RM} ${OBJECTDIR}/_ext/60178049/plib_pmp.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/60178049/plib_pmp.o.d" -o ${OBJECTDIR}/_ext/60178049/plib_pmp.o ../src/config/default/peripheral/pmp/plib_pmp.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/60178049/plib_pmp.o.d" -o ${OBJECTDIR}/_ext/60178049/plib_pmp.o ../src/config/default/peripheral/pmp/plib_pmp.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
 	@${FIXDEPS} "${OBJECTDIR}/_ext/60178049/plib_pmp.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o: ../src/config/default/peripheral/tmr1/plib_tmr1.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/1865638794" 
 	@${RM} ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1865638794/plib_tmr1.o.d" -o ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o ../src/config/default/peripheral/tmr1/plib_tmr1.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1865638794/plib_tmr1.o.d" -o ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o ../src/config/default/peripheral/tmr1/plib_tmr1.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1865638794/plib_tmr1.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1865657120/plib_uart6.o: ../src/config/default/peripheral/uart/plib_uart6.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1865657120" 
+	@${RM} ${OBJECTDIR}/_ext/1865657120/plib_uart6.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1865657120/plib_uart6.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1865657120/plib_uart6.o.d" -o ${OBJECTDIR}/_ext/1865657120/plib_uart6.o ../src/config/default/peripheral/uart/plib_uart6.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1865657120/plib_uart6.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/163028504/xc32_monitor.o: ../src/config/default/stdio/xc32_monitor.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/163028504" 
+	@${RM} ${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d 
+	@${RM} ${OBJECTDIR}/_ext/163028504/xc32_monitor.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d" -o ${OBJECTDIR}/_ext/163028504/xc32_monitor.o ../src/config/default/stdio/xc32_monitor.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1171490990/initialization.o: ../src/config/default/initialization.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/initialization.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/initialization.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/initialization.o.d" -o ${OBJECTDIR}/_ext/1171490990/initialization.o ../src/config/default/initialization.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/initialization.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1171490990/interrupts.o: ../src/config/default/interrupts.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/interrupts.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/interrupts.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/interrupts.o.d" -o ${OBJECTDIR}/_ext/1171490990/interrupts.o ../src/config/default/interrupts.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/interrupts.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1171490990/exceptions.o: ../src/config/default/exceptions.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/exceptions.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/exceptions.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/exceptions.o.d" -o ${OBJECTDIR}/_ext/1171490990/exceptions.o ../src/config/default/exceptions.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/exceptions.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1171490990/tasks.o: ../src/config/default/tasks.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/tasks.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/tasks.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/tasks.o.d" -o ${OBJECTDIR}/_ext/1171490990/tasks.o ../src/config/default/tasks.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/tasks.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/610655027/Drivers.o: ../../../../SOC_Portable/PIC32/Drivers.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/610655027" 
+	@${RM} ${OBJECTDIR}/_ext/610655027/Drivers.o.d 
+	@${RM} ${OBJECTDIR}/_ext/610655027/Drivers.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/610655027/Drivers.o.d" -o ${OBJECTDIR}/_ext/610655027/Drivers.o ../../../../SOC_Portable/PIC32/Drivers.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/610655027/Drivers.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108147519/ESC_Utils.o: ../../../../Source/ESC/ESC_Utils.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108147519" 
+	@${RM} ${OBJECTDIR}/_ext/108147519/ESC_Utils.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108147519/ESC_Utils.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108147519/ESC_Utils.o.d" -o ${OBJECTDIR}/_ext/108147519/ESC_Utils.o ../../../../Source/ESC/ESC_Utils.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108147519/ESC_Utils.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108147519/LAN925x.o: ../../../../Source/ESC/LAN925x.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108147519" 
+	@${RM} ${OBJECTDIR}/_ext/108147519/LAN925x.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108147519/LAN925x.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108147519/LAN925x.o.d" -o ${OBJECTDIR}/_ext/108147519/LAN925x.o ../../../../Source/ESC/LAN925x.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108147519/LAN925x.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/bootmode.o: ../../../../Source/SSC/bootmode.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/bootmode.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/bootmode.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/bootmode.o.d" -o ${OBJECTDIR}/_ext/108134065/bootmode.o ../../../../Source/SSC/bootmode.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/bootmode.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/coeappl.o: ../../../../Source/SSC/coeappl.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/coeappl.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/coeappl.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/coeappl.o.d" -o ${OBJECTDIR}/_ext/108134065/coeappl.o ../../../../Source/SSC/coeappl.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/coeappl.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/ecatappl.o: ../../../../Source/SSC/ecatappl.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatappl.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatappl.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatappl.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatappl.o ../../../../Source/SSC/ecatappl.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatappl.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/ecatcoe.o: ../../../../Source/SSC/ecatcoe.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatcoe.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatcoe.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatcoe.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatcoe.o ../../../../Source/SSC/ecatcoe.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatcoe.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/ecatfoe.o: ../../../../Source/SSC/ecatfoe.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatfoe.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatfoe.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatfoe.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatfoe.o ../../../../Source/SSC/ecatfoe.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatfoe.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/ecatslv.o: ../../../../Source/SSC/ecatslv.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatslv.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatslv.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatslv.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatslv.o ../../../../Source/SSC/ecatslv.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatslv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/emcy.o: ../../../../Source/SSC/emcy.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/emcy.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/emcy.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/emcy.o.d" -o ${OBJECTDIR}/_ext/108134065/emcy.o ../../../../Source/SSC/emcy.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/emcy.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/foeappl.o: ../../../../Source/SSC/foeappl.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/foeappl.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/foeappl.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/foeappl.o.d" -o ${OBJECTDIR}/_ext/108134065/foeappl.o ../../../../Source/SSC/foeappl.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/foeappl.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/mailbox.o: ../../../../Source/SSC/mailbox.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/mailbox.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/mailbox.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/mailbox.o.d" -o ${OBJECTDIR}/_ext/108134065/mailbox.o ../../../../Source/SSC/mailbox.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/mailbox.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/objdef.o: ../../../../Source/SSC/objdef.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/objdef.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/objdef.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/objdef.o.d" -o ${OBJECTDIR}/_ext/108134065/objdef.o ../../../../Source/SSC/objdef.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/objdef.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/sample_app.o: ../../../../Source/SSC/sample_app.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/sample_app.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/sample_app.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/sample_app.o.d" -o ${OBJECTDIR}/_ext/108134065/sample_app.o ../../../../Source/SSC/sample_app.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/sample_app.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/sdoserv.o: ../../../../Source/SSC/sdoserv.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/sdoserv.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/sdoserv.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/sdoserv.o.d" -o ${OBJECTDIR}/_ext/108134065/sdoserv.o ../../../../Source/SSC/sdoserv.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/sdoserv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1360937237/main.o: ../src/main.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1360937237" 
+	@${RM} ${OBJECTDIR}/_ext/1360937237/main.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1360937237/main.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1360937237/main.o.d" -o ${OBJECTDIR}/_ext/1360937237/main.o ../src/main.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1360937237/app.o: ../src/app.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1360937237" 
+	@${RM} ${OBJECTDIR}/_ext/1360937237/app.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1360937237/app.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1360937237/app.o.d" -o ${OBJECTDIR}/_ext/1360937237/app.o ../src/app.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/app.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1360937237/Developer_Test.o: ../src/Developer_Test.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1360937237" 
+	@${RM} ${OBJECTDIR}/_ext/1360937237/Developer_Test.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1360937237/Developer_Test.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1  -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1360937237/Developer_Test.o.d" -o ${OBJECTDIR}/_ext/1360937237/Developer_Test.o ../src/Developer_Test.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/Developer_Test.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 else
-${OBJECTDIR}/_ext/163028504/xc32_monitor.o: ../src/config/default/stdio/xc32_monitor.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/163028504" 
-	@${RM} ${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d 
-	@${RM} ${OBJECTDIR}/_ext/163028504/xc32_monitor.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d" -o ${OBJECTDIR}/_ext/163028504/xc32_monitor.o ../src/config/default/stdio/xc32_monitor.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/1171490990/initialization.o: ../src/config/default/initialization.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/initialization.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/initialization.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/initialization.o.d" -o ${OBJECTDIR}/_ext/1171490990/initialization.o ../src/config/default/initialization.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/initialization.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/1171490990/interrupts.o: ../src/config/default/interrupts.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/interrupts.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/interrupts.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/interrupts.o.d" -o ${OBJECTDIR}/_ext/1171490990/interrupts.o ../src/config/default/interrupts.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/interrupts.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/1171490990/exceptions.o: ../src/config/default/exceptions.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/exceptions.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/exceptions.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/exceptions.o.d" -o ${OBJECTDIR}/_ext/1171490990/exceptions.o ../src/config/default/exceptions.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/exceptions.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/1171490990/tasks.o: ../src/config/default/tasks.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/tasks.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1171490990/tasks.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/tasks.o.d" -o ${OBJECTDIR}/_ext/1171490990/tasks.o ../src/config/default/tasks.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/tasks.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/610655027/Drivers.o: ../../../../SOC_Portable/PIC32/Drivers.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/610655027" 
-	@${RM} ${OBJECTDIR}/_ext/610655027/Drivers.o.d 
-	@${RM} ${OBJECTDIR}/_ext/610655027/Drivers.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/610655027/Drivers.o.d" -o ${OBJECTDIR}/_ext/610655027/Drivers.o ../../../../SOC_Portable/PIC32/Drivers.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/610655027/Drivers.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108147519/ESC_Utils.o: ../../../../Source/ESC/ESC_Utils.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108147519" 
-	@${RM} ${OBJECTDIR}/_ext/108147519/ESC_Utils.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108147519/ESC_Utils.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108147519/ESC_Utils.o.d" -o ${OBJECTDIR}/_ext/108147519/ESC_Utils.o ../../../../Source/ESC/ESC_Utils.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108147519/ESC_Utils.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108147519/LAN925x.o: ../../../../Source/ESC/LAN925x.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108147519" 
-	@${RM} ${OBJECTDIR}/_ext/108147519/LAN925x.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108147519/LAN925x.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108147519/LAN925x.o.d" -o ${OBJECTDIR}/_ext/108147519/LAN925x.o ../../../../Source/ESC/LAN925x.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108147519/LAN925x.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/bootmode.o: ../../../../Source/SSC/bootmode.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/bootmode.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/bootmode.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/bootmode.o.d" -o ${OBJECTDIR}/_ext/108134065/bootmode.o ../../../../Source/SSC/bootmode.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/bootmode.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/coeappl.o: ../../../../Source/SSC/coeappl.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/coeappl.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/coeappl.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/coeappl.o.d" -o ${OBJECTDIR}/_ext/108134065/coeappl.o ../../../../Source/SSC/coeappl.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/coeappl.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/ecatappl.o: ../../../../Source/SSC/ecatappl.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatappl.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatappl.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatappl.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatappl.o ../../../../Source/SSC/ecatappl.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatappl.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/ecatcoe.o: ../../../../Source/SSC/ecatcoe.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatcoe.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatcoe.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatcoe.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatcoe.o ../../../../Source/SSC/ecatcoe.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatcoe.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/ecatfoe.o: ../../../../Source/SSC/ecatfoe.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatfoe.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatfoe.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatfoe.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatfoe.o ../../../../Source/SSC/ecatfoe.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatfoe.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/ecatslv.o: ../../../../Source/SSC/ecatslv.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatslv.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/ecatslv.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatslv.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatslv.o ../../../../Source/SSC/ecatslv.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatslv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/emcy.o: ../../../../Source/SSC/emcy.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/emcy.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/emcy.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/emcy.o.d" -o ${OBJECTDIR}/_ext/108134065/emcy.o ../../../../Source/SSC/emcy.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/emcy.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/foeappl.o: ../../../../Source/SSC/foeappl.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/foeappl.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/foeappl.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/foeappl.o.d" -o ${OBJECTDIR}/_ext/108134065/foeappl.o ../../../../Source/SSC/foeappl.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/foeappl.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/mailbox.o: ../../../../Source/SSC/mailbox.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/mailbox.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/mailbox.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/mailbox.o.d" -o ${OBJECTDIR}/_ext/108134065/mailbox.o ../../../../Source/SSC/mailbox.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/mailbox.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/objdef.o: ../../../../Source/SSC/objdef.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/objdef.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/objdef.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/objdef.o.d" -o ${OBJECTDIR}/_ext/108134065/objdef.o ../../../../Source/SSC/objdef.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/objdef.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/sample_app.o: ../../../../Source/SSC/sample_app.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/sample_app.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/sample_app.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/sample_app.o.d" -o ${OBJECTDIR}/_ext/108134065/sample_app.o ../../../../Source/SSC/sample_app.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/sample_app.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/108134065/sdoserv.o: ../../../../Source/SSC/sdoserv.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
-	@${RM} ${OBJECTDIR}/_ext/108134065/sdoserv.o.d 
-	@${RM} ${OBJECTDIR}/_ext/108134065/sdoserv.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/sdoserv.o.d" -o ${OBJECTDIR}/_ext/108134065/sdoserv.o ../../../../Source/SSC/sdoserv.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/sdoserv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/1360937237/main.o: ../src/main.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1360937237" 
-	@${RM} ${OBJECTDIR}/_ext/1360937237/main.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1360937237/main.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1360937237/main.o.d" -o ${OBJECTDIR}/_ext/1360937237/main.o ../src/main.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/1360937237/app.o: ../src/app.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1360937237" 
-	@${RM} ${OBJECTDIR}/_ext/1360937237/app.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1360937237/app.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1360937237/app.o.d" -o ${OBJECTDIR}/_ext/1360937237/app.o ../src/app.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/app.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
-${OBJECTDIR}/_ext/1360937237/Developer_Test.o: ../src/Developer_Test.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/_ext/1360937237" 
-	@${RM} ${OBJECTDIR}/_ext/1360937237/Developer_Test.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1360937237/Developer_Test.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1360937237/Developer_Test.o.d" -o ${OBJECTDIR}/_ext/1360937237/Developer_Test.o ../src/Developer_Test.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/Developer_Test.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
-	
 ${OBJECTDIR}/_ext/60165520/plib_clk.o: ../src/config/default/peripheral/clk/plib_clk.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/60165520" 
 	@${RM} ${OBJECTDIR}/_ext/60165520/plib_clk.o.d 
 	@${RM} ${OBJECTDIR}/_ext/60165520/plib_clk.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/60165520/plib_clk.o.d" -o ${OBJECTDIR}/_ext/60165520/plib_clk.o ../src/config/default/peripheral/clk/plib_clk.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/60165520/plib_clk.o.d" -o ${OBJECTDIR}/_ext/60165520/plib_clk.o ../src/config/default/peripheral/clk/plib_clk.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
 	@${FIXDEPS} "${OBJECTDIR}/_ext/60165520/plib_clk.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o: ../src/config/default/peripheral/coretimer/plib_coretimer.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/1249264884" 
 	@${RM} ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1249264884/plib_coretimer.o.d" -o ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o ../src/config/default/peripheral/coretimer/plib_coretimer.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1249264884/plib_coretimer.o.d" -o ${OBJECTDIR}/_ext/1249264884/plib_coretimer.o ../src/config/default/peripheral/coretimer/plib_coretimer.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1249264884/plib_coretimer.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/_ext/1865200349/plib_evic.o: ../src/config/default/peripheral/evic/plib_evic.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/1865200349" 
 	@${RM} ${OBJECTDIR}/_ext/1865200349/plib_evic.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1865200349/plib_evic.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1865200349/plib_evic.o.d" -o ${OBJECTDIR}/_ext/1865200349/plib_evic.o ../src/config/default/peripheral/evic/plib_evic.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1865200349/plib_evic.o.d" -o ${OBJECTDIR}/_ext/1865200349/plib_evic.o ../src/config/default/peripheral/evic/plib_evic.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1865200349/plib_evic.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/_ext/1865254177/plib_gpio.o: ../src/config/default/peripheral/gpio/plib_gpio.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/1865254177" 
 	@${RM} ${OBJECTDIR}/_ext/1865254177/plib_gpio.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1865254177/plib_gpio.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1865254177/plib_gpio.o.d" -o ${OBJECTDIR}/_ext/1865254177/plib_gpio.o ../src/config/default/peripheral/gpio/plib_gpio.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1865254177/plib_gpio.o.d" -o ${OBJECTDIR}/_ext/1865254177/plib_gpio.o ../src/config/default/peripheral/gpio/plib_gpio.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1865254177/plib_gpio.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/_ext/60178049/plib_pmp.o: ../src/config/default/peripheral/pmp/plib_pmp.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/60178049" 
 	@${RM} ${OBJECTDIR}/_ext/60178049/plib_pmp.o.d 
 	@${RM} ${OBJECTDIR}/_ext/60178049/plib_pmp.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/60178049/plib_pmp.o.d" -o ${OBJECTDIR}/_ext/60178049/plib_pmp.o ../src/config/default/peripheral/pmp/plib_pmp.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/60178049/plib_pmp.o.d" -o ${OBJECTDIR}/_ext/60178049/plib_pmp.o ../src/config/default/peripheral/pmp/plib_pmp.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
 	@${FIXDEPS} "${OBJECTDIR}/_ext/60178049/plib_pmp.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o: ../src/config/default/peripheral/tmr1/plib_tmr1.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/_ext/1865638794" 
 	@${RM} ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o 
-	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX_DFP" -I"../src/packs/PIC32MX795F512L_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1865638794/plib_tmr1.o.d" -o ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o ../src/config/default/peripheral/tmr1/plib_tmr1.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1865638794/plib_tmr1.o.d" -o ${OBJECTDIR}/_ext/1865638794/plib_tmr1.o ../src/config/default/peripheral/tmr1/plib_tmr1.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1865638794/plib_tmr1.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1865657120/plib_uart6.o: ../src/config/default/peripheral/uart/plib_uart6.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1865657120" 
+	@${RM} ${OBJECTDIR}/_ext/1865657120/plib_uart6.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1865657120/plib_uart6.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1865657120/plib_uart6.o.d" -o ${OBJECTDIR}/_ext/1865657120/plib_uart6.o ../src/config/default/peripheral/uart/plib_uart6.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1865657120/plib_uart6.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/163028504/xc32_monitor.o: ../src/config/default/stdio/xc32_monitor.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/163028504" 
+	@${RM} ${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d 
+	@${RM} ${OBJECTDIR}/_ext/163028504/xc32_monitor.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d" -o ${OBJECTDIR}/_ext/163028504/xc32_monitor.o ../src/config/default/stdio/xc32_monitor.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/163028504/xc32_monitor.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1171490990/initialization.o: ../src/config/default/initialization.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/initialization.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/initialization.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/initialization.o.d" -o ${OBJECTDIR}/_ext/1171490990/initialization.o ../src/config/default/initialization.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/initialization.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1171490990/interrupts.o: ../src/config/default/interrupts.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/interrupts.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/interrupts.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/interrupts.o.d" -o ${OBJECTDIR}/_ext/1171490990/interrupts.o ../src/config/default/interrupts.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/interrupts.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1171490990/exceptions.o: ../src/config/default/exceptions.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/exceptions.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/exceptions.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/exceptions.o.d" -o ${OBJECTDIR}/_ext/1171490990/exceptions.o ../src/config/default/exceptions.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/exceptions.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1171490990/tasks.o: ../src/config/default/tasks.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1171490990" 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/tasks.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1171490990/tasks.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1171490990/tasks.o.d" -o ${OBJECTDIR}/_ext/1171490990/tasks.o ../src/config/default/tasks.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1171490990/tasks.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/610655027/Drivers.o: ../../../../SOC_Portable/PIC32/Drivers.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/610655027" 
+	@${RM} ${OBJECTDIR}/_ext/610655027/Drivers.o.d 
+	@${RM} ${OBJECTDIR}/_ext/610655027/Drivers.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/610655027/Drivers.o.d" -o ${OBJECTDIR}/_ext/610655027/Drivers.o ../../../../SOC_Portable/PIC32/Drivers.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/610655027/Drivers.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108147519/ESC_Utils.o: ../../../../Source/ESC/ESC_Utils.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108147519" 
+	@${RM} ${OBJECTDIR}/_ext/108147519/ESC_Utils.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108147519/ESC_Utils.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108147519/ESC_Utils.o.d" -o ${OBJECTDIR}/_ext/108147519/ESC_Utils.o ../../../../Source/ESC/ESC_Utils.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108147519/ESC_Utils.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108147519/LAN925x.o: ../../../../Source/ESC/LAN925x.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108147519" 
+	@${RM} ${OBJECTDIR}/_ext/108147519/LAN925x.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108147519/LAN925x.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108147519/LAN925x.o.d" -o ${OBJECTDIR}/_ext/108147519/LAN925x.o ../../../../Source/ESC/LAN925x.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108147519/LAN925x.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/bootmode.o: ../../../../Source/SSC/bootmode.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/bootmode.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/bootmode.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/bootmode.o.d" -o ${OBJECTDIR}/_ext/108134065/bootmode.o ../../../../Source/SSC/bootmode.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/bootmode.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/coeappl.o: ../../../../Source/SSC/coeappl.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/coeappl.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/coeappl.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/coeappl.o.d" -o ${OBJECTDIR}/_ext/108134065/coeappl.o ../../../../Source/SSC/coeappl.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/coeappl.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/ecatappl.o: ../../../../Source/SSC/ecatappl.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatappl.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatappl.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatappl.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatappl.o ../../../../Source/SSC/ecatappl.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatappl.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/ecatcoe.o: ../../../../Source/SSC/ecatcoe.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatcoe.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatcoe.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatcoe.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatcoe.o ../../../../Source/SSC/ecatcoe.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatcoe.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/ecatfoe.o: ../../../../Source/SSC/ecatfoe.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatfoe.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatfoe.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatfoe.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatfoe.o ../../../../Source/SSC/ecatfoe.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatfoe.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/ecatslv.o: ../../../../Source/SSC/ecatslv.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatslv.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/ecatslv.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/ecatslv.o.d" -o ${OBJECTDIR}/_ext/108134065/ecatslv.o ../../../../Source/SSC/ecatslv.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/ecatslv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/emcy.o: ../../../../Source/SSC/emcy.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/emcy.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/emcy.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/emcy.o.d" -o ${OBJECTDIR}/_ext/108134065/emcy.o ../../../../Source/SSC/emcy.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/emcy.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/foeappl.o: ../../../../Source/SSC/foeappl.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/foeappl.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/foeappl.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/foeappl.o.d" -o ${OBJECTDIR}/_ext/108134065/foeappl.o ../../../../Source/SSC/foeappl.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/foeappl.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/mailbox.o: ../../../../Source/SSC/mailbox.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/mailbox.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/mailbox.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/mailbox.o.d" -o ${OBJECTDIR}/_ext/108134065/mailbox.o ../../../../Source/SSC/mailbox.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/mailbox.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/objdef.o: ../../../../Source/SSC/objdef.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/objdef.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/objdef.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/objdef.o.d" -o ${OBJECTDIR}/_ext/108134065/objdef.o ../../../../Source/SSC/objdef.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/objdef.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/sample_app.o: ../../../../Source/SSC/sample_app.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/sample_app.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/sample_app.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/sample_app.o.d" -o ${OBJECTDIR}/_ext/108134065/sample_app.o ../../../../Source/SSC/sample_app.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/sample_app.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/108134065/sdoserv.o: ../../../../Source/SSC/sdoserv.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/108134065" 
+	@${RM} ${OBJECTDIR}/_ext/108134065/sdoserv.o.d 
+	@${RM} ${OBJECTDIR}/_ext/108134065/sdoserv.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/108134065/sdoserv.o.d" -o ${OBJECTDIR}/_ext/108134065/sdoserv.o ../../../../Source/SSC/sdoserv.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/108134065/sdoserv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1360937237/main.o: ../src/main.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1360937237" 
+	@${RM} ${OBJECTDIR}/_ext/1360937237/main.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1360937237/main.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1360937237/main.o.d" -o ${OBJECTDIR}/_ext/1360937237/main.o ../src/main.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1360937237/app.o: ../src/app.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1360937237" 
+	@${RM} ${OBJECTDIR}/_ext/1360937237/app.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1360937237/app.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1360937237/app.o.d" -o ${OBJECTDIR}/_ext/1360937237/app.o ../src/app.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/app.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/_ext/1360937237/Developer_Test.o: ../src/Developer_Test.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/_ext/1360937237" 
+	@${RM} ${OBJECTDIR}/_ext/1360937237/Developer_Test.o.d 
+	@${RM} ${OBJECTDIR}/_ext/1360937237/Developer_Test.o 
+	${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -DDIRECT_MODE -DDC_SUPPORTED -DESF_PDI=HBI -DHBI=1 -DHBI_MDP_8BIT -I"../src" -I"../src/config/default" -I"../src/packs/PIC32MX795F512L_DFP" -I"../src/packs/PIC32MX_DFP" -I"../../../../SOC_Portable/PIC32" -I"../../../../Source/ESC" -I"../../../../Source/SSC" -MMD -MF "${OBJECTDIR}/_ext/1360937237/Developer_Test.o.d" -o ${OBJECTDIR}/_ext/1360937237/Developer_Test.o ../src/Developer_Test.c    -DXPRJ_ESF_LAN925x_HBI_MDP_8BIT_DIRECT_MODE=$(CND_CONF)  -legacy-libc  $(COMPARISON_BUILD)  -std=c99 -mdfp="${DFP_DIR}"  
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/Developer_Test.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ 
 	
 endif
 

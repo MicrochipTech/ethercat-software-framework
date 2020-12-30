@@ -177,8 +177,6 @@ void SYS_Initialize ( void* data )
 
 
 	EVIC_Initialize();
-    
-    INTCONbits.MVEC = 1;
 
     /* Enable global interrupts */
     __builtin_enable_interrupts();

@@ -61,29 +61,28 @@
 // *****************************************************************************
 // *****************************************************************************
 
-/*** Macros for SYNC1_IRQ pin ***/
-#define SYNC1_IRQ_Set()               ((LATBSET = (1<<1)))
-#define SYNC1_IRQ_Clear()             (LATBCLR = (1<<1))
-#define SYNC1_IRQ_Toggle()            (LATBINV= (1<<1))
-#define SYNC1_IRQ_Get()               ((PORTB >> 1) & 0x1)
-#define SYNC1_IRQ_OutputEnable()      (TRISBCLR = (1<<1))
-#define SYNC1_IRQ_InputEnable()       (TRISBSET = (1<<1))          
-#define SYNC1_IRQ_InterruptEnable()   (CNENSET = 1<<3)
-#define SYNC1_IRQ_InterruptDisable()  (CNENCLR = 1<<3)
-#define SYNC1_IRQ_PIN                  GPIO_PIN_RB1        
 
-/*** Macros for SYNC0_IRQ pin ***/
-#define SYNC0_IRQ_Set()               (LATBSET = (1<<0))
-#define SYNC0_IRQ_Clear()             (LATBCLR = (1<<0))
-#define SYNC0_IRQ_Toggle()            (LATBINV= (1<<0))
-#define SYNC0_IRQ_Get()               ((PORTB >> 0) & 0x1)
-#define SYNC0_IRQ_OutputEnable()      (TRISBCLR = (1<<0))
-#define SYNC0_IRQ_InputEnable()       (TRISBSET = (1<<1))              
-#define SYNC0_IRQ_InterruptEnable()   (CNENSET = 1<<2)
-#define SYNC0_IRQ_InterruptDisable()  (CNENCLR = 1<<2)
-#define SYNC0_IRQ_PIN                  GPIO_PIN_RB0
+/*** Macros for ESC_SYNC0 pin ***/
+#define ESC_SYNC0_Set()               (LATGSET = (1<<6))
+#define ESC_SYNC0_Clear()             (LATGCLR = (1<<6))
+#define ESC_SYNC0_Toggle()            (LATGINV= (1<<6))
+#define ESC_SYNC0_OutputEnable()      (TRISGCLR = (1<<6))
+#define ESC_SYNC0_InputEnable()       (TRISGSET = (1<<6))
+#define ESC_SYNC0_Get()               ((PORTG >> 6) & 0x1)
+#define ESC_SYNC0_InterruptEnable()   GPIO_PinInterruptEnable(CN8_PIN);  
+#define ESC_SYNC0_InterruptDisable()  GPIO_PinInterruptDisable(CN8_PIN);          
+#define ESC_SYNC0_PIN                 CN8_PIN
+
+#define ESC_SYNC1_Set()               (LATBSET = (1<<3))
+#define ESC_SYNC1_Clear()             (LATBCLR = (1<<3))
+#define ESC_SYNC1_Toggle()            (LATBINV= (1<<3))
+#define ESC_SYNC1_OutputEnable()      (TRISBCLR = (1<<3))
+#define ESC_SYNC1_InputEnable()       (TRISBSET = (1<<3))
+#define ESC_SYNC1_Get()               ((PORTB >> 3) & 0x1)
+#define ESC_SYNC1_InterruptEnable()   GPIO_PinInterruptEnable(CN5_PIN);  
+#define ESC_SYNC1_InterruptDisable()  GPIO_PinInterruptDisable(CN5_PIN);          
+#define ESC_SYNC1_PIN                 CN5_PIN
         
-
 /*** Macros for GPIO_RD2 pin ***/
 #define GPIO_RD2_Set()               (LATDSET = (1<<2))
 #define GPIO_RD2_Clear()             (LATDCLR = (1<<2))
@@ -103,7 +102,6 @@
 #define GPIO_RD3_PIN                  GPIO_PIN_RD3
 
 
-        
 // *****************************************************************************
 /* GPIO Port
 

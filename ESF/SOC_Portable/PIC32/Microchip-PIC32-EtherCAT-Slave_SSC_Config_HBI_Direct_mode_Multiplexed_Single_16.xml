@@ -96,14 +96,14 @@
 			<Setting CodeDefine="MAX_EMERGENCIES" Value="0x1"/>
 			<Setting CodeDefine="VENDOR_ID" Value="0xE00004D8"/>
 			<Setting CodeDefine="VENDOR_NAME" Value="Microchip"/>
-			<Setting CodeDefine="PRODUCT_CODE" Value="0x00009253"/>
+			<Setting CodeDefine="PRODUCT_CODE" Value="0x00009254"/>
 			<Setting CodeDefine="REVISION_NUMBER" Value="0x1"/>
 			<Setting CodeDefine="SERIAL_NUMBER" Value="0x1"/>
 			<Setting CodeDefine="DEVICE_NAME" Value="PIC32 EtherCAT Slave"/>
 			<Setting CodeDefine="DEVICE_HW_VERSION" Value="1.0"/>
 			<Setting CodeDefine="DEVICE_PROFILE_TYPE" Value="0x00000192"/>
 			<Setting CodeDefine="DEVICE_HW_VERSION_LEN" Value="0x3"/>
-			<Setting CodeDefine="DEVICE_SW_VERSION" Value="1.0"/>
+			<Setting CodeDefine="DEVICE_SW_VERSION" Value="1.2"/>
 			<Setting CodeDefine="DEVICE_SW_VERSION_LEN" Value="0x3"/>
 			<Setting CodeDefine="MIN_PD_WRITE_ADDRESS" Value="0x1000"/>
 			<Setting CodeDefine="MAX_PD_WRITE_ADDRESS" Value="0x1FFF"/>

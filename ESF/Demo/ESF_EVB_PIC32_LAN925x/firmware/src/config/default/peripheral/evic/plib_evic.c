@@ -62,9 +62,8 @@ void EVIC_Initialize( void )
 
     /* Initialize External interrupt 0 callback object */
     extInt0CbObj.callback = NULL;
-    
+	
     EVIC_ExternalInterruptEnable(EXTERNAL_INT_0);
-
 }
 
 void EVIC_SourceEnable( INT_SOURCE source )

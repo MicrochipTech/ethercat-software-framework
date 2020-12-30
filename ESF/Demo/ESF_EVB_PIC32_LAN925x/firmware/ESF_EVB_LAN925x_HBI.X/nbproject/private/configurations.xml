@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="65">
   <projectmakefile>Makefile</projectmakefile>
-  <defaultConf>5</defaultConf>
+  <defaultConf>0</defaultConf>
   <confs>
     <conf name="ESF_LAN925x_HBI_MSP_16BIT_DIRECT_MODE" type="2">
       <platformToolSN>:=MPLABComm-USB-Microchip:=&lt;vid>04D8:=&lt;pid>900A:=&lt;rev>0002:=&lt;man>Microchip Technology Inc.:=&lt;prod>PICkit 3:=&lt;sn>BUR131882804:=&lt;drv>x:=&lt;xpt>h:=end</platformToolSN>

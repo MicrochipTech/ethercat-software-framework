@@ -63,17 +63,17 @@ void TMR5_Initialize(void)
 
     /*
     SIDL = 0
-    TCKPS =3
+    TCKPS =0
     T32   = 0
     TCS = 0
     */
-    T5CONSET = 0x30;
+    T5CONSET = 0x0;
 
     /* Clear counter */
     TMR5 = 0x0;
 
     /*Set period */
-    PR5 = 1499U;
+    PR5 = 11999U;
 
     /* Enable TMR Interrupt */
     IEC0SET = _IEC0_T5IE_MASK;
@@ -110,7 +110,7 @@ uint16_t TMR5_CounterGet(void)
 
 uint32_t TMR5_FrequencyGet(void)
 {
-    return (5000000);
+    return (40000000);
 }
 
 

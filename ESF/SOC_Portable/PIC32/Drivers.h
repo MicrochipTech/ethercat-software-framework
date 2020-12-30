@@ -44,8 +44,8 @@
 #include <stdint.h>
 #include "definitions.h"
 
-#define SYNC0                                       SYNC0_IRQ_PIN
-#define SYNC1                                       SYNC1_IRQ_PIN
+#define SYNC0                                       ESC_SYNC0_PIN
+#define SYNC1                                       ESC_SYNC1_PIN
 #define ESCIRQ                                      EXTERNAL_INT_0
 
 /* Configured PA20 and PA21 pins 
@@ -105,6 +105,7 @@ typedef enum {LGY, ESM, MM2, MM1} RWType;
 	void	ESC_BYTE_TEST_Register_Read(UINT8 *pu8Data);
     void    CRITICAL_SECTION_ENTER(void);
     void    CRITICAL_SECTION_LEAVE(void);
+    void    PinInterruptCallbackRegister(CN_PIN pin);
 
 	UINT16	PDI_GetTimer();
 	void	PDI_ClearTimer(void);

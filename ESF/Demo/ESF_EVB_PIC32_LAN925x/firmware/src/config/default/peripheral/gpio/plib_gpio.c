@@ -47,8 +47,9 @@
 /* Array to store pin objects of each configured interrupt */
 GPIO_PIN_CALLBACK_OBJ cnPinObj[TOTAL_NUM_OF_INT_USED] =
     {
-        {.cnPin = CN2_PIN , .gpioPin = GPIO_PIN_RB0, .callback = NULL },
-        {.cnPin = CN3_PIN , .gpioPin = GPIO_PIN_RB1, .callback = NULL },
+        {.cnPin = CN8_PIN , .gpioPin = GPIO_PIN_RG6, .callback = NULL },
+        {.cnPin = CN5_PIN , .gpioPin = GPIO_PIN_RB3, .callback = NULL },
+        
     };
 
 
@@ -64,12 +65,12 @@ GPIO_PIN_CALLBACK_OBJ cnPinObj[TOTAL_NUM_OF_INT_USED] =
 */
 void GPIO_Initialize ( void )
 {
-    AD1PCFGSET = 0x3; /* Digital Mode Enable */
+    AD1PCFGSET = 0x8; /* Digital Mode Enable */
 
     /* PORTA Initialization */
 
     /* PORTB Initialization */
-
+            
     /* PORTC Initialization */
 
     /* PORTD Initialization */
@@ -96,10 +97,8 @@ void GPIO_Initialize ( void )
         mask = 1 << bitPosition;
         cnPinObj[i].prevPinValue = (bool)((latestPortValue & mask) >> bitPosition);
     }
-
-    SYNC1_IRQ_InterruptEnable();
-    SYNC0_IRQ_InterruptEnable();
-    
+    ESC_SYNC0_InterruptEnable();
+    ESC_SYNC1_InterruptEnable();
 }
 
 // *****************************************************************************
@@ -293,24 +292,16 @@ bool GPIO_PinInterruptCallbackRegister(
 */
 void CHANGE_NOTICE_InterruptHandler(void)
 {
-    uint8_t i, bitPosition;
-    uint32_t latestPortValue, mask;
-    bool currPinValue;
-
+    uint8_t i;
+    
     /* Check which CN interrupt has occurred and call callback if registered */
     for(i = 0; i < TOTAL_NUM_OF_INT_USED; i++)
     {
-        latestPortValue = *(volatile uint32_t *)(&PORTA + ((cnPinObj[i].gpioPin >> 4) * 0x10));
-        bitPosition = cnPinObj[i].gpioPin % 16;
-        mask = 1 << bitPosition;
-        currPinValue = (bool)((latestPortValue & mask) >> bitPosition);
-        if((cnPinObj[i].prevPinValue != currPinValue) && (cnPinObj[i].callback != NULL))
+        if(cnPinObj[i].callback != NULL)
         {
-            cnPinObj[i].prevPinValue = currPinValue;
             cnPinObj[i].callback (cnPinObj[i].cnPin, cnPinObj[i].context);
         }
-        
-        
+    
     }
     IFS1CLR = _IFS1_CNIF_MASK;
 }

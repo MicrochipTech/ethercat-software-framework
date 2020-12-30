@@ -86,6 +86,6 @@
 #define MCHP_ESF_CRITICAL_SECTION_ENTER()				CRITICAL_SECTION_ENTER()
 #define MCHP_ESF_CRITICAL_SECTION_LEAVE()				CRITICAL_SECTION_LEAVE()
 
-#define MCHP_ESF_IRQ_REGISTER_CB(pin, callback)			(pin == ESCIRQ) ? (EVIC_ExternalInterruptCallbackRegister (pin, callback,0 )) : (GPIO_PinInterruptCallbackRegister(pin, callback,0 ))
+#define MCHP_ESF_IRQ_REGISTER_CB(pin, callback)			(pin == ESCIRQ) ? (EVIC_ExternalInterruptCallbackRegister (ESCIRQ, ESC_IRQ_cb,0 )) : (PinInterruptCallbackRegister(pin))
 
 #endif /* ESF_API_HOOK_H_ */
