@@ -75,6 +75,20 @@ PROTO void APPL_Application(void);
 PROTO UINT16 APPL_GetDeviceID(void);
 #endif
 
+#ifdef _IS_EEPROM_EMULATION_SUPPORT
+#define ESC_EEPROM_CONTROL_OFFSET                 0x0502
+/**
+EEPROM_READ_SIZE: Only required if EEPROM emulation is active. This value defines the number of bytes which will be read per opertion. */
+#ifndef EEPROM_READ_SIZE
+#define EEPROM_READ_SIZE                          0x8
+#endif
+
+/*Number of bytes - needs to be calculate checksum*/
+#define ESC_EEPROM_CONFIG_BYTES                   0x0E
+
+PROTO void Emulation_Init();
+#endif
+
 PROTO void   APPL_AckErrorInd(UINT16 stateTrans);
 PROTO UINT16 APPL_StartMailboxHandler(void);
 PROTO UINT16 APPL_StopMailboxHandler(void);

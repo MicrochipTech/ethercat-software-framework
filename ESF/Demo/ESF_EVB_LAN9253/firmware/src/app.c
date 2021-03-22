@@ -61,6 +61,55 @@
 #include "sample_app.h"
 #include "Developer_Test.h"
 
+#if _IS_EEPROM_EMULATION_SUPPORT
+#include "eeprom.h"
+#endif
+
+#ifdef _IS_EEPROM_EMULATION_SUPPORT
+uint8_t CalculateCRC8(uint8_t* pData, int length)
+{
+    uint16_t Crc8Poly = 0x07U;    // s/b international standard for CRC-8
+                                // x^8 + x^2 + x + 1
+    uint8_t crc = 0xff;
+    uint8_t i;
+    
+    while (length--) {
+		crc ^= *pData++;
+		for (i = 0; i < 8; i++)
+            crc = crc & 0x80 ? (crc << 1) ^ Crc8Poly : crc << 1;
+    }
+	return crc & 0xff;
+}
+
+void APP_FlashEEPROMUpdate(uint8_t *flash_data, uint8_t checksum)
+{
+    uint32_t   flashStartAddress=0;
+    int        pageCnt=0;
+    uint8_t    readdata[APP_ERASE_BLOCK_SIZE];
+    
+    while(NVMCTRL_IsBusy()){}
+    
+    NVMCTRL_Read( (uint32_t *)readdata, APP_ERASE_BLOCK_SIZE, flashStartAddress);
+    MEMCPY(&readdata[FLASH_EEPROM_START_ADDRESS],flash_data, ESC_EEPROM_SIZE);
+    MEMCPY(&readdata[FLASH_EEPROM_START_ADDRESS+ESC_EEPROM_CONFIG_BYTES],&checksum, 1);
+    flash_data = readdata;
+    
+    /* Erase the block */
+    NVMCTRL_BlockErase((uint32_t)flashStartAddress);
+    
+    for (pageCnt=0; pageCnt < APP_PAGES_IN_ERASE_BLOCK; pageCnt++)
+	{
+        /* If write mode is manual, */
+        /* Program 512 byte page */
+        NVMCTRL_PageWrite((uint32_t *)flash_data, (uint32_t)flashStartAddress);
+        while(NVMCTRL_IsBusy()){}
+
+        flash_data = flash_data + APP_PAGE_SIZE;
+        flashStartAddress = flashStartAddress + APP_PAGE_SIZE;        
+	}
+}
+#endif
+
 #if defined(ETHERCAT_USE_FOE)  
 //-----------------------------------------------------------------------------
 const uint32_t gAppBankBOffsetAddr = APP_NVM_BANKB_START_ADDRESS;
@@ -172,6 +221,10 @@ void APP_Tasks ( void )
         /* Application's initial state. */
         case APP_STATE_INIT:
         {
+#ifdef _IS_EEPROM_EMULATION_SUPPORT            
+            pEEPROM = aEepromData;
+            
+#endif
             ESF_PDI_Init();
 #ifdef DEVELOPER_TEST_EN
 #ifdef DIRECT_MODE
@@ -183,6 +236,9 @@ void APP_Tasks ( void )
             /* EtherCAT Initialization after NVIC initialization */
             ESC_Init();
             MainInit();
+#ifdef _IS_EEPROM_EMULATION_SUPPORT            
+            Emulation_Init();
+#endif
 #if defined(ETHERCAT_USE_FOE)  
             BL_FOE_Application();
                 

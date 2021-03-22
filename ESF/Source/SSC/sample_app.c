@@ -308,6 +308,96 @@ void BL_FOE_Application(void)
 
 #endif
 
+#ifdef _IS_EEPROM_EMULATION_SUPPORT
+
+/* Beckhoff Hw abstraction layer interface API to write new configuration parameters to slave EEPROM area */
+UINT16 HW_EepromWrite(UINT32 wordaddr)
+{
+  
+  UINT16 EEPROMReg = 0U; /* Regvalue 0x502 - 0x5003 */
+  uint8_t   checksum = 0;
+  
+  if ((wordaddr <= (uint32_t)ESC_EEPROM_SIZE) && (pEEPROM != NULL))
+  {
+     UINT16 *pData = (UINT16 *)(void*)pEEPROM;
+     
+     //update to buffer - ESC eeprom configuration value from the master
+     HW_EscRead((MEM_ADDR *)(void*)&pData[(wordaddr)], (uint16_t)ESC_EEPROM_DATA_OFFSET, (uint16_t)EEPROM_WRITE_SIZE);
+     
+     if((wordaddr == (uint32_t)4U))
+     {
+        /*lets program the complete EEPROM new prepare Data for EEPROM */
+        HW_EscReadWord(EEPROMReg,ESC_EEPROM_CONTROL_OFFSET);
+        EEPROMReg = EEPROMReg & (~ESC_EEPROM_BUSY_MASK);
+        HW_EscWriteWord(EEPROMReg,ESC_EEPROM_CONTROL_OFFSET);
+
+        DISABLE_ESC_INT();
+
+        //calculate checksum (Byte 7) needed by SII EEPROM Contents 
+        checksum = CalculateCRC8((UINT8 *)pData, ESC_EEPROM_CONFIG_BYTES);
+        
+        /* Program the RAM contents to Emulated EEPROM*/
+        APP_FlashEEPROMUpdate((UINT8 *)pData, checksum);
+        ENABLE_ESC_INT();
+        
+     }
+     
+  }
+  return 0;
+}
+
+/* API to reload slave EEPROM area */
+UINT16 HW_EepromReload(void)
+{
+    UINT16 EEPROMReg = 0; /* Register0x502 - 0x503 */
+    UINT32 cmd = (uint32_t)EEPROMReg & (uint32_t)ESC_EEPROM_CMD_MASK;
+    UINT32 addr;
+  
+    HW_EscReadDWord(addr,(uint32_t)ESC_EEPROM_ADDRESS_OFFSET);
+    addr = SWAPDWORD(addr);
+
+    /* EEPROM emulation ( 8Bytes EEPROM data) */
+    if ((addr <= (uint32_t)ESC_EEPROM_SIZE) && (pEEPROM != NULL))
+    {
+        UINT16 *pData = (UINT16 *)(void*)pEEPROM;
+        do
+        {
+            HW_EscWrite((MEM_ADDR *)(void*)&pData[(addr)], (uint16_t)ESC_EEPROM_DATA_OFFSET, EEPROM_READ_SIZE);
+
+            /*Clear error bits */
+            EEPROMReg &= (uint16_t)(~(uint16_t)(ESC_EEPROM_ERROR_MASK));
+
+            /*Ack current reload segment */
+            HW_EscWriteWord(EEPROMReg,(uint32_t)ESC_EEPROM_CONTROL_OFFSET);
+
+            /* Read EEPROM control (To check if the reload is still pending) */
+            HW_EscReadWord(EEPROMReg,ESC_EEPROM_CONTROL_OFFSET);
+            cmd = (uint32_t)EEPROMReg  & (uint32_t)ESC_EEPROM_CMD_MASK;
+
+            HW_EscReadDWord(addr,(uint32_t)ESC_EEPROM_ADDRESS_OFFSET);
+
+        } while(cmd == (uint32_t)ESC_EEPROM_CMD_RELOAD_MASK);
+  }
+  else
+  {
+        /* Set Error  */
+        EEPROMReg |= (uint16_t)ESC_EEPROM_ERROR_CMD_ACK;
+  }
+  return 0;
+}
+
+void Emulation_Init()
+{
+   pAPPL_EEPROM_Reload = HW_EepromReload;
+   pAPPL_EEPROM_Write  = HW_EepromWrite;
+}
+#else
+UINT16 HW_EepromReload ()
+{
+    return 0;
+}
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////
 /**
  \brief    The function is called when an error state was acknowledged by the master
