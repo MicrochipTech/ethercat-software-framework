@@ -1661,10 +1661,3 @@ void HW_SetLed(UINT8 u8RunLed, UINT8 u8ErrLed)
 {
 	/* Here RunLed is not used. Because on chip supported RUN Led is available*/
 }
-
-#ifdef _IS_EEPROM_EMULATION_SUPPORT
-UINT8 HW_EepromReload ()
-{
-    return 0;
-}
-#endif

@@ -85,7 +85,21 @@ extern "C" {
 #define APP_PAGES_IN_ERASE_BLOCK        APP_ERASE_BLOCK_SIZE/APP_PAGE_SIZE
 
 #define APP_DATA_SIZE                   APP_ERASE_BLOCK_SIZE
-#define WORDS(x)                        ((int)((x) / sizeof(uint32_t)))    
+#define WORDS(x)                        ((int)((x) / sizeof(uint32_t)))   
+
+// This define should be based on current firmware and mode
+#if DIRECT_MODE
+#define FLASH_EEPROM_START_ADDRESS      0x09E4
+#else
+#define FLASH_EEPROM_START_ADDRESS      0x09FC
+#endif
+    
+#if _IS_EEPROM_EMULATION_SUPPORT
+uint8_t CalculateCRC8(uint8_t* pData, int length);
+void APP_FlashEEPROMUpdate(uint8_t *flash_data, uint8_t checksum);
+UINT16 HW_EepromReload(void);
+void Emulation_Init();
+#endif
 // *****************************************************************************
 /* Application states
 

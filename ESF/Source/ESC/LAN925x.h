@@ -232,9 +232,6 @@ void EscWrite(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len);
 
 PROTO UINT16 PDI_GetTimer();
 PROTO void   PDI_ClearTimer();
-#ifdef _IS_EEPROM_EMULATION_SUPPORT
-PROTO UINT8 HW_EepromReload ();
-#endif
 
 #undef PROTO
 
