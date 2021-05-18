@@ -40,10 +40,23 @@
 
 #include "plib_clock.h"
 #include "device.h"
+#include "ESF_Config.h"
 
 static void OSCCTRL_Initialize(void)
 {
+    /****************** XOSC0 Initialization   ********************************/
 
+    /* Configure External Oscillator */
+#ifdef CONFIG_USE_EXTERNAL_CLOCK_SOURCE
+    OSCCTRL_REGS->OSCCTRL_XOSCCTRL[0] = OSCCTRL_XOSCCTRL_STARTUP(0) | OSCCTRL_XOSCCTRL_IMULT(6) | OSCCTRL_XOSCCTRL_IPTAT(3) | OSCCTRL_XOSCCTRL_ENABLE_Msk;
+#else
+    OSCCTRL_REGS->OSCCTRL_XOSCCTRL[0] = OSCCTRL_XOSCCTRL_STARTUP(0) | OSCCTRL_XOSCCTRL_IMULT(6) | OSCCTRL_XOSCCTRL_IPTAT(3) | OSCCTRL_XOSCCTRL_XTALEN_Msk | OSCCTRL_XOSCCTRL_ENABLE_Msk;
+#endif
+
+    while((OSCCTRL_REGS->OSCCTRL_STATUS & OSCCTRL_STATUS_XOSCRDY0_Msk) != OSCCTRL_STATUS_XOSCRDY0_Msk)
+    {
+        /* Waiting for the XOSC Ready state */
+    }
 }
 
 static void OSC32KCTRL_Initialize(void)
@@ -54,7 +67,7 @@ static void OSC32KCTRL_Initialize(void)
 
 static void FDPLL0_Initialize(void)
 {
-    GCLK_REGS->GCLK_PCHCTRL[1] = GCLK_PCHCTRL_GEN(0x2)  | GCLK_PCHCTRL_CHEN_Msk;
+    GCLK_REGS->GCLK_PCHCTRL[1] = GCLK_PCHCTRL_GEN(0x1)  | GCLK_PCHCTRL_CHEN_Msk;
     while ((GCLK_REGS->GCLK_PCHCTRL[1] & GCLK_PCHCTRL_CHEN_Msk) != GCLK_PCHCTRL_CHEN_Msk)
     {
         /* Wait for synchronization */
@@ -114,7 +127,7 @@ static void GCLK0_Initialize(void)
 
 static void GCLK1_Initialize(void)
 {
-    GCLK_REGS->GCLK_GENCTRL[1] = GCLK_GENCTRL_DIV(1) | GCLK_GENCTRL_SRC(7) | GCLK_GENCTRL_GENEN_Msk;
+     GCLK_REGS->GCLK_GENCTRL[1] = GCLK_GENCTRL_DIV(25) | GCLK_GENCTRL_SRC(0) | GCLK_GENCTRL_GENEN_Msk;
 
     while((GCLK_REGS->GCLK_SYNCBUSY & GCLK_SYNCBUSY_GENCTRL_GCLK1) == GCLK_SYNCBUSY_GENCTRL_GCLK1)
     {
@@ -124,7 +137,7 @@ static void GCLK1_Initialize(void)
 
 static void GCLK2_Initialize(void)
 {
-    GCLK_REGS->GCLK_GENCTRL[2] = GCLK_GENCTRL_DIV(48) | GCLK_GENCTRL_SRC(6) | GCLK_GENCTRL_GENEN_Msk;
+    GCLK_REGS->GCLK_GENCTRL[2] = GCLK_GENCTRL_DIV(25) | GCLK_GENCTRL_SRC(0) | GCLK_GENCTRL_GENEN_Msk;
 
     while((GCLK_REGS->GCLK_SYNCBUSY & GCLK_SYNCBUSY_GENCTRL_GCLK2) == GCLK_SYNCBUSY_GENCTRL_GCLK2)
     {
@@ -140,11 +153,11 @@ void CLOCK_Initialize (void)
     /* Function to Initialize the 32KHz Oscillators */
     OSC32KCTRL_Initialize();
 
-    DFLL_Initialize();
-    GCLK2_Initialize();
-    FDPLL0_Initialize();
-    GCLK0_Initialize();
     GCLK1_Initialize();
+    DFLL_Initialize();
+    FDPLL0_Initialize();
+    GCLK2_Initialize();
+    GCLK0_Initialize();
 
 
 

@@ -54,6 +54,17 @@
 #define IS_SUPPORT_DUMMY_CYCLE
 
 /*
+ * LAN925x REV C board uses clock from LAN9253,
+ * There is no Crystal component circuit, whereas gets clock from LAN9253
+ *
+ * This macro should be defined to enable the necessary external clock config.
+ *
+ * By un-defining or commenting this macro, make the external crystal
+ * as clock source
+ */
+//#define CONFIG_USE_EXTERNAL_CLOCK_SOURCE
+
+/*
  * The Dummy cycles needed for read transaction introduced by two methods
  * - Dummy clock method - dummy clocks feed to SQI structure
  * - Dummy read method  - dummy read happen and data extraction happen through application READ API
