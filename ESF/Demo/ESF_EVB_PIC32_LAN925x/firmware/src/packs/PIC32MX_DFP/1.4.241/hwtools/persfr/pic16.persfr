@@ -1,0 +1,761 @@
+<persfr:persfr xmlns:persfr="http://crownking/persfr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://crownking/persfr ../../schema/persfr/persfr.xsd">
+  <persfr:version major="0" minor="0" rev="0"/>
+  <persfr:peripheral name="Alternate Pin Function">
+    <persfr:sfr sfr="APFCON[0|1]?"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Run Time Self Programming">
+    <persfr:sfr sfr="EECON[0-9]?"/>
+    <persfr:sfr sfr="EEDAT|EEDATA|EEDATL|EEDATH"/>
+    <persfr:sfr sfr="EEADR|EEADRL|EEADRH"/>
+    <persfr:sfr sfr="EEINTF"/>
+    <persfr:sfr sfr="PMCON[0-9]?"/>
+    <persfr:sfr sfr="PMDATA|PMDATL|PMDATH"/>
+    <persfr:sfr sfr="PMADR|PMADRL|PMADRH"/>
+    <persfr:sfr sfr="PIR[0-9]" field="EEIF" critical="false"/>
+    <persfr:sfr sfr="PIE[0-9]" field="EEIE" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="UART1">
+    <persfr:sfr sfr="TX1?STA1?"/>
+    <persfr:sfr sfr="RC1?STA1?"/>
+    <persfr:sfr sfr="TX1?REG1?"/>
+    <persfr:sfr sfr="RC1?REG1?"/>
+    <persfr:sfr sfr="BAUD1?CON1?"/>
+    <persfr:sfr sfr="BAUDCTL"/>
+    <persfr:sfr sfr="SP1?BRG[1L]?"/>
+    <persfr:sfr sfr="SP1?BRGH1?"/>
+    <persfr:sfr sfr="PIR[1-5]" field="RC1?IF[1]?" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="RC1?IE[1]?" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="UART2">
+    <persfr:sfr sfr="TX2STA"/>
+    <persfr:sfr sfr="RC2STA"/>
+    <persfr:sfr sfr="TX2REG"/>
+    <persfr:sfr sfr="RC2REG"/>
+    <persfr:sfr sfr="BAUD2CON"/>
+    <persfr:sfr sfr="SP2BRG2?L?"/>
+    <persfr:sfr sfr="SP2BRGH1?"/>
+    <persfr:sfr sfr="PIR[1-5]" field="RC2IF" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="RC2IE" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Brown-Out Reset">
+    <persfr:sfr sfr="BORCON"/>
+    <persfr:sfr sfr="PCON" field="nBOR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Brown-Out Detect">
+    <persfr:sfr sfr="PCON" field="nBOD"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Power-on Reset">
+    <persfr:sfr sfr="PCON" field="nPOR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Watchdog Timer">
+    <persfr:sfr sfr="STATUS" field="nTO" critical="false"/>
+    <persfr:sfr sfr="OPTION_REG" field="PSA?" critical="false"/>
+    <persfr:sfr sfr="WDTCON"/>
+    <persfr:sfr sfr="PCON" field="nRWDT"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Oscillator">
+    <persfr:sfr sfr="OSCCON"/>
+    <persfr:sfr sfr="OSCSTAT"/>
+    <persfr:sfr sfr="OSCTUNE"/>
+    <persfr:sfr sfr="CLKRCON"/>
+    <persfr:sfr sfr="OSCCAL"/>
+    <persfr:sfr sfr="PIR[1-5]" field="OSFIF" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="OSFIE" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Comparator 1">
+    <persfr:sfr sfr="CM1CON[0-9]?"/>
+    <persfr:sfr sfr="VRCON" critical="false"/>
+    <persfr:sfr sfr="CVRCON" critical="false"/>
+    <persfr:sfr sfr="CMOUT" field="(MC1OUT)|(MCOUT1)" critical="false"/>
+    <persfr:sfr sfr="CM1?CON[0-9]?" field="(C1NCH0)|(C1NCH)|(C1OUT)" critical="false"/>
+    <persfr:sfr sfr="CM2CON[0-9]?" field="MC1OUT" critical="false"/>
+    <persfr:sfr sfr="PIE[0-5]+" field="C1IE" critical="false"/>
+    <persfr:sfr sfr="PIR[0-5]+" field="C1IF" critical="false"/>
+    <persfr:sfr sfr="PIE[0-5]+" field="CMIE" critical="false"/>
+    <persfr:sfr sfr="PIR[0-5]+" field="CMIF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Comparator 2">
+    <persfr:sfr sfr="CM2CON[0-9]?"/>
+    <persfr:sfr sfr="VRCON" critical="false"/>
+    <persfr:sfr sfr="CVRCON" critical="false"/>
+    <persfr:sfr sfr="CMOUT" field="(MC2OUT)|(MCOUT2)" critical="false"/>
+    <persfr:sfr sfr="CMCON[0-9]?" field="(C2NCH0)|(C2NCH)|(C2OUT)|(C2SYNC)" critical="false"/>
+    <persfr:sfr sfr="APFCON" field="C2OUTSEL" critical="false"/>
+    <persfr:sfr sfr="PIE[0-5]+" field="C2IE" critical="false"/>
+    <persfr:sfr sfr="PIR[0-5]+" field="C2IF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Comparator 3">
+    <persfr:sfr sfr="CM3CON[0-9]?"/>
+    <persfr:sfr sfr="CMOUT" field="MC3OUT" critical="false"/>
+    <persfr:sfr sfr="PIE[0-5]+" field="C3IE" critical="false"/>
+    <persfr:sfr sfr="PIR[0-5]+" field="C3IF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Programmable Switch Mode Controller">
+    <persfr:sfr sfr="PSMCCON[0|1]"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Capture/Compare/PWM 1">
+    <persfr:sfr sfr="CCP1CON"/>
+    <persfr:sfr sfr="CCPR1L"/>
+    <persfr:sfr sfr="CCPR1H"/>
+    <persfr:sfr sfr="DATACCP"/>
+    <persfr:sfr sfr="TRISCCP"/>
+    <persfr:sfr sfr="E?CCP1?AS"/>
+    <persfr:sfr sfr="PWM1CON" critical="false"/>
+    <persfr:sfr sfr="PSTR1?CON" critical="false"/>
+    <persfr:sfr sfr="T1CON" critical="false"/>
+    <persfr:sfr sfr="TMR1L" critical="false"/>
+    <persfr:sfr sfr="TMR1H" critical="false"/>
+    <persfr:sfr sfr="T2CON" critical="false"/>
+    <persfr:sfr sfr="TMR2" critical="false"/>
+    <persfr:sfr sfr="PR2" critical="false"/>
+    <persfr:sfr sfr="CCPTMRS.*" field="C1.*" critical="false"/>
+    <persfr:sfr sfr="APFCON[0|1]?" field="CCP1SEL" critical="false"/>
+    <persfr:sfr sfr="PIE[0-5]+" field="(CCP1IE)|(ECCP1IE)|(ECCPIE)" critical="false"/>
+    <persfr:sfr sfr="PIR[0-5]+" field="(CCP1IF)|(ECCP1IF)|(ECCPIF)" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Capture/Compare/PWM 2">
+    <persfr:sfr sfr="CCP2CON"/>
+    <persfr:sfr sfr="CCPR2L"/>
+    <persfr:sfr sfr="CCPR2H"/>
+    <persfr:sfr sfr="CCP2AS"/>
+    <persfr:sfr sfr="PWM2CON" critical="false"/>
+    <persfr:sfr sfr="PSTR2CON" critical="false"/>
+    <persfr:sfr sfr="T1CON" critical="false"/>
+    <persfr:sfr sfr="TMR1L" critical="false"/>
+    <persfr:sfr sfr="TMR1H" critical="false"/>
+    <persfr:sfr sfr="T2CON" critical="false"/>
+    <persfr:sfr sfr="TMR2" critical="false"/>
+    <persfr:sfr sfr="PR2" critical="false"/>
+    <persfr:sfr sfr="CCPTMRS.*" field="C2.*" critical="false"/>
+    <persfr:sfr sfr="APFCON[0|1]?" field="CCP2SEL" critical="false"/>
+    <persfr:sfr sfr="PIE[0-5]+" field="(CCP2IE)|(ECCP2IE)" critical="false"/>
+    <persfr:sfr sfr="PIR[0-5]+" field="(CCP2IF)|(ECCP2IF)" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Capture/Compare/PWM 3">
+    <persfr:sfr sfr="CCP3CON"/>
+    <persfr:sfr sfr="CCPR3L"/>
+    <persfr:sfr sfr="CCPR3H"/>
+    <persfr:sfr sfr="CCP3AS"/>
+    <persfr:sfr sfr="PWM3CON" critical="false"/>
+    <persfr:sfr sfr="PSTR3CON" critical="false"/>
+    <persfr:sfr sfr="T1CON" critical="false"/>
+    <persfr:sfr sfr="TMR1L" critical="false"/>
+    <persfr:sfr sfr="TMR1H" critical="false"/>
+    <persfr:sfr sfr="T2CON" critical="false"/>
+    <persfr:sfr sfr="TMR2" critical="false"/>
+    <persfr:sfr sfr="PR2" critical="false"/>
+    <persfr:sfr sfr="CCPTMRS.*" field="C3.*" critical="false"/>
+    <persfr:sfr sfr="PIE[0-5]+" field="(CCP3IE)|(ECCP3IE)" critical="false"/>
+    <persfr:sfr sfr="PIR[0-5]+" field="(CCP3IF)|(ECCP3IF)" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Capture/Compare/PWM 4">
+    <persfr:sfr sfr="CCP4CON"/>
+    <persfr:sfr sfr="CCPR4L"/>
+    <persfr:sfr sfr="CCPR4H"/>
+    <persfr:sfr sfr="T1CON" critical="false"/>
+    <persfr:sfr sfr="TMR1L" critical="false"/>
+    <persfr:sfr sfr="TMR1H" critical="false"/>
+    <persfr:sfr sfr="T2CON" critical="false"/>
+    <persfr:sfr sfr="TMR2" critical="false"/>
+    <persfr:sfr sfr="PR2" critical="false"/>
+    <persfr:sfr sfr="CCPTMRS.*" field="C4.*" critical="false"/>
+    <persfr:sfr sfr="PIE[0-5]+" field="(CCP4IE)|(ECCP4IE)" critical="false"/>
+    <persfr:sfr sfr="PIR[0-5]+" field="(CCP4IF)|(ECCP4IF)" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Capture/Compare/PWM 5">
+    <persfr:sfr sfr="CCP5CON"/>
+    <persfr:sfr sfr="CCPR5L"/>
+    <persfr:sfr sfr="CCPR5H"/>
+    <persfr:sfr sfr="T1CON" critical="false"/>
+    <persfr:sfr sfr="TMR1L" critical="false"/>
+    <persfr:sfr sfr="TMR1H" critical="false"/>
+    <persfr:sfr sfr="T2CON" critical="false"/>
+    <persfr:sfr sfr="TMR2" critical="false"/>
+    <persfr:sfr sfr="PR2" critical="false"/>
+    <persfr:sfr sfr="CCPTMRS.*" field="C5.*" critical="false"/>
+    <persfr:sfr sfr="PIE[0-5]+" field="(CCP5IE)|(ECCP5IE)" critical="false"/>
+    <persfr:sfr sfr="PIR[0-5]+" field="(CCP5IF)|(ECCP5IF)" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Capture/Compare/PWM 6">
+    <persfr:sfr sfr="CCP6CON"/>
+    <persfr:sfr sfr="CCPR6L"/>
+    <persfr:sfr sfr="CCPR6H"/>
+    <persfr:sfr sfr="T1CON" critical="false"/>
+    <persfr:sfr sfr="TMR1L" critical="false"/>
+    <persfr:sfr sfr="TMR1H" critical="false"/>
+    <persfr:sfr sfr="T2CON" critical="false"/>
+    <persfr:sfr sfr="TMR2" critical="false"/>
+    <persfr:sfr sfr="PR2" critical="false"/>
+    <persfr:sfr sfr="CCPTMRS.*" field="C6.*" critical="false"/>
+    <persfr:sfr sfr="PIE[0-5]+" field="(CCP6IE)|(ECCP6IE)" critical="false"/>
+    <persfr:sfr sfr="PIR[0-5]+" field="(CCP6IF)|(ECCP6IF)" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Capture/Compare/PWM 7">
+    <persfr:sfr sfr="CCP7CON"/>
+    <persfr:sfr sfr="CCPR7L"/>
+    <persfr:sfr sfr="CCPR7H"/>
+    <persfr:sfr sfr="T1CON" critical="false"/>
+    <persfr:sfr sfr="TMR1L" critical="false"/>
+    <persfr:sfr sfr="TMR1H" critical="false"/>
+    <persfr:sfr sfr="T2CON" critical="false"/>
+    <persfr:sfr sfr="TMR2" critical="false"/>
+    <persfr:sfr sfr="PR2" critical="false"/>
+    <persfr:sfr sfr="CCPTMRS.*" field="C7.*" critical="false"/>
+    <persfr:sfr sfr="PIE[0-5]+" field="(CCP7IE)|(ECCP7IE)" critical="false"/>
+    <persfr:sfr sfr="PIR[0-5]+" field="(CCP7IF)|(ECCP7IF)" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Capture/Compare/PWM 8">
+    <persfr:sfr sfr="CCP8CON"/>
+    <persfr:sfr sfr="CCPR8L"/>
+    <persfr:sfr sfr="CCPR8H"/>
+    <persfr:sfr sfr="T1CON" critical="false"/>
+    <persfr:sfr sfr="TMR1L" critical="false"/>
+    <persfr:sfr sfr="TMR1H" critical="false"/>
+    <persfr:sfr sfr="T2CON" critical="false"/>
+    <persfr:sfr sfr="TMR2" critical="false"/>
+    <persfr:sfr sfr="PR2" critical="false"/>
+    <persfr:sfr sfr="CCPTMRS.*" field="C8.*" critical="false"/>
+    <persfr:sfr sfr="PIE[0-5]+" field="(CCP8IE)|(ECCP8IE)" critical="false"/>
+    <persfr:sfr sfr="PIR[0-5]+" field="(CCP8IF)|(ECCP8IF)" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Capture/Compare/PWM 9">
+    <persfr:sfr sfr="CCP9CON"/>
+    <persfr:sfr sfr="CCPR9L"/>
+    <persfr:sfr sfr="CCPR9H"/>
+    <persfr:sfr sfr="T1CON" critical="false"/>
+    <persfr:sfr sfr="TMR1L" critical="false"/>
+    <persfr:sfr sfr="TMR1H" critical="false"/>
+    <persfr:sfr sfr="T2CON" critical="false"/>
+    <persfr:sfr sfr="TMR2" critical="false"/>
+    <persfr:sfr sfr="PR2" critical="false"/>
+    <persfr:sfr sfr="CCPTMRS.*" field="C9.*" critical="false"/>
+    <persfr:sfr sfr="PIE[0-5]+" field="(CCP9IE)|(ECCP9IE)" critical="false"/>
+    <persfr:sfr sfr="PIR[0-5]+" field="(CCP9IF)|(ECCP9IF)" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Capture/Compare/PWM 10">
+    <persfr:sfr sfr="CCP10CON"/>
+    <persfr:sfr sfr="CCPR10L"/>
+    <persfr:sfr sfr="CCPR10H"/>
+    <persfr:sfr sfr="T1CON" critical="false"/>
+    <persfr:sfr sfr="TMR1L" critical="false"/>
+    <persfr:sfr sfr="TMR1H" critical="false"/>
+    <persfr:sfr sfr="T2CON" critical="false"/>
+    <persfr:sfr sfr="TMR2" critical="false"/>
+    <persfr:sfr sfr="PR2" critical="false"/>
+    <persfr:sfr sfr="CCPTMRS.*" field="C10.*" critical="false"/>
+    <persfr:sfr sfr="PIE[0-5]+" field="(CCP10IE)|(ECCP10IE)" critical="false"/>
+    <persfr:sfr sfr="PIR[0-5]+" field="(CCP10IF)|(ECCP10IF)" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Complementary Output Generator">
+    <persfr:sfr sfr="COG1CON[0|1]"/>
+    <persfr:sfr sfr="COG1ASD"/>
+    <persfr:sfr sfr="COG1DB"/>
+    <persfr:sfr sfr="COG1BLK"/>
+    <persfr:sfr sfr="COG1PH"/>
+    <persfr:sfr sfr="PIE[1-5]" field="COG1IE" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="COG1IF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Capacitive Sensing">
+    <persfr:sfr sfr="CPS[A|B]?CON[0|1]"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="SR Latch">
+    <persfr:sfr sfr="SRCON[0|1]"/>
+    <persfr:sfr sfr="APFCON" field="SRNQSEL" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Hardware Limit Timer">
+    <persfr:sfr sfr="HLT1CON[0|1]"/>
+    <persfr:sfr sfr="HLTMR1"/>
+    <persfr:sfr sfr="HLTPR1"/>
+    <persfr:sfr sfr="PIE[1-5]" field="HLTMR1IE" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="HLTMR1IF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer A">
+    <persfr:sfr sfr="TMRA"/>
+    <persfr:sfr sfr="TACON"/>
+    <persfr:sfr sfr="INTCON" critical="false"/>
+    <persfr:sfr sfr="CPSACON0" field="TAXCS" critical="false"/>
+    <persfr:sfr sfr="PIE[0-9]" field="T(MR)?AIE" critical="false"/>
+    <persfr:sfr sfr="PIR[0-9]" field="T(MR)?AIF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer B">
+    <persfr:sfr sfr="TMRB"/>
+    <persfr:sfr sfr="TBCON"/>
+    <persfr:sfr sfr="INTCON" critical="false"/>
+    <persfr:sfr sfr="CPSBCON0" field="TBXCS" critical="false"/>
+    <persfr:sfr sfr="PIE[0-9]" field="T(MR)?BIE" critical="false"/>
+    <persfr:sfr sfr="PIR[0-9]" field="T(MR)?BIF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer 0">
+    <persfr:sfr sfr="TMR0"/>
+    <persfr:sfr sfr="INTCON" field="T0.*" critical="false"/>
+    <persfr:sfr sfr="INTCON" field="TMR0.*" critical="false"/>
+    <persfr:sfr sfr="OPTION_REG" field="T0.*" critical="false"/>
+    <persfr:sfr sfr="OPTION_REG" field="TMR0.*" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer 1">
+    <persfr:sfr sfr="TMR1L"/>
+    <persfr:sfr sfr="TMR1H"/>
+    <persfr:sfr sfr="T1CON"/>
+    <persfr:sfr sfr="T1GCON"/>
+    <persfr:sfr sfr="DATACCP" field="DT1CK" critical="false"/>
+    <persfr:sfr sfr="TRISCCP" field="TT1CK" critical="false"/>
+    <persfr:sfr sfr="APFCON[0|1]?" field="T1GSEL" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="TMR1GIE" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="TMR1?IE" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="TMR1GIF" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="TMR1?IF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer 2">
+    <persfr:sfr sfr="TMR2"/>
+    <persfr:sfr sfr="T2CON"/>
+    <persfr:sfr sfr="PR2"/>
+    <persfr:sfr sfr="PIE[1-5]" field="TMR2IE" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="TMR2IF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer 3">
+    <persfr:sfr sfr="TMR3L"/>
+    <persfr:sfr sfr="TMR3H"/>
+    <persfr:sfr sfr="T3CON"/>
+    <persfr:sfr sfr="T3GCON"/>
+    <persfr:sfr sfr="PIE[1-5]" field="TMR3GIE" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="TMR3IE" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="TMR3GIF" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="TMR3IF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer 4">
+    <persfr:sfr sfr="TMR4"/>
+    <persfr:sfr sfr="T4CON"/>
+    <persfr:sfr sfr="PR4"/>
+    <persfr:sfr sfr="PIE[1-5]" field="TMR4IE" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="TMR4IF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer 5">
+    <persfr:sfr sfr="TMR5L"/>
+    <persfr:sfr sfr="TMR5H"/>
+    <persfr:sfr sfr="T5CON"/>
+    <persfr:sfr sfr="T5GCON"/>
+    <persfr:sfr sfr="PIE[1-5]" field="TMR5GIE" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="TMR5IE" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="TMR5GIF" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="TMR5IF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer 6">
+    <persfr:sfr sfr="TMR6"/>
+    <persfr:sfr sfr="T6CON"/>
+    <persfr:sfr sfr="PR6"/>
+    <persfr:sfr sfr="PIE[1-5]" field="TMR6IE" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="TMR6IF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer 8">
+    <persfr:sfr sfr="TMR8"/>
+    <persfr:sfr sfr="T8CON"/>
+    <persfr:sfr sfr="PR8"/>
+    <persfr:sfr sfr="PIE[1-5]" field="TMR8IE" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="TMR8IF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer 10">
+    <persfr:sfr sfr="TMR10"/>
+    <persfr:sfr sfr="T10CON"/>
+    <persfr:sfr sfr="PR10"/>
+    <persfr:sfr sfr="PIE[1-5]" field="TMR10IE" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="TMR10IF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Data Signal Modulator">
+    <persfr:sfr sfr="MDCON"/>
+    <persfr:sfr sfr="MDSRC"/>
+    <persfr:sfr sfr="MDCAR[H|L]"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="LIN Transceiver">
+    <persfr:sfr sfr="LININTF"/>
+    <persfr:sfr sfr="GPIO" field="LINRX|LINTX" critical="false"/>
+    <persfr:sfr sfr="PORTA" field="LINRX" critical="false"/>
+    <persfr:sfr sfr="TRISA" field="TLINRX" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="General Purpose IO">
+    <persfr:sfr sfr="PORT"/>
+    <persfr:sfr sfr="TRIS[IO]?"/>
+    <persfr:sfr sfr="GPIO"/>
+    <persfr:sfr sfr="ANSEL" critical="false"/>
+    <persfr:sfr sfr="WPU" critical="false"/>
+    <persfr:sfr sfr="IOC" critical="false"/>
+    <persfr:sfr sfr="WPUA" critical="false"/>
+    <persfr:sfr sfr="WPUDA" critical="false"/>
+    <persfr:sfr sfr="WDA" critical="false"/>
+    <persfr:sfr sfr="IOCA" critical="false"/>
+    <persfr:sfr sfr="INTCON" field="GP.*" critical="false"/>
+    <persfr:sfr sfr="OPTION_REG" field="nGPPU" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Synchronous Serial Port 1">
+    <persfr:sfr sfr="SSP1?BUF"/>
+    <persfr:sfr sfr="SSP1?ADD"/>
+    <persfr:sfr sfr="SSP1?MSK"/>
+    <persfr:sfr sfr="SSP1?CON[1-3]?"/>
+    <persfr:sfr sfr="SSP1?STAT"/>
+    <persfr:sfr sfr="APFCON[0|1]?" field="SSSEL" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="SSP1?IE" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="SSP1?IF" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="BCL1?IE" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="BCL1?IF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Synchronous Serial Port 2">
+    <persfr:sfr sfr="SSP2BUF"/>
+    <persfr:sfr sfr="SSP2ADD"/>
+    <persfr:sfr sfr="SSP2MSK"/>
+    <persfr:sfr sfr="SSP2CON[1-3]?"/>
+    <persfr:sfr sfr="SSP2STAT"/>
+    <persfr:sfr sfr="APFCON[0|1]?" field="SS2SEL" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="SSP2IE" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="SSP2IF" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="BCL2IE" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="BCL2IF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Universal Serial Bus">
+    <persfr:sfr sfr="UIR"/>
+    <persfr:sfr sfr="UIE"/>
+    <persfr:sfr sfr="UEIR"/>
+    <persfr:sfr sfr="UEIE"/>
+    <persfr:sfr sfr="USTAT"/>
+    <persfr:sfr sfr="UCTRL"/>
+    <persfr:sfr sfr="UADDR"/>
+    <persfr:sfr sfr="USWSTAT"/>
+    <persfr:sfr sfr="UEP[0-2]"/>
+    <persfr:sfr sfr="BD[0-2]OST" critical="false"/>
+    <persfr:sfr sfr="BD[0-2]OBC" critical="false"/>
+    <persfr:sfr sfr="BD[0-2]OAL" critical="false"/>
+    <persfr:sfr sfr="BD[0-2]IST" critical="false"/>
+    <persfr:sfr sfr="BD[0-2]IBC" critical="false"/>
+    <persfr:sfr sfr="BD[0-2]IAL" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="USBIE" critical="false"/>
+    <persfr:sfr sfr="PIR[1-5]" field="USBIF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port A">
+    <persfr:sfr sfr="PORTA"/>
+    <persfr:sfr sfr="TRISA"/>
+    <persfr:sfr sfr="LATA"/>
+    <persfr:sfr sfr="ANSELA"/>
+    <persfr:sfr sfr="WPUA" critical="false"/>
+    <persfr:sfr sfr="WPUDA" critical="false"/>
+    <persfr:sfr sfr="WDA" critical="false"/>
+    <persfr:sfr sfr="IOCA" critical="false"/>
+    <persfr:sfr sfr="ODCONA"/>
+    <persfr:sfr sfr="SLRCONA"/>
+    <persfr:sfr sfr="INLVLA"/>
+    <persfr:sfr sfr="ANSEL0?" critical="false"/>
+    <persfr:sfr sfr="OPTION_REG" field="nRAPU" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port B">
+    <persfr:sfr sfr="PORTB"/>
+    <persfr:sfr sfr="TRISB"/>
+    <persfr:sfr sfr="LATB"/>
+    <persfr:sfr sfr="ANSELB"/>
+    <persfr:sfr sfr="WPUB"/>
+    <persfr:sfr sfr="IOCB"/>
+    <persfr:sfr sfr="ODCONB"/>
+    <persfr:sfr sfr="SLRCONB"/>
+    <persfr:sfr sfr="INLVLB"/>
+    <persfr:sfr sfr="ANSEL1?H?" critical="false"/>
+    <persfr:sfr sfr="INTCON" field="RBIF"/>
+    <persfr:sfr sfr="OPTION_REG" field="nRBPU|nRBWU" critical="false"/>
+    <persfr:sfr sfr="STATUS" field="RBWUF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port C">
+    <persfr:sfr sfr="PORTC"/>
+    <persfr:sfr sfr="TRISC"/>
+    <persfr:sfr sfr="LATC"/>
+    <persfr:sfr sfr="ANSELC"/>
+    <persfr:sfr sfr="WPUC"/>
+    <persfr:sfr sfr="IOCC"/>
+    <persfr:sfr sfr="ODCONC"/>
+    <persfr:sfr sfr="SLRCONC"/>
+    <persfr:sfr sfr="INLVLC"/>
+    <persfr:sfr sfr="ANSEL1?H?" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port D">
+    <persfr:sfr sfr="PORTD"/>
+    <persfr:sfr sfr="TRISD"/>
+    <persfr:sfr sfr="LATD"/>
+    <persfr:sfr sfr="ANSELD"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port E">
+    <persfr:sfr sfr="PORTE"/>
+    <persfr:sfr sfr="TRISE"/>
+    <persfr:sfr sfr="LATE"/>
+    <persfr:sfr sfr="ANSELE"/>
+    <persfr:sfr sfr="WPUE"/>
+    <persfr:sfr sfr="IOCE"/>
+    <persfr:sfr sfr="INLVLE"/>
+    <persfr:sfr sfr="ANSEL" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port F">
+    <persfr:sfr sfr="PORTF"/>
+    <persfr:sfr sfr="TRISF"/>
+    <persfr:sfr sfr="LATF"/>
+    <persfr:sfr sfr="ANSELF"/>
+    <persfr:sfr sfr="WPUF"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port G">
+    <persfr:sfr sfr="PORTG"/>
+    <persfr:sfr sfr="TRISG"/>
+    <persfr:sfr sfr="LATG"/>
+    <persfr:sfr sfr="ANSELG"/>
+    <persfr:sfr sfr="WPUG"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Port P">
+    <persfr:sfr sfr="DATACCP"/>
+    <persfr:sfr sfr="TRISCCP"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Parallel Slave Port">
+    <persfr:sfr sfr="PORTD"/>
+    <persfr:sfr sfr="PORTE"/>
+    <persfr:sfr sfr="TRISE"/>
+    <persfr:sfr sfr="PIR1"/>
+    <persfr:sfr sfr="PIE1"/>
+    <persfr:sfr sfr="ADCON1"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Analog-to-Digital Converter">
+    <persfr:sfr sfr="A?ADCON[0-3]"/>
+    <persfr:sfr sfr="A?ADRES[0|1]?H"/>
+    <persfr:sfr sfr="A?ADRES[0|1]?L"/>
+    <persfr:sfr sfr="ADRES"/>
+    <persfr:sfr sfr="A?ADSATA"/>
+    <persfr:sfr sfr="A?ADPRE"/>
+    <persfr:sfr sfr="A?ADACQ"/>
+    <persfr:sfr sfr="A?ADGRD"/>
+    <persfr:sfr sfr="A?ADCAP"/>
+    <persfr:sfr sfr="ANSEL.*" critical="false"/>
+    <persfr:sfr sfr="REFCON" critical="false"/>
+    <persfr:sfr sfr="FVRCON" critical="false"/>
+    <persfr:sfr sfr="PIR1" field="ADIF" critical="false"/>
+    <persfr:sfr sfr="PIE1" field="ADIE" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Digital-to-Analog Converter">
+    <persfr:sfr sfr="DACON[0|1]"/>
+    <persfr:sfr sfr="DAC"/>
+    <persfr:sfr sfr="ANSEL" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Operational Amplifier 1">
+    <persfr:sfr sfr="OPA1?CON"/>
+    <persfr:sfr sfr="CALCON"/>
+    <persfr:sfr sfr="ANSEL[0|1]?" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Operational Amplifier 2">
+    <persfr:sfr sfr="OPA2CON"/>
+    <persfr:sfr sfr="ANSEL[0|1]" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Internal Voltage Regulator">
+    <persfr:sfr sfr="VREGCON"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Fixed Voltage Reference">
+    <persfr:sfr sfr="FVRCON"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Voltage Reference">
+    <persfr:sfr sfr="VRCON"/>
+    <persfr:sfr sfr="REFCON"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Configurable Logic Cell 1">
+    <persfr:sfr sfr="CLCDATA"/>
+    <persfr:sfr sfr="CLC1CON"/>
+    <persfr:sfr sfr="CLC1POL"/>
+    <persfr:sfr sfr="CLC1SEL[0|1]"/>
+    <persfr:sfr sfr="CLC1GLS[0-3]"/>
+    <persfr:sfr sfr="PIR[1-5]" field="CLC1IF" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="CLC1IE" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Configurable Logic Cell 2">
+    <persfr:sfr sfr="CLCDATA"/>
+    <persfr:sfr sfr="CLC2CON"/>
+    <persfr:sfr sfr="CLC2POL"/>
+    <persfr:sfr sfr="CLC2SEL[0|1]"/>
+    <persfr:sfr sfr="CLC2GLS[0-3]"/>
+    <persfr:sfr sfr="PIR[1-5]" field="CLC2IF" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="CLC2IE" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="LCD">
+    <persfr:sfr sfr="LCDSE[0-5]?"/>
+    <persfr:sfr sfr="LCDPS"/>
+    <persfr:sfr sfr="LCDCON"/>
+    <persfr:sfr sfr="LCDREF"/>
+    <persfr:sfr sfr="LCDCST"/>
+    <persfr:sfr sfr="LCDRL"/>
+    <persfr:sfr sfr="LCDD[0-9]*"/>
+    <persfr:sfr sfr="LCDDATA[0-9]*"/>
+    <persfr:sfr sfr="PIR[1-5]" field="LCDIF" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="LCDIE" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Pulse Width Modulator">
+    <persfr:sfr sfr="CM1CON0" field="C1OUT" critical="false"/>
+    <persfr:sfr sfr="CM2CON0" field="C2OUT" critical="false"/>
+    <persfr:sfr sfr="PWMCLK"/>
+    <persfr:sfr sfr="PWMCON0"/>
+    <persfr:sfr sfr="PWMCON1"/>
+    <persfr:sfr sfr="PWM\d+CON" critical="false"/>
+    <persfr:sfr sfr="PWM\d+DC[H|L]"/>
+    <persfr:sfr sfr="PWMPH1"/>
+    <persfr:sfr sfr="PWMPH2"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="External Interrupt">
+    <persfr:sfr sfr="INTCON" field="INTE" critical="false"/>
+    <persfr:sfr sfr="INTCON" field="INTF|INT0IF" critical="false"/>
+    <persfr:sfr sfr="OPTION_REG" field="INTEDG"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Interrupt-On-Change">
+    <persfr:sfr sfr="IOC[A-C]P"/>
+    <persfr:sfr sfr="IOC[A-C]N"/>
+    <persfr:sfr sfr="IOC[A-C]F"/>
+    <persfr:sfr sfr="INTCON" field="IOCIE|IOCIF" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Low-voltage Detect">
+    <persfr:sfr sfr="LVDCON"/>
+    <persfr:sfr sfr="PIR[1-5]" field="LVDIF" critical="false"/>
+    <persfr:sfr sfr="PIE[1-5]" field="LVDIE" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Numerically Controlled Oscillator">
+    <persfr:sfr sfr="NCO1CON"/>
+    <persfr:sfr sfr="NCO1CLK"/>
+    <persfr:sfr sfr="NCO1ACCL"/>
+    <persfr:sfr sfr="NCO1ACCH"/>
+    <persfr:sfr sfr="NCO1ACCU"/>
+    <persfr:sfr sfr="NCO1INCL"/>
+    <persfr:sfr sfr="NCO1INCH"/>
+    <persfr:sfr sfr="PIR[0-9]?" field="NCO1IF" critical="false"/>
+    <persfr:sfr sfr="OSCCON" field="IRCF" critical="false"/>
+    <persfr:sfr sfr="CLC1CON" field="LC1OUT" critical="false"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Complementary Waveform Generator">
+    <persfr:sfr sfr="CWG1CON[0-2]"/>
+    <persfr:sfr sfr="CWG1DBF"/>
+    <persfr:sfr sfr="CWG1DBR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Programmable Switch Mode Control 1">
+    <persfr:sfr sfr="PSMC1ASDC"/>
+    <persfr:sfr sfr="PSMC1ASDL"/>
+    <persfr:sfr sfr="PSMC1ASDS"/>
+    <persfr:sfr sfr="PSMC1BLKF"/>
+    <persfr:sfr sfr="PSMC1BLKR"/>
+    <persfr:sfr sfr="PSMC1BLNK"/>
+    <persfr:sfr sfr="PSMC1CLK"/>
+    <persfr:sfr sfr="PSMC1CON"/>
+    <persfr:sfr sfr="PSMC1DBF"/>
+    <persfr:sfr sfr="PSMC1DBR"/>
+    <persfr:sfr sfr="PSMC1DCH"/>
+    <persfr:sfr sfr="PSMC1DCL"/>
+    <persfr:sfr sfr="PSMC1DCS"/>
+    <persfr:sfr sfr="PSMC1FEBS"/>
+    <persfr:sfr sfr="PSMC1FFA"/>
+    <persfr:sfr sfr="PSMC1INT"/>
+    <persfr:sfr sfr="PSMC1MDL"/>
+    <persfr:sfr sfr="PSMC1OEN"/>
+    <persfr:sfr sfr="PSMC1PHH"/>
+    <persfr:sfr sfr="PSMC1PHL"/>
+    <persfr:sfr sfr="PSMC1PHS"/>
+    <persfr:sfr sfr="PSMC1POL"/>
+    <persfr:sfr sfr="PSMC1PRH"/>
+    <persfr:sfr sfr="PSMC1PRL"/>
+    <persfr:sfr sfr="PSMC1PRS"/>
+    <persfr:sfr sfr="PSMC1REBS"/>
+    <persfr:sfr sfr="PSMC1STR0"/>
+    <persfr:sfr sfr="PSMC1STR1"/>
+    <persfr:sfr sfr="PSMC1SYNC"/>
+    <persfr:sfr sfr="PSMC1TMRH"/>
+    <persfr:sfr sfr="PSMC1TMRL"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Programmable Switch Mode Control 2">
+    <persfr:sfr sfr="PSMC2ASDC"/>
+    <persfr:sfr sfr="PSMC2ASDL"/>
+    <persfr:sfr sfr="PSMC2ASDS"/>
+    <persfr:sfr sfr="PSMC2BLKF"/>
+    <persfr:sfr sfr="PSMC2BLKR"/>
+    <persfr:sfr sfr="PSMC2BLNK"/>
+    <persfr:sfr sfr="PSMC2CLK"/>
+    <persfr:sfr sfr="PSMC2CON"/>
+    <persfr:sfr sfr="PSMC2DBF"/>
+    <persfr:sfr sfr="PSMC2DBR"/>
+    <persfr:sfr sfr="PSMC2DCH"/>
+    <persfr:sfr sfr="PSMC2DCL"/>
+    <persfr:sfr sfr="PSMC2DCS"/>
+    <persfr:sfr sfr="PSMC2FEBS"/>
+    <persfr:sfr sfr="PSMC2FFA"/>
+    <persfr:sfr sfr="PSMC2INT"/>
+    <persfr:sfr sfr="PSMC2MDL"/>
+    <persfr:sfr sfr="PSMC2OEN"/>
+    <persfr:sfr sfr="PSMC2PHH"/>
+    <persfr:sfr sfr="PSMC2PHL"/>
+    <persfr:sfr sfr="PSMC2PHS"/>
+    <persfr:sfr sfr="PSMC2POL"/>
+    <persfr:sfr sfr="PSMC2PRH"/>
+    <persfr:sfr sfr="PSMC2PRL"/>
+    <persfr:sfr sfr="PSMC2PRS"/>
+    <persfr:sfr sfr="PSMC2REBS"/>
+    <persfr:sfr sfr="PSMC2STR0"/>
+    <persfr:sfr sfr="PSMC2STR1"/>
+    <persfr:sfr sfr="PSMC2SYNC"/>
+    <persfr:sfr sfr="PSMC2TMRH"/>
+    <persfr:sfr sfr="PSMC2TMRL"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Programmable Switch Mode Control 3">
+    <persfr:sfr sfr="PSMC3ASDC"/>
+    <persfr:sfr sfr="PSMC3ASDL"/>
+    <persfr:sfr sfr="PSMC3ASDS"/>
+    <persfr:sfr sfr="PSMC3BLKF"/>
+    <persfr:sfr sfr="PSMC3BLKR"/>
+    <persfr:sfr sfr="PSMC3BLNK"/>
+    <persfr:sfr sfr="PSMC3CLK"/>
+    <persfr:sfr sfr="PSMC3CON"/>
+    <persfr:sfr sfr="PSMC3DBF"/>
+    <persfr:sfr sfr="PSMC3DBR"/>
+    <persfr:sfr sfr="PSMC3DCH"/>
+    <persfr:sfr sfr="PSMC3DCL"/>
+    <persfr:sfr sfr="PSMC3DCS"/>
+    <persfr:sfr sfr="PSMC3FEBS"/>
+    <persfr:sfr sfr="PSMC3FFA"/>
+    <persfr:sfr sfr="PSMC3INT"/>
+    <persfr:sfr sfr="PSMC3MDL"/>
+    <persfr:sfr sfr="PSMC3OEN"/>
+    <persfr:sfr sfr="PSMC3PHH"/>
+    <persfr:sfr sfr="PSMC3PHL"/>
+    <persfr:sfr sfr="PSMC3PHS"/>
+    <persfr:sfr sfr="PSMC3POL"/>
+    <persfr:sfr sfr="PSMC3PRH"/>
+    <persfr:sfr sfr="PSMC3PRL"/>
+    <persfr:sfr sfr="PSMC3PRS"/>
+    <persfr:sfr sfr="PSMC3REBS"/>
+    <persfr:sfr sfr="PSMC3STR0"/>
+    <persfr:sfr sfr="PSMC3STR1"/>
+    <persfr:sfr sfr="PSMC3SYNC"/>
+    <persfr:sfr sfr="PSMC3TMRH"/>
+    <persfr:sfr sfr="PSMC3TMRL"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Programmable Switch Mode Control 4">
+    <persfr:sfr sfr="PSMC4ASDC"/>
+    <persfr:sfr sfr="PSMC4ASDL"/>
+    <persfr:sfr sfr="PSMC4ASDS"/>
+    <persfr:sfr sfr="PSMC4BLKF"/>
+    <persfr:sfr sfr="PSMC4BLKR"/>
+    <persfr:sfr sfr="PSMC4BLNK"/>
+    <persfr:sfr sfr="PSMC4CLK"/>
+    <persfr:sfr sfr="PSMC4CON"/>
+    <persfr:sfr sfr="PSMC4DBF"/>
+    <persfr:sfr sfr="PSMC4DBR"/>
+    <persfr:sfr sfr="PSMC4DCH"/>
+    <persfr:sfr sfr="PSMC4DCL"/>
+    <persfr:sfr sfr="PSMC4DCS"/>
+    <persfr:sfr sfr="PSMC4FEBS"/>
+    <persfr:sfr sfr="PSMC4FFA"/>
+    <persfr:sfr sfr="PSMC4INT"/>
+    <persfr:sfr sfr="PSMC4MDL"/>
+    <persfr:sfr sfr="PSMC4OEN"/>
+    <persfr:sfr sfr="PSMC4PHH"/>
+    <persfr:sfr sfr="PSMC4PHL"/>
+    <persfr:sfr sfr="PSMC4PHS"/>
+    <persfr:sfr sfr="PSMC4POL"/>
+    <persfr:sfr sfr="PSMC4PRH"/>
+    <persfr:sfr sfr="PSMC4PRL"/>
+    <persfr:sfr sfr="PSMC4PRS"/>
+    <persfr:sfr sfr="PSMC4REBS"/>
+    <persfr:sfr sfr="PSMC4STR0"/>
+    <persfr:sfr sfr="PSMC4STR1"/>
+    <persfr:sfr sfr="PSMC4SYNC"/>
+    <persfr:sfr sfr="PSMC4TMRH"/>
+    <persfr:sfr sfr="PSMC4TMRL"/>
+  </persfr:peripheral>
+</persfr:persfr>

@@ -1,0 +1,22 @@
+<sdm:sdm xmlns:sdm="http://crownking/sdm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://crownking/sdm ../../schema/sdm/sdm.xsd">
+  <sdm:version sdm:major="0" sdm:minor="0" sdm:rev="0" sdm:filename="sdmSimulator.xml"/>
+  <sdm:devicecapabilities>
+    <sdm:device sdm:devicename="*" sdm:profile="sim"/>
+  </sdm:devicecapabilities>
+  <sdm:profiledef sdm:profilename="sim" sdm:profilesupported="yes">
+    <sdm:datastreams>
+      <sdm:stream sdm:type="runtimewatch">
+        <sdm:canuse sdm:connection="na" sdm:decodescheme="simulator" sdm:max="10000" sdm:interleave="no" sdm:default="true" sdm:resource="simulator"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="trace">
+        <sdm:canuse sdm:resource="simulator" sdm:connection="na" sdm:decodescheme="simulator"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="analyzer">
+        <sdm:canuse sdm:resource="simulator" sdm:connection="na" sdm:decodescheme="simulator"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="registertrace">
+        <sdm:canuse sdm:resource="simulator" sdm:connection="na" sdm:decodescheme="simulator"/>
+      </sdm:stream>
+    </sdm:datastreams>
+  </sdm:profiledef>
+</sdm:sdm>

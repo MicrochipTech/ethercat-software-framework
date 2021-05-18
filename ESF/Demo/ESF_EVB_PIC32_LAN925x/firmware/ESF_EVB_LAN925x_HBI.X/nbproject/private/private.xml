@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/I17043/Downloads/ethercat-software-framework-public-new-release-v1.21@715cca255d7_working/ESF/Demo/ESF_EVB_PIC32_LAN925x/firmware/src/config/default/peripheral/tmr/plib_tmr5.c</file>
+            <file>file:/C:/Users/I17043/Downloads/ethercat-software-framework-public-new-release-v1.21@715cca255d7_working/ESF/Source/ESC/ESC_Utils.c</file>
+            <file>file:/C:/Users/I17043/Downloads/ethercat-software-framework-public-new-release-v1.21@715cca255d7_working/ESF/Demo/ESF_EVB_PIC32_LAN925x/firmware/src/config/default/peripheral/tmr/plib_tmr5.h</file>
+            <file>file:/C:/Users/I17043/Downloads/ethercat-software-framework-public-new-release-v1.21@715cca255d7_working/ESF/SOC_Portable/PIC32/Drivers.c</file>
+            <file>file:/C:/Users/I17043/Downloads/ethercat-software-framework-public-new-release-v1.21@715cca255d7_working/ESF/Source/ESC/LAN925x.c</file>
+            <file>file:/C:/Users/I17043/Downloads/ethercat-software-framework-public-new-release-v1.21@715cca255d7_working/ESF/Demo/ESF_EVB_PIC32_LAN925x/firmware/src/config/default/interrupts.c</file>
+            <file>file:/C:/Users/I17043/Downloads/ethercat-software-framework-public-new-release-v1.21@715cca255d7_working/ESF/Source/SSC/ecatappl.c</file>
+            <file>file:/C:/Users/I17043/Downloads/ethercat-software-framework-public-new-release-v1.21@715cca255d7_working/ESF/Demo/ESF_EVB_PIC32_LAN925x/firmware/src/config/default/peripheral/gpio/plib_gpio.c</file>
+            <file>file:/C:/Users/I17043/Downloads/ethercat-software-framework-public-new-release-v1.21@715cca255d7_working/ESF/Demo/ESF_EVB_PIC32_LAN925x/firmware/src/config/default/peripheral/gpio/plib_gpio.h</file>
+            <file>file:/C:/Users/I17043/Downloads/ethercat-software-framework-public-new-release-v1.21@715cca255d7_working/ESF/Source/SSC/coeappl.c</file>
+            <file>file:/C:/Users/I17043/Downloads/ethercat-software-framework-public-new-release-v1.21@715cca255d7_working/ESF/Source/SSC/ecatslv.c</file>
+            <file>file:/C:/Users/I17043/Downloads/ethercat-software-framework-public-new-release-v1.21@715cca255d7_working/ESF/SOC_Portable/PIC32/ESF_APIHook.h</file>
+            <file>file:/C:/Users/I17043/Downloads/ethercat-software-framework-public-new-release-v1.21@715cca255d7_working/ESF/Demo/ESF_EVB_PIC32_LAN925x/firmware/src/config/default/peripheral/coretimer/plib_coretimer.c</file>
+            <file>file:/C:/Users/I17043/Downloads/ethercat-software-framework-public-new-release-v1.21@715cca255d7_working/ESF/Demo/ESF_EVB_PIC32_LAN925x/firmware/src/main.c</file>
+        </group>
+    </open-files>
+</project-private>

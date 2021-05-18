@@ -39,6 +39,7 @@
 #include "LAN925x.h"
 #include "definitions.h"
 
+#if (ESF_PDI == SPI) || (ESF_PDI == SQI)
 static UINT16 RoundUpMultipleOf (UINT16 u16X, UINT16 u16Type);
 /*
  * Make the u16X as multiple of 2 or 4 or 8, based on u16Type
@@ -121,6 +122,8 @@ UINT8 GetDummyBytesRequired (UINT8 u8SPIType, UINT16 u16IAT, UINT16 u16SPIClkCou
     return u8DummyByte;
 }
 
+#endif
+
 void ESC_Init()
 {
 	LAN925x_Init();
@@ -139,6 +142,7 @@ void PDI_Init_SYNC_Interrupts()
 {
 	MCHP_ESF_IRQ_REGISTER_CB(SYNC0, ESC_Sync0_cb);
 	MCHP_ESF_IRQ_REGISTER_CB(SYNC1, ESC_Sync1_cb);
+	
 }
 #endif // DC_SUPPORTED
 
@@ -151,5 +155,5 @@ void PDI_Init_SYNC_Interrupts()
 *******************************************************************************/
 void PDI_IRQ_Interrupt()
 {
-	MCHP_ESF_IRQ_REGISTER_CB(ESCIRQ, ESC_IRQ_cb);
+    MCHP_ESF_IRQ_REGISTER_CB(ESCIRQ, ESC_IRQ_cb);
 }

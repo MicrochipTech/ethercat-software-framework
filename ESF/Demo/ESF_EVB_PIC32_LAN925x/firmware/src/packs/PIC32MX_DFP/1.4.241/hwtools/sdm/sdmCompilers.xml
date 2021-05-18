@@ -1,0 +1,268 @@
+<sdm:sdm xmlns:sdm="http://crownking/sdm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://crownking/sdm ../../schema/sdm/sdm.xsd">
+  <sdm:version sdm:major="0" sdm:minor="0" sdm:rev="0" sdm:filename="sdmCompilers.xml"/>
+  <sdm:compiler sdm:compilername="C32">
+    <sdm:stream sdm:type="runtimewatch" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="datacapture" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="instrumentedtrace" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+      <sdm:canuse sdm:resource="spi" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="trace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appout" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-appout" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="appin" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-appin" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="analyzer" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="registertrace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="memoryaccess" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="generic" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:request="powermonitor" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+  </sdm:compiler>
+  <sdm:compiler sdm:compilername="C30">
+    <sdm:stream sdm:type="runtimewatch" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="datacapture" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="instrumentedtrace" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+      <sdm:canuse sdm:resource="port" sdm:connection="na" sdm:decodescheme="na"/>
+      <sdm:canuse sdm:resource="spi" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="trace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appout" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appin" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="analyzer" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="registertrace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="pcsample" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="memoryaccess" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="generic" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:request="powermonitor" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+  </sdm:compiler>
+  <sdm:compiler sdm:compilername="C18">
+    <sdm:stream sdm:type="runtimewatch" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="datacapture" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="instrumentedtrace" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+      <sdm:canuse sdm:resource="port" sdm:connection="na" sdm:decodescheme="na"/>
+      <sdm:canuse sdm:resource="spi" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="trace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appout" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appin" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="analyzer" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="registertrace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="generic" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:request="powermonitor" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+  </sdm:compiler>
+  <sdm:compiler sdm:compilername="hi-tech-picc">
+    <sdm:stream sdm:type="runtimewatch" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="datacapture" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="instrumentedtrace" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="trace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appout" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appin" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="memoryaccess" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="analyzer" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="registertrace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="generic" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:request="powermonitor" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+  </sdm:compiler>
+  <sdm:compiler sdm:compilername="hi-tech-picc18">
+    <sdm:stream sdm:type="runtimewatch" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="datacapture" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="instrumentedtrace" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="trace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appout" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appin" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="analyzer" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="registertrace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="generic" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:request="powermonitor" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+  </sdm:compiler>
+  <sdm:compiler sdm:compilername="XC32">
+    <sdm:stream sdm:type="runtimewatch" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="datacapture" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="instrumentedtrace" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+      <sdm:canuse sdm:resource="spi" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="trace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appout" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-appout" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="appin" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-appin" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="analyzer" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="registertrace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="memoryaccess" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="generic" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:request="powermonitor" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="functionprofile" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+  </sdm:compiler>
+  <sdm:compiler sdm:compilername="XC16">
+    <sdm:stream sdm:type="runtimewatch" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="datacapture" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="instrumentedtrace" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+      <sdm:canuse sdm:resource="port" sdm:connection="na" sdm:decodescheme="na"/>
+      <sdm:canuse sdm:resource="spi" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="trace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appout" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appin" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="analyzer" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="registertrace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="pcsample" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="functionprofile" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na" sdm:minimumcompilerversion="1.20"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="generic" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:request="powermonitor" sdm:connection="na" sdm:decodescheme="na"/>
+      <sdm:canuse sdm:resource="debuggermodule-streamout" sdm:request="jumptrace" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="memoryaccess" sdm:compilersupport="dontcare"/>
+  </sdm:compiler>
+  <sdm:compiler sdm:compilername="XC8">
+    <sdm:stream sdm:type="runtimewatch" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="datacapture" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="instrumentedtrace" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+      <sdm:canuse sdm:resource="port" sdm:connection="na" sdm:decodescheme="na"/>
+      <sdm:canuse sdm:resource="spi" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="trace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appout" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appin" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="memoryaccess" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="analyzer" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="registertrace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="functionprofile" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na" sdm:minimumcompilerversion="1.21"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="generic" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:request="powermonitor" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+  </sdm:compiler>
+  <sdm:compiler sdm:compilername="CCSC">
+    <sdm:stream sdm:type="runtimewatch" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="datacapture" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="instrumentedtrace" sdm:compilersupport="no"/>
+    <sdm:stream sdm:type="trace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appout" sdm:compilersupport="no"/>
+    <sdm:stream sdm:type="appin" sdm:compilersupport="no"/>
+    <sdm:stream sdm:type="analyzer" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="registertrace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="memoryaccess" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="functionprofile" sdm:compilersupport="no"/>
+    <sdm:stream sdm:type="generic" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:request="powermonitor" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+  </sdm:compiler>
+  <sdm:compiler sdm:compilername="UNK">
+    <sdm:stream sdm:type="runtimewatch" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="datacapture" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="instrumentedtrace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="trace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appout" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appin" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="analyzer" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="registertrace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="memoryaccess" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="functionprofile" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="generic" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:request="powermonitor" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+  </sdm:compiler>
+  <sdm:compiler sdm:compilername="MPASMWIN">
+    <sdm:stream sdm:type="runtimewatch" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="datacapture" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="instrumentedtrace" sdm:compilersupport="no"/>
+    <sdm:stream sdm:type="trace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appout" sdm:compilersupport="no"/>
+    <sdm:stream sdm:type="appin" sdm:compilersupport="no"/>
+    <sdm:stream sdm:type="memoryaccess" sdm:compilersupport="no"/>
+    <sdm:stream sdm:type="analyzer" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="registertrace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="generic" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:request="powermonitor" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+  </sdm:compiler>
+  <sdm:compiler sdm:compilername="ASM30">
+    <sdm:stream sdm:type="runtimewatch" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="datacapture" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="instrumentedtrace" sdm:compilersupport="no"/>
+    <sdm:stream sdm:type="trace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appout" sdm:compilersupport="no"/>
+    <sdm:stream sdm:type="appin" sdm:compilersupport="no"/>
+    <sdm:stream sdm:type="memoryaccess" sdm:compilersupport="no"/>
+    <sdm:stream sdm:type="analyzer" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="registertrace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="generic" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:request="powermonitor" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+  </sdm:compiler>
+  <sdm:compiler sdm:compilername="C24">
+    <sdm:stream sdm:type="runtimewatch" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="datacapture" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="instrumentedtrace" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+      <sdm:canuse sdm:resource="port" sdm:connection="na" sdm:decodescheme="na"/>
+      <sdm:canuse sdm:resource="spi" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="trace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appout" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appin" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="analyzer" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="registertrace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="pcsample" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="memoryaccess" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="generic" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:request="powermonitor" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+  </sdm:compiler>
+  <sdm:compiler sdm:compilername="dsPIC">
+    <sdm:stream sdm:type="runtimewatch" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="datacapture" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="instrumentedtrace" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+      <sdm:canuse sdm:resource="port" sdm:connection="na" sdm:decodescheme="na"/>
+      <sdm:canuse sdm:resource="spi" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="trace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appout" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="appin" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="analyzer" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="registertrace" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="pcsample" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+    <sdm:stream sdm:type="memoryaccess" sdm:compilersupport="dontcare"/>
+    <sdm:stream sdm:type="generic" sdm:compilersupport="yes">
+      <sdm:canuse sdm:resource="debuggermodule-datacapture" sdm:request="powermonitor" sdm:connection="na" sdm:decodescheme="na"/>
+    </sdm:stream>
+  </sdm:compiler>
+  <sdm:devicecapabilities/>
+</sdm:sdm>

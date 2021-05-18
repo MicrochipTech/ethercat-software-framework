@@ -2078,6 +2078,7 @@ void LAN9252SQI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT16 u16Len)
 {
 	UINT32_VAL u32Val;
 	UINT8 u8StartAlignSize = 0, u8EndAlignSize = 0,u8Itr = 0;
+    UINT8 *p8Data = NULL;
     
 	/* Address and length */
 	u32Val.w[0] = u16Addr;
@@ -2095,14 +2096,25 @@ void LAN9252SQI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT16 u16Len)
 		u8EndAlignSize = (((u8EndAlignSize + 4) & 0xC) - u8EndAlignSize);
 	}
     
-	MCHP_ESF_PDI_READ(LAN925x_ECAT_PRAM_RD_DATA_FIFO_REG, u32Val.v, u16Len+u8StartAlignSize+u8EndAlignSize);
+    //UNG_J2_SIP-35 - creating memory from heap to read and corrected the receive buffer
+    //UNG_JUTLAND2-317
+    p8Data = (UINT8 *) malloc (sizeof(UINT8) * (u16Len+u8StartAlignSize+u8EndAlignSize));
+    if (p8Data == NULL) {
+        /* we simply return in case of failure,
+         * caller will handle as it does not read anything
+         */
+        return;
+    }
+
+	MCHP_ESF_PDI_READ(LAN925x_ECAT_PRAM_RD_DATA_FIFO_REG, p8Data, u16Len+u8StartAlignSize+u8EndAlignSize);
     
     //https://jira.microchip.com/browse/UNG_JUTLAND2-278
     //Fix is added for odd address failure
     for (u8Itr = 0; u8Itr < u16Len; u8Itr++)
     {
-       *pu8Data++ = u32Val.v[u8Itr+((u16Addr & 0x3))];
+       *pu8Data++ = p8Data[u8Itr + u8StartAlignSize];
     }
+    free(p8Data);
 }
 
 /* 

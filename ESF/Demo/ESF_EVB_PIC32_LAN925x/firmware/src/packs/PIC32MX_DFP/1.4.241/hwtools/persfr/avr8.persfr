@@ -1,0 +1,183 @@
+<persfr:persfr xmlns:persfr="http://crownking/persfr" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://crownking/persfr ../../schema/persfr/persfr.xsd">
+  <persfr:version major="0" minor="0" rev="0"/>
+  <persfr:peripheral name="Analog Comparator">
+    <persfr:sfr sfr="ACSR"/>
+    <persfr:sfr sfr="ACSRB"/>
+    <persfr:sfr sfr="DIDR1"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="USART (USART0)">
+    <persfr:sfr sfr="UDR0?"/>
+    <persfr:sfr sfr="UCSR0A?"/>
+    <persfr:sfr sfr="UCSR0B"/>
+    <persfr:sfr sfr="UCSR0C"/>
+    <persfr:sfr sfr="UCSR0D"/>
+    <persfr:sfr sfr="UBRR0"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="USART (USART1)">
+    <persfr:sfr sfr="UDR1"/>
+    <persfr:sfr sfr="UCSR1A"/>
+    <persfr:sfr sfr="UCSR1B"/>
+    <persfr:sfr sfr="UCSR1C"/>
+    <persfr:sfr sfr="UCSR1D"/>
+    <persfr:sfr sfr="UBRR1"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="USART (USART)2">
+    <persfr:sfr sfr="UDR2"/>
+    <persfr:sfr sfr="UCSR2A"/>
+    <persfr:sfr sfr="UCSR2B"/>
+    <persfr:sfr sfr="UCSR2C"/>
+    <persfr:sfr sfr="UCSR2D"/>
+    <persfr:sfr sfr="UBRR2"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="I/O Port (Port A)">
+    <persfr:sfr sfr="PORTA"/>
+    <persfr:sfr sfr="DDRA"/>
+    <persfr:sfr sfr="PINA"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="I/O Port (Port B)">
+    <persfr:sfr sfr="PORTB"/>
+    <persfr:sfr sfr="DDRB"/>
+    <persfr:sfr sfr="PINB"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="I/O Port (Port C)">
+    <persfr:sfr sfr="PORTC"/>
+    <persfr:sfr sfr="DDRC"/>
+    <persfr:sfr sfr="PINC"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="I/O Port (Port D)">
+    <persfr:sfr sfr="PORTD"/>
+    <persfr:sfr sfr="DDRD"/>
+    <persfr:sfr sfr="PIND"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="I/O Port (Port E)">
+    <persfr:sfr sfr="PORTE"/>
+    <persfr:sfr sfr="DDRE"/>
+    <persfr:sfr sfr="PINE"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="I/O Port (Port F)">
+    <persfr:sfr sfr="PORTF"/>
+    <persfr:sfr sfr="DDRF"/>
+    <persfr:sfr sfr="PINF"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer/Counter, (TC0) 8-bit">
+    <persfr:sfr sfr="OCR0[A|B]"/>
+    <persfr:sfr sfr="TCNT0"/>
+    <persfr:sfr sfr="TCCR0[A|B]"/>
+    <persfr:sfr sfr="TIMSK0"/>
+    <persfr:sfr sfr="TIFR0"/>
+    <persfr:sfr sfr="GTCCR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer/Counter, (TC1) 16-bit">
+    <persfr:sfr sfr="OCR1[A|B]"/>
+    <persfr:sfr sfr="TCNT1"/>
+    <persfr:sfr sfr="TCCR1[A|B|C]"/>
+    <persfr:sfr sfr="TIMSK1"/>
+    <persfr:sfr sfr="TIFR1"/>
+    <persfr:sfr sfr="ICR1"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer/Counter, (TC2) 8-bit Async">
+    <persfr:sfr sfr="OCR2[A|B]"/>
+    <persfr:sfr sfr="TCNT2"/>
+    <persfr:sfr sfr="TCCR2[A|B|C]"/>
+    <persfr:sfr sfr="TIMSK2"/>
+    <persfr:sfr sfr="TIFR2"/>
+    <persfr:sfr sfr="ICR2"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer/Counter, (TC3)">
+    <persfr:sfr sfr="OCR3[A|B]"/>
+    <persfr:sfr sfr="TCNT3"/>
+    <persfr:sfr sfr="TCCR3[A|B|C]"/>
+    <persfr:sfr sfr="TIMSK3"/>
+    <persfr:sfr sfr="TIFR3"/>
+    <persfr:sfr sfr="ICR3"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Timer/Counter, (TC4)">
+    <persfr:sfr sfr="OCR4[A|B]"/>
+    <persfr:sfr sfr="TCNT4"/>
+    <persfr:sfr sfr="TCCR4[A|B|C]"/>
+    <persfr:sfr sfr="TIMSK4"/>
+    <persfr:sfr sfr="TIFR4"/>
+    <persfr:sfr sfr="ICR4"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Watchdog Timer (WDT)">
+    <persfr:sfr sfr="WDTCSR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="JTAG">
+    <persfr:sfr sfr="OCDR"/>
+    <persfr:sfr sfr="MCUCR"/>
+    <persfr:sfr sfr="MCUSR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Store Program Memory Control">
+    <persfr:sfr sfr="SPMCSR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="External Interrupts (EXINT)">
+    <persfr:sfr sfr="EICRA"/>
+    <persfr:sfr sfr="EIMSK"/>
+    <persfr:sfr sfr="EIFR"/>
+    <persfr:sfr sfr="PCMSK4"/>
+    <persfr:sfr sfr="PCMSK3"/>
+    <persfr:sfr sfr="PCMSK2"/>
+    <persfr:sfr sfr="PCMSK1"/>
+    <persfr:sfr sfr="PCMSK0"/>
+    <persfr:sfr sfr="PCIFR"/>
+    <persfr:sfr sfr="PCICR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Analog-to-Digital Converter (ADC)">
+    <persfr:sfr sfr="ADMUX"/>
+    <persfr:sfr sfr="ADC"/>
+    <persfr:sfr sfr="ADCSRA"/>
+    <persfr:sfr sfr="ADCSRB"/>
+    <persfr:sfr sfr="DIDR0"/>
+    <persfr:sfr sfr="PCMSK2"/>
+    <persfr:sfr sfr="PCMSK1"/>
+    <persfr:sfr sfr="PCMSK0"/>
+    <persfr:sfr sfr="PCIFR"/>
+    <persfr:sfr sfr="PCICR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="EEPROM (EEPROM)">
+    <persfr:sfr sfr="EEAR"/>
+    <persfr:sfr sfr="EEDR"/>
+    <persfr:sfr sfr="EECR"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Serial Peripheral Interface (SPI0)">
+    <persfr:sfr sfr="SPCR0"/>
+    <persfr:sfr sfr="SPDR0"/>
+    <persfr:sfr sfr="SPSR0"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Serial Peripheral Interface (SPI1)">
+    <persfr:sfr sfr="SPCR1"/>
+    <persfr:sfr sfr="SPDR1"/>
+    <persfr:sfr sfr="SPSR1"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Two Wire Serial Interface (TWI0)">
+    <persfr:sfr sfr="TWAMR0"/>
+    <persfr:sfr sfr="TWAR0"/>
+    <persfr:sfr sfr="TWBR0"/>
+    <persfr:sfr sfr="TWCR0"/>
+    <persfr:sfr sfr="TWSR0"/>
+    <persfr:sfr sfr="TWDR0"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="Two Wire Serial Interface (TWI1)">
+    <persfr:sfr sfr="TWAMR1"/>
+    <persfr:sfr sfr="TWAR1"/>
+    <persfr:sfr sfr="TWBR1"/>
+    <persfr:sfr sfr="TWCR1"/>
+    <persfr:sfr sfr="TWSR1"/>
+    <persfr:sfr sfr="TWDR1"/>
+  </persfr:peripheral>
+  <persfr:peripheral name="CPU">
+    <persfr:sfr sfr="SREG"/>
+    <persfr:sfr sfr="SP"/>
+    <persfr:sfr sfr="MCUSR"/>
+    <persfr:sfr sfr="OSCCAL"/>
+    <persfr:sfr sfr="CLKPR"/>
+    <persfr:sfr sfr="SMCR"/>
+    <persfr:sfr sfr="MCUSR"/>
+    <persfr:sfr sfr="MCUCR"/>
+    <persfr:sfr sfr="SPMCSR"/>
+    <persfr:sfr sfr="GPIOR2"/>
+    <persfr:sfr sfr="GPIOR1"/>
+    <persfr:sfr sfr="GPIOR0"/>
+    <persfr:sfr sfr="PRR.*"/>
+  </persfr:peripheral>
+</persfr:persfr>

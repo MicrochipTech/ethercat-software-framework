@@ -1,0 +1,553 @@
+<sdm:sdm xmlns:sdm="http://crownking/sdm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://crownking/sdm ../../schema/sdm/sdm.xsd">
+  <sdm:version sdm:filename="sdmRealICE.xml" sdm:major="0" sdm:minor="0" sdm:rev="0"/>
+  <sdm:devicecapabilities>
+    <sdm:device sdm:devicename="PIC32MX110F016B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX110F016C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX110F016D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX120F032B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX120F032C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX120F032D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX120F064H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX130F064B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX130F064C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX130F064D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX130F128H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX130F128L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX130F256B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX130F256D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX150F128B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX150F128C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX150F128D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX150F256H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX150F256L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX170F256B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX170F256D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX170F512H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX170F512L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX210F016B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX210F016C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX210F016D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX220F032B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX220F032C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX220F032D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX230F064B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX230F064C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX230F064D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX230F128H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX230F128L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX230F256B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX230F256D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX250F128B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX250F128C" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX250F128D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX250F256H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX250F256L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX270F256B" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX270F256D" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX270F512H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX270F512L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX320F032H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX320F064H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX320F128H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX320F128L" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX330F064H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX330F064L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX340F128H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX340F128L" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX340F256H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX340F512H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX350F128H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX350F128L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX350F256H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX350F256L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX360F256L" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX360F512L" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX370F512H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX370F512L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX420F032H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX430F064H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX430F064L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX440F128H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX440F128L" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX440F256H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX440F512H" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX450F128H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX450F128L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX450F256H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX450F256L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX460F256L" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX460F512L" sdm:profile="ejtag"/>
+    <sdm:device sdm:devicename="PIC32MX470F512H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX470F512L" sdm:profile="ejtagonlyplustrace"/>
+    <sdm:device sdm:devicename="PIC32MX530F128H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX530F128L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX534F064H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX534F064L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX550F256H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX550F256L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX564F064H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX564F064L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX564F128H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX564F128L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX570F512H" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX570F512L" sdm:profile="ejtagonly"/>
+    <sdm:device sdm:devicename="PIC32MX575F256H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX575F256L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX575F512H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX575F512L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX664F064H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX664F064L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX664F128H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX664F128L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX675F256H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX675F256L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX675F512H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX675F512L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX695F512H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX695F512L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX764F128H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX764F128L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX775F256H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX775F256L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX775F512H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX775F512L" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX795F512H" sdm:profile="ejtagbvci"/>
+    <sdm:device sdm:devicename="PIC32MX795F512L" sdm:profile="ejtagbvci"/>
+  </sdm:devicecapabilities>
+  <sdm:devicechanges>
+    <sdm:newdevice sdm:datetime="2016-05-23 08:34:59" sdm:devicename="PIC18F65K40"/>
+    <sdm:newdevice sdm:datetime="2016-05-23 08:34:59" sdm:devicename="PIC18F66K40"/>
+    <sdm:newdevice sdm:datetime="2016-05-23 08:34:59" sdm:devicename="PIC18LF65K40"/>
+    <sdm:newdevice sdm:datetime="2016-05-23 08:34:59" sdm:devicename="PIC18LF66K40"/>
+    <sdm:newdevice sdm:datetime="2016-05-24 14:30:58" sdm:devicename="USB49XX"/>
+    <sdm:newdevice sdm:datetime="2016-06-17 08:59:43" sdm:devicename="PIC32MX275F256B"/>
+    <sdm:newdevice sdm:datetime="2016-06-17 10:19:07" sdm:devicename="PIC32MX274F256D"/>
+    <sdm:newdevice sdm:datetime="2016-06-17 10:25:34" sdm:devicename="PIC32MX274F256B"/>
+    <sdm:newdevice sdm:datetime="2016-06-17 10:25:34" sdm:devicename="PIC32MX174F256B"/>
+    <sdm:newdevice sdm:datetime="2016-06-17 10:25:34" sdm:devicename="PIC32MX174F256D"/>
+    <sdm:newdevice sdm:datetime="2016-06-17 10:25:34" sdm:devicename="PIC32MX175F256B"/>
+    <sdm:newdevice sdm:datetime="2016-06-17 10:25:34" sdm:devicename="PIC32MX175F256D"/>
+    <sdm:newdevice sdm:datetime="2016-06-21 13:17:37" sdm:devicename="MEC1414"/>
+    <sdm:newdevice sdm:datetime="2016-06-21 13:17:37" sdm:devicename="MEC1416"/>
+    <sdm:newdevice sdm:datetime="2016-06-23 09:35:33" sdm:devicename="PIC18F27K40"/>
+    <sdm:newdevice sdm:datetime="2016-06-23 09:54:01" sdm:devicename="PIC18LF27K40"/>
+    <sdm:newdevice sdm:datetime="2016-06-24 10:20:54" sdm:devicename="PIC18F47K40"/>
+    <sdm:newdevice sdm:datetime="2016-07-01 08:45:59" sdm:devicename="PIC18LF47K40"/>
+    <sdm:newdevice sdm:datetime="2016-07-18 10:45:27" sdm:devicename="PIC18LF67K40"/>
+    <sdm:newdevice sdm:datetime="2016-07-18 10:45:27" sdm:devicename="PIC18F67K40"/>
+    <sdm:newdevice sdm:datetime="2016-08-22 14:51:22" sdm:devicename="PIC16LF19195"/>
+    <sdm:newdevice sdm:datetime="2016-08-22 14:51:22" sdm:devicename="PIC16LF19196"/>
+    <sdm:newdevice sdm:datetime="2016-08-22 14:51:22" sdm:devicename="PIC16LF19197"/>
+    <sdm:newdevice sdm:datetime="2016-08-22 14:51:22" sdm:devicename="PIC16F19195"/>
+    <sdm:newdevice sdm:datetime="2016-08-22 14:51:22" sdm:devicename="PIC16F19196"/>
+    <sdm:newdevice sdm:datetime="2016-08-22 14:51:22" sdm:devicename="PIC16F19197"/>
+    <sdm:newdevice sdm:datetime="2016-08-22 14:57:22" sdm:devicename="PIC16LF15325"/>
+    <sdm:newdevice sdm:datetime="2016-08-22 14:57:22" sdm:devicename="PIC16LF15345"/>
+    <sdm:newdevice sdm:datetime="2016-08-22 14:57:22" sdm:devicename="PIC16F15325"/>
+    <sdm:newdevice sdm:datetime="2016-08-22 14:57:22" sdm:devicename="PIC16F15345"/>
+    <sdm:newdevice sdm:datetime="2016-08-31 14:56:33" sdm:devicename="PIC32MK0512GPD064"/>
+    <sdm:newdevice sdm:datetime="2016-08-31 14:56:33" sdm:devicename="PIC32MK0512GPD100"/>
+    <sdm:newdevice sdm:datetime="2016-08-31 14:56:33" sdm:devicename="PIC32MK0512GPE064"/>
+    <sdm:newdevice sdm:datetime="2016-08-31 14:56:33" sdm:devicename="PIC32MK0512GPE100"/>
+    <sdm:newdevice sdm:datetime="2016-08-31 14:56:33" sdm:devicename="PIC32MK1024GPD064"/>
+    <sdm:newdevice sdm:datetime="2016-08-31 14:56:33" sdm:devicename="PIC32MK1024GPD100"/>
+    <sdm:newdevice sdm:datetime="2016-08-31 14:56:33" sdm:devicename="PIC32MK1024GPE064"/>
+    <sdm:newdevice sdm:datetime="2016-08-31 14:56:33" sdm:devicename="PIC32MK0512MCF064"/>
+    <sdm:newdevice sdm:datetime="2016-08-31 14:56:33" sdm:devicename="PIC32MK0512MCF100"/>
+    <sdm:newdevice sdm:datetime="2016-08-31 14:56:33" sdm:devicename="PIC32MK1024MCF064"/>
+    <sdm:newdevice sdm:datetime="2016-09-19 17:14:05" sdm:devicename="dsPIC33DV64MC205"/>
+    <sdm:newdevice sdm:datetime="2016-09-20 12:55:51" sdm:devicename="MEC1428"/>
+    <sdm:newdevice sdm:datetime="2016-09-21 11:11:05" sdm:devicename="PIC16LF15356"/>
+    <sdm:newdevice sdm:datetime="2016-09-21 11:11:05" sdm:devicename="PIC16F15356"/>
+    <sdm:newdevice sdm:datetime="2016-09-21 11:11:05" sdm:devicename="PIC16LF15375"/>
+    <sdm:newdevice sdm:datetime="2016-09-21 11:11:05" sdm:devicename="PIC16LF15376"/>
+    <sdm:newdevice sdm:datetime="2016-09-21 11:11:05" sdm:devicename="PIC16LF15385"/>
+    <sdm:newdevice sdm:datetime="2016-09-21 11:11:05" sdm:devicename="PIC16LF15386"/>
+    <sdm:newdevice sdm:datetime="2016-09-21 11:11:05" sdm:devicename="PIC16F15375"/>
+    <sdm:newdevice sdm:datetime="2016-09-21 11:11:05" sdm:devicename="PIC16F15376"/>
+    <sdm:newdevice sdm:datetime="2016-09-21 11:11:05" sdm:devicename="PIC16F15385"/>
+    <sdm:newdevice sdm:datetime="2016-09-21 11:11:05" sdm:devicename="PIC16F15386"/>
+    <sdm:newdevice sdm:datetime="2016-10-18 14:22:40" sdm:devicename="MCP19214"/>
+    <sdm:newdevice sdm:datetime="2016-10-18 14:22:40" sdm:devicename="MCP19215"/>
+    <sdm:newdevice sdm:datetime="2016-11-02 16:23:21" sdm:devicename="PIC18F24K42"/>
+    <sdm:newdevice sdm:datetime="2016-11-02 16:23:21" sdm:devicename="PIC18F25K42"/>
+    <sdm:newdevice sdm:datetime="2016-11-02 16:23:21" sdm:devicename="PIC18LF24K42"/>
+    <sdm:newdevice sdm:datetime="2016-11-02 16:23:21" sdm:devicename="PIC18LF25K42"/>
+    <sdm:newdevice sdm:datetime="2017-01-18 13:53:39" sdm:devicename="PIC16LF15324"/>
+    <sdm:newdevice sdm:datetime="2017-01-18 13:53:39" sdm:devicename="PIC16LF15344"/>
+    <sdm:newdevice sdm:datetime="2017-01-18 13:53:39" sdm:devicename="PIC16F15324"/>
+    <sdm:newdevice sdm:datetime="2017-01-18 13:53:39" sdm:devicename="PIC16F15344"/>
+    <sdm:newdevice sdm:datetime="2017-01-18 14:12:31" sdm:devicename="PIC32MK1024MCF100A"/>
+    <sdm:newdevice sdm:datetime="2017-01-18 14:12:31" sdm:devicename="PIC32MK1024MCM100EMU"/>
+    <sdm:newdevice sdm:datetime="2017-01-18 14:12:31" sdm:devicename="PIC32MK1024MCF100AEMU"/>
+    <sdm:newdevice sdm:datetime="2017-02-13 10:46:34" sdm:devicename="PIC16LF15313"/>
+    <sdm:newdevice sdm:datetime="2017-02-13 10:46:34" sdm:devicename="PIC16LF15323"/>
+    <sdm:newdevice sdm:datetime="2017-02-13 10:46:34" sdm:devicename="PIC16F15313"/>
+    <sdm:newdevice sdm:datetime="2017-02-13 10:46:34" sdm:devicename="PIC16F15323"/>
+    <sdm:newdevice sdm:datetime="2017-03-22 11:04:04" sdm:devicename="PIC32MX154F128B"/>
+    <sdm:newdevice sdm:datetime="2017-03-22 11:04:04" sdm:devicename="PIC32MX154F128D"/>
+    <sdm:newdevice sdm:datetime="2017-03-22 11:04:04" sdm:devicename="PIC32MX254F128B"/>
+    <sdm:newdevice sdm:datetime="2017-03-22 11:04:04" sdm:devicename="PIC32MX254F128D"/>
+    <sdm:newdevice sdm:datetime="2017-03-22 11:10:54" sdm:devicename="USB70XX"/>
+    <sdm:newdevice sdm:datetime="2017-04-24 11:02:53" sdm:devicename="dsPIC33CH128MP508"/>
+    <sdm:newdevice sdm:datetime="2017-04-24 11:02:53" sdm:devicename="dsPIC33CH128MP508S1"/>
+    <sdm:newdevice sdm:datetime="2017-04-24 11:42:10" sdm:devicename="PIC16F19155"/>
+    <sdm:newdevice sdm:datetime="2017-04-24 11:42:10" sdm:devicename="PIC16F19156"/>
+    <sdm:newdevice sdm:datetime="2017-04-24 11:42:10" sdm:devicename="PIC16F19175"/>
+    <sdm:newdevice sdm:datetime="2017-04-24 11:42:10" sdm:devicename="PIC16F19176"/>
+    <sdm:newdevice sdm:datetime="2017-04-24 11:42:10" sdm:devicename="PIC16F19185"/>
+    <sdm:newdevice sdm:datetime="2017-04-24 11:42:10" sdm:devicename="PIC16F19186"/>
+    <sdm:newdevice sdm:datetime="2017-04-24 11:42:10" sdm:devicename="PIC16LF19155"/>
+    <sdm:newdevice sdm:datetime="2017-04-24 11:42:10" sdm:devicename="PIC16LF19156"/>
+    <sdm:newdevice sdm:datetime="2017-04-24 11:42:10" sdm:devicename="PIC16LF19175"/>
+    <sdm:newdevice sdm:datetime="2017-04-24 11:42:10" sdm:devicename="PIC16LF19176"/>
+    <sdm:newdevice sdm:datetime="2017-04-24 11:42:10" sdm:devicename="PIC16LF19185"/>
+    <sdm:newdevice sdm:datetime="2017-04-24 11:42:10" sdm:devicename="PIC16LF19186"/>
+    <sdm:newdevice sdm:datetime="2017-04-28 20:38:27" sdm:devicename="PIC18F45K42"/>
+    <sdm:newdevice sdm:datetime="2017-04-28 20:38:27" sdm:devicename="PIC18LF45K42"/>
+    <sdm:newdevice sdm:datetime="2017-04-28 20:38:27" sdm:devicename="PIC18F26K42"/>
+    <sdm:newdevice sdm:datetime="2017-04-28 20:38:27" sdm:devicename="PIC18F46K42"/>
+    <sdm:newdevice sdm:datetime="2017-04-28 20:38:27" sdm:devicename="PIC18F55K42"/>
+    <sdm:newdevice sdm:datetime="2017-04-28 20:38:27" sdm:devicename="PIC18F56K42"/>
+    <sdm:newdevice sdm:datetime="2017-04-28 20:38:27" sdm:devicename="PIC18LF26K42"/>
+    <sdm:newdevice sdm:datetime="2017-04-28 20:38:27" sdm:devicename="PIC18LF46K42"/>
+    <sdm:newdevice sdm:datetime="2017-04-28 20:38:27" sdm:devicename="PIC18LF55K42"/>
+    <sdm:newdevice sdm:datetime="2017-04-28 20:38:27" sdm:devicename="PIC18LF56K42"/>
+    <sdm:newdevice sdm:datetime="2017-04-28 21:08:59" sdm:devicename="PIC18F24Q10"/>
+    <sdm:newdevice sdm:datetime="2017-04-28 21:08:59" sdm:devicename="PIC18F25Q10"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="PIC18F57K42"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="PIC18LF57K42"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="PIC18F26K83"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="PIC18F25K83"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="PIC18LF25K83"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="PIC18LF26K83"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="PIC18F47K42"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="PIC18F27K42"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="PIC18LF47K42"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="PIC18LF27K42"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP202"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP202S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP203"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP203S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP205"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP205S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP206"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP206S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP208"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP208S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP502"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP502S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP503"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP503S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP505"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP505S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP506"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH128MP506S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP202"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP202S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP203"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP203S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP205"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP205S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP206"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP206S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP208"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP208S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP502"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP502S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP503"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP503S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP505"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP505S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP506"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP506S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP508"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33CH64MP508S1"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33EDV64MC205"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33EV64GM003"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33EV64GM103"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33EV128GM003"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33EV128GM103"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33EV256GM003"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33EV256GM103"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33EV32GM003"/>
+    <sdm:newdevice sdm:datetime="2017-09-22 15:21:12" sdm:devicename="dsPIC33EV32GM103"/>
+    <sdm:newdevice sdm:datetime="2017-11-06 13:40:51" sdm:devicename="PIC16LF73"/>
+    <sdm:newdevice sdm:datetime="2017-11-06 13:40:51" sdm:devicename="PIC16F18426"/>
+    <sdm:newdevice sdm:datetime="2017-11-06 13:40:51" sdm:devicename="PIC16F18446"/>
+    <sdm:newdevice sdm:datetime="2017-11-06 13:40:51" sdm:devicename="PIC16LF18426"/>
+    <sdm:newdevice sdm:datetime="2017-11-06 13:40:51" sdm:devicename="PIC16LF18446"/>
+    <sdm:newdevice sdm:datetime="2017-11-06 13:40:51" sdm:devicename="PIC32MX155F128B"/>
+    <sdm:newdevice sdm:datetime="2017-11-06 13:40:51" sdm:devicename="PIC32MX155F128D"/>
+    <sdm:newdevice sdm:datetime="2017-11-06 13:40:51" sdm:devicename="PIC32MX255F128B"/>
+    <sdm:newdevice sdm:datetime="2017-11-06 13:40:51" sdm:devicename="PIC32MX255F128D"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK128MP202"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK128MP203"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK128MP205"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK128MP206"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK128MP208"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK128MP502"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK128MP503"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK128MP505"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK128MP506"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK128MP508"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK256MP202"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK256MP203"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK256MP205"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK256MP206"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK256MP208"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK256MP502"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK256MP503"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK256MP505"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK256MP506"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK256MP508"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK32MP202"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK32MP203"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK32MP205"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK32MP206"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK32MP502"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK32MP503"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK32MP505"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK32MP506"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK64MP202"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK64MP203"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK64MP205"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK64MP206"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK64MP208"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK64MP502"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK64MP503"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK64MP505"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK64MP506"/>
+    <sdm:newdevice sdm:datetime="2018-01-08 14:37:18" sdm:devicename="dsPIC33CK64MP508"/>
+    <sdm:newdevice sdm:datetime="2018-01-09 12:50:01" sdm:devicename="USB72XXA0"/>
+    <sdm:newdevice sdm:datetime="2018-01-11 11:15:49" sdm:devicename="PIC32MK0512MCM100"/>
+    <sdm:newdevice sdm:datetime="2018-01-11 11:40:30" sdm:devicename="PIC32MK1024MCM100"/>
+    <sdm:newdevice sdm:datetime="2018-01-16 14:25:11" sdm:devicename="PIC32MK0512GPK064"/>
+    <sdm:newdevice sdm:datetime="2018-01-16 14:25:11" sdm:devicename="PIC32MK0512GPK100"/>
+    <sdm:newdevice sdm:datetime="2018-01-16 14:25:11" sdm:devicename="PIC32MK0512GPL064"/>
+    <sdm:newdevice sdm:datetime="2018-01-16 14:25:11" sdm:devicename="PIC32MK0512GPL100"/>
+    <sdm:newdevice sdm:datetime="2018-01-16 14:25:11" sdm:devicename="PIC32MK0512MCM064"/>
+    <sdm:newdevice sdm:datetime="2018-01-16 14:25:11" sdm:devicename="PIC32MK1024GPK064"/>
+    <sdm:newdevice sdm:datetime="2018-01-16 14:25:11" sdm:devicename="PIC32MK1024GPK100"/>
+    <sdm:newdevice sdm:datetime="2018-01-16 14:25:11" sdm:devicename="PIC32MK1024GPL064"/>
+    <sdm:newdevice sdm:datetime="2018-01-16 14:25:11" sdm:devicename="PIC32MK1024GPL100"/>
+    <sdm:newdevice sdm:datetime="2018-01-16 14:25:11" sdm:devicename="PIC32MK1024MCM064"/>
+    <sdm:newdevice sdm:datetime="2018-01-22 12:17:29" sdm:devicename="PIC16F18424"/>
+    <sdm:newdevice sdm:datetime="2018-01-22 12:17:29" sdm:devicename="PIC16F18425"/>
+    <sdm:newdevice sdm:datetime="2018-01-22 12:17:29" sdm:devicename="PIC16F18444"/>
+    <sdm:newdevice sdm:datetime="2018-01-22 12:17:29" sdm:devicename="PIC16F18445"/>
+    <sdm:newdevice sdm:datetime="2018-01-22 12:17:29" sdm:devicename="PIC16LF18424"/>
+    <sdm:newdevice sdm:datetime="2018-01-22 12:17:29" sdm:devicename="PIC16LF18425"/>
+    <sdm:newdevice sdm:datetime="2018-01-22 12:17:29" sdm:devicename="PIC16LF18444"/>
+    <sdm:newdevice sdm:datetime="2018-01-22 12:17:29" sdm:devicename="PIC16LF18445"/>
+    <sdm:newdevice sdm:datetime="2018-02-21 14:09:08" sdm:devicename="PIC16F18455"/>
+    <sdm:newdevice sdm:datetime="2018-02-21 14:09:08" sdm:devicename="PIC16LF18455"/>
+    <sdm:newdevice sdm:datetime="2018-03-21 09:49:35" sdm:devicename="MCP19132"/>
+    <sdm:newdevice sdm:datetime="2018-03-21 09:49:35" sdm:devicename="MCP19133"/>
+    <sdm:newdevice sdm:datetime="2018-03-21 09:49:35" sdm:devicename="MCP19128"/>
+    <sdm:newdevice sdm:datetime="2018-04-17 08:07:12" sdm:devicename="PIC16F18456"/>
+    <sdm:newdevice sdm:datetime="2018-04-17 08:07:12" sdm:devicename="PIC16LF18456"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="PIC18F27Q10"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="PIC18F47Q10"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH256MP205"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH256MP205S1"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH256MP206"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH256MP206S1"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH256MP208"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH256MP208S1"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH256MP505"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH256MP505S1"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH256MP506"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH256MP506S1"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH256MP508"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH256MP508S1"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH512MP205"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH512MP205S1"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH512MP206"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH512MP206S1"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH512MP208"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH512MP208S1"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH512MP505"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH512MP505S1"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH512MP506"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH512MP506S1"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH512MP508"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="dsPIC33CH512MP508S1"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="PIC32MZ1025W104132"/>
+    <sdm:newdevice sdm:datetime="2018-04-23 12:37:02" sdm:devicename="PIC32MZ1025W104132_DEV"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC18F26Q10"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC18F45Q10"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC18F46Q10"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ64GL302"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ64GL303"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ64GL305"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ64GL306"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ128GL302"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ128GL303"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ128GL305"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ128GL306"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ512GL410"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ512GU406"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ512GU408"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ512GU405"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ512GL408"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ512GL406"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ128GU408"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ128GL408"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ128GU406"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ128GU405"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ128GL410"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ128GL405"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ128GU410"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ512GL405"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ256GU406"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ256GL406"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ256GU410"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ256GU408"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ256GU405"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ256GL410"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ256GL408"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ256GL405"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ512GU410"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC24FJ128GL406"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="dsPIC33CK32MP102"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="dsPIC33CK32MP103"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="dsPIC33CK32MP105"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="dsPIC33CK64MP102"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="dsPIC33CK64MP103"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="dsPIC33CK64MP105"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MK0256GPG048"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MK0256GPG064"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MK0512GPG048"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MK0256GPH048"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MK0256GPH064"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MK0512GPH048"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MK0512GPH064"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MK0256MCJ048"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MK0256MCJ064"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MK0512GPG064"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1025DAK169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1025DAK176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1025DAL169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1025DAL176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1025DAR169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1025DAR176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1025DAS169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1025DAS176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1064DAK169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1064DAK176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1064DAL169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1064DAL176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1064DAR169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1064DAR176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1064DAS169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ1064DAS176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2025DAK169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2025DAK176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2025DAL169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2025DAL176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2025DAR169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2025DAR176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2025DAS169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2025DAS176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2064DAK169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2064DAK176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2064DAL169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2064DAL176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2064DAR169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2064DAR176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2064DAS169"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MZ2064DAS176"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="USB72XX"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MK0512MCH064_FPGA"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MK0512MCJ048"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MK0512MCJ064"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="PIC32MK0512MCJ064FPGA"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="BT5512"/>
+    <sdm:newdevice sdm:datetime="2019-12-12 10:22:41" sdm:devicename="USB249XX"/>
+  </sdm:devicechanges>
+  <sdm:profiledef sdm:profilename="ejtagonly" sdm:profilesupported="yes">
+    <sdm:debuggermodule/>
+    <sdm:datastreams>
+      <sdm:stream sdm:type="generic">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="raw" sdm:request="powermonitor" sdm:resource="debuggermodule-datacapture"/>
+      </sdm:stream>
+    </sdm:datastreams>
+  </sdm:profiledef>
+  <sdm:profiledef sdm:profilename="ejtag" sdm:profilesupported="yes">
+    <sdm:debuggermodule>
+      <sdm:datacaptureformat sdm:datasize="4" sdm:idsize="1" sdm:iduse="always"/>
+      <sdm:appoutformat sdm:datasize="4" sdm:idsize="1" sdm:iduse="always"/>
+      <sdm:appinformat sdm:datasize="4" sdm:idsize="0" sdm:iduse="never"/>
+      <sdm:dmaformat sdm:datasize="variable" sdm:idsize="2" sdm:iduse="always"/>
+    </sdm:debuggermodule>
+    <sdm:datastreams>
+      <sdm:stream sdm:type="runtimewatch">
+        <sdm:canuse sdm:connection="2" sdm:decodescheme="dma" sdm:max="60" sdm:resource="dma"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="trace">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="iflowtrace" sdm:default="true" sdm:interleave="no" sdm:resource="iflowtrace" sdm:stallonfull="yes"/>
+      </sdm:stream>
+      <sdm:stream sdm:compilersupport="required" sdm:type="appout">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="ssm" sdm:interleave="yes" sdm:resource="debuggermodule-appout" sdm:reversedata="yes"/>
+      </sdm:stream>
+      <sdm:stream sdm:compilersupport="required" sdm:type="appin">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="appin" sdm:resource="debuggermodule-appin"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="memoryaccess">
+        <sdm:canuse sdm:connection="2" sdm:decodescheme="none" sdm:max="60" sdm:resource="dma"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="generic">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="raw" sdm:request="powermonitor" sdm:resource="debuggermodule-datacapture"/>
+      </sdm:stream>
+    </sdm:datastreams>
+  </sdm:profiledef>
+  <sdm:profiledef sdm:profilename="ejtagonlyplustrace" sdm:profilesupported="yes">
+    <sdm:debuggermodule/>
+    <sdm:datastreams>
+      <sdm:stream sdm:type="trace">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="iflowtrace" sdm:default="true" sdm:interleave="no" sdm:resource="iflowtrace" sdm:stallonfull="yes"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="generic">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="raw" sdm:request="powermonitor" sdm:resource="debuggermodule-datacapture"/>
+      </sdm:stream>
+    </sdm:datastreams>
+  </sdm:profiledef>
+  <sdm:profiledef sdm:profilename="ejtagbvci" sdm:profilesupported="yes">
+    <sdm:debuggermodule>
+      <sdm:datacaptureformat sdm:datasize="4" sdm:idsize="1" sdm:iduse="always"/>
+      <sdm:appoutformat sdm:datasize="4" sdm:idsize="1" sdm:iduse="always"/>
+      <sdm:appinformat sdm:datasize="4" sdm:idsize="0" sdm:iduse="never"/>
+      <sdm:dmaformat sdm:datasize="variable" sdm:idsize="2" sdm:iduse="always"/>
+    </sdm:debuggermodule>
+    <sdm:datastreams>
+      <sdm:stream sdm:type="runtimewatch">
+        <sdm:canuse sdm:connection="2" sdm:decodescheme="dma" sdm:max="60" sdm:resource="dma"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="datacapture">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="ssm" sdm:interleave="yes" sdm:resource="debuggermodule-datacapture" sdm:reversedata="yes"/>
+      </sdm:stream>
+      <sdm:stream sdm:compilersupport="required" sdm:type="instrumentedtrace">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="it_pic32_4byte" sdm:default="true" sdm:interleave="no" sdm:max="1" sdm:resource="debuggermodule-datacapture" sdm:symbolname="__DCWord"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="trace">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="iflowtrace" sdm:default="true" sdm:interleave="no" sdm:resource="iflowtrace" sdm:stallonfull="yes"/>
+      </sdm:stream>
+      <sdm:stream sdm:compilersupport="required" sdm:type="appout">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="ssm" sdm:interleave="yes" sdm:resource="debuggermodule-appout" sdm:reversedata="yes"/>
+      </sdm:stream>
+      <sdm:stream sdm:compilersupport="required" sdm:type="appin">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="appin" sdm:resource="debuggermodule-appin"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="memoryaccess">
+        <sdm:canuse sdm:connection="2" sdm:decodescheme="none" sdm:max="60" sdm:resource="dma"/>
+      </sdm:stream>
+      <sdm:stream sdm:type="generic">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="raw" sdm:request="powermonitor" sdm:resource="debuggermodule-datacapture"/>
+      </sdm:stream>
+      <sdm:stream sdm:compilersupport="required" sdm:type="functionprofile">
+        <sdm:canuse sdm:connection="3" sdm:decodescheme="cp_ssm_pic32_4byte" sdm:default="true" sdm:interleave="no" sdm:max="1" sdm:resource="debuggermodule-datacapture" sdm:symbolname="__DCWord"/>
+      </sdm:stream>
+    </sdm:datastreams>
+  </sdm:profiledef>
+</sdm:sdm>
