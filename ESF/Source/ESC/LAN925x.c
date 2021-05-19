@@ -49,7 +49,7 @@
 BOOL gbALEvtOpEnabled = FALSE;
 UALEVENT         gEscALEvent;
 #if (ESF_PDI == SPI) || (ESF_PDI == SQI)
-UINT8 gau8DummyCntArr[SETCFG_MAX_DATA_BYTES] = {0,0,0,1,0,0,1,0,0,2,0,0,1,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,1,0,0};
+UINT8 gau8DummyCntArr[SETCFG_MAX_DATA_BYTES] = {0,0,0,0,0,0,1,0,0,2,0,0,1,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,1,0,0};
 #endif
 /*******************************************************************************
     Function:

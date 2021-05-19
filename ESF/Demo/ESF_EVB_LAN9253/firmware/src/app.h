@@ -64,6 +64,11 @@ extern "C" {
 #endif
 // DOM-IGNORE-END
 
+/* This Version is application version and
+ * gets updated whenever there is application change
+ */
+#define APP_FW_VERSION  0x0122  /* V1.22 */
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Type Definitions
