@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Configuration>
+  <Configurator>
+    <Name dnOrder="0" value="default"/>
+    <Processor dnOrder="1" value="ATSAMD51J19A"/>
+    <Harmony dnOrder="2" path="C:\Users\i52915\Documents\Jutland2"/>
+    <Manifest dnOrder="3">
+      <Files dnOrder="0">
+        <File dnOrder="0">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">app.c</Name>
+          <LogicalPath dnOrder="2"/>
+          <PhysicalPath dnOrder="3">/../../</PhysicalPath>
+          <GeneratedChecksum dnOrder="4"/>
+          <UserChecksum dnOrder="5"/>
+        </File>
+        <File dnOrder="1">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">exceptions.c</Name>
+          <LogicalPath dnOrder="2">config/default/</LogicalPath>
+          <PhysicalPath dnOrder="3">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">AC89AA0F2AF07C0733678D30AE1A5E02</GeneratedChecksum>
+          <UserChecksum dnOrder="5">AC89AA0F2AF07C0733678D30AE1A5E02</UserChecksum>
+        </File>
+        <File dnOrder="2">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">initialization.c</Name>
+          <LogicalPath dnOrder="2">config/default/</LogicalPath>
+          <PhysicalPath dnOrder="3">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">F77BDA3B11FDF60B7DFBF975130D9CCE</GeneratedChecksum>
+          <UserChecksum dnOrder="5">85E60CE003FFA4A2F37F1808317F8A5F</UserChecksum>
+        </File>
+        <File dnOrder="3">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">interrupts.c</Name>
+          <LogicalPath dnOrder="2">config/default/</LogicalPath>
+          <PhysicalPath dnOrder="3">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">E10CAD2007F2D189A67B9C3356C49D8D</GeneratedChecksum>
+          <UserChecksum dnOrder="5">E10CAD2007F2D189A67B9C3356C49D8D</UserChecksum>
+        </File>
+        <File dnOrder="4">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">libc_syscalls.c</Name>
+          <LogicalPath dnOrder="2">config/default/</LogicalPath>
+          <PhysicalPath dnOrder="3">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">328F1E09E0DD9BEE901C4562A3E5180A</GeneratedChecksum>
+          <UserChecksum dnOrder="5">328F1E09E0DD9BEE901C4562A3E5180A</UserChecksum>
+        </File>
+        <File dnOrder="5">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">main.c</Name>
+          <LogicalPath dnOrder="2"/>
+          <PhysicalPath dnOrder="3">/../../</PhysicalPath>
+          <GeneratedChecksum dnOrder="4"/>
+          <UserChecksum dnOrder="5"/>
+        </File>
+        <File dnOrder="6">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">plib_clock.c</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/clock/</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/clock/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">1DB480A7B557ACFCE5D0C8E6A04F3866</GeneratedChecksum>
+          <UserChecksum dnOrder="5">2CC7A2E777A35B7769938475B22F620F</UserChecksum>
+        </File>
+        <File dnOrder="7">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">plib_cmcc.c</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/cmcc/</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/cmcc/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">FD8CCFC86D63BF1AC9F15EBA909D181D</GeneratedChecksum>
+          <UserChecksum dnOrder="5">FD8CCFC86D63BF1AC9F15EBA909D181D</UserChecksum>
+        </File>
+        <File dnOrder="8">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">plib_eic.c</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/eic/</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/eic/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">C3F86F2E0560DDA8B33D4B8CE03D7362</GeneratedChecksum>
+          <UserChecksum dnOrder="5">F3F612CF730C4B103023CCEE469CB29B</UserChecksum>
+        </File>
+        <File dnOrder="9">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">plib_evsys.c</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/evsys</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/evsys/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">C99E6D9B9BA371EA749B7DC16BC2C209</GeneratedChecksum>
+          <UserChecksum dnOrder="5">C99E6D9B9BA371EA749B7DC16BC2C209</UserChecksum>
+        </File>
+        <File dnOrder="10">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">plib_nvic.c</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/nvic/</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/nvic/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">3CAA9D084181DD2639CE6C778B656D34</GeneratedChecksum>
+          <UserChecksum dnOrder="5">96AC367F61121D731DAE37A4E0689B0A</UserChecksum>
+        </File>
+        <File dnOrder="11">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">plib_nvmctrl.c</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/nvmctrl/</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/nvmctrl/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">8AA3681EED55E354B4F2764AAECA5347</GeneratedChecksum>
+          <UserChecksum dnOrder="5">894ADF7F4B25E778697545B9AD15E880</UserChecksum>
+        </File>
+        <File dnOrder="12">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">plib_port.c</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/port/</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/port/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">49FFB7E3193A3E3A63031C3F46C1BF69</GeneratedChecksum>
+          <UserChecksum dnOrder="5">95C9C52051F2D9659A7959CBD9030581</UserChecksum>
+        </File>
+        <File dnOrder="13">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">plib_qspi.c</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/qspi/</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/qspi/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">4323D5595734E18749515988B0367BF0</GeneratedChecksum>
+          <UserChecksum dnOrder="5">7E37CBED18CD4DF1173A750959298631</UserChecksum>
+        </File>
+        <File dnOrder="14">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">startup_xc32.c</Name>
+          <LogicalPath dnOrder="2">config/default/</LogicalPath>
+          <PhysicalPath dnOrder="3">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">31987BD86EE19226FFF4173AE2BDDAB7</GeneratedChecksum>
+          <UserChecksum dnOrder="5">31987BD86EE19226FFF4173AE2BDDAB7</UserChecksum>
+        </File>
+        <File dnOrder="15">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">tasks.c</Name>
+          <LogicalPath dnOrder="2">config/default/</LogicalPath>
+          <PhysicalPath dnOrder="3">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">DE51BB8F6FDBC39FB049CB2A14E56B25</GeneratedChecksum>
+          <UserChecksum dnOrder="5">DE51BB8F6FDBC39FB049CB2A14E56B25</UserChecksum>
+        </File>
+        <File dnOrder="16">
+          <Type dnOrder="0">SOURCE</Type>
+          <Name dnOrder="1">xc32_monitor.c</Name>
+          <LogicalPath dnOrder="2">config/default/stdio/</LogicalPath>
+          <PhysicalPath dnOrder="3">/stdio/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">0CDCE9B6891797FCD2AEA243F841353F</GeneratedChecksum>
+          <UserChecksum dnOrder="5">0CDCE9B6891797FCD2AEA243F841353F</UserChecksum>
+        </File>
+        <File dnOrder="17">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">ac.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">A0CCACF39CEA32D86896A570F07B092D</GeneratedChecksum>
+          <UserChecksum dnOrder="5">A0CCACF39CEA32D86896A570F07B092D</UserChecksum>
+        </File>
+        <File dnOrder="18">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">adc.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">1CEC852BB53D436D5D3C452F74104876</GeneratedChecksum>
+          <UserChecksum dnOrder="5">1CEC852BB53D436D5D3C452F74104876</UserChecksum>
+        </File>
+        <File dnOrder="19">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">aes.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">2DCDB7D9292E694D166988AA7305A911</GeneratedChecksum>
+          <UserChecksum dnOrder="5">2DCDB7D9292E694D166988AA7305A911</UserChecksum>
+        </File>
+        <File dnOrder="20">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">app.h</Name>
+          <LogicalPath dnOrder="2"/>
+          <PhysicalPath dnOrder="3">/../../</PhysicalPath>
+          <GeneratedChecksum dnOrder="4"/>
+          <UserChecksum dnOrder="5"/>
+        </File>
+        <File dnOrder="21">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">atsamd51j19a.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">18694BDD9C81417C79C2B936C3A5B7D0</GeneratedChecksum>
+          <UserChecksum dnOrder="5">18694BDD9C81417C79C2B936C3A5B7D0</UserChecksum>
+        </File>
+        <File dnOrder="22">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">ccl.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">C9083814A2D0B5CB14F9451169C6120F</GeneratedChecksum>
+          <UserChecksum dnOrder="5">C9083814A2D0B5CB14F9451169C6120F</UserChecksum>
+        </File>
+        <File dnOrder="23">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">cmcc.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">35CC93DC5356F3763FA64555B1F30C99</GeneratedChecksum>
+          <UserChecksum dnOrder="5">35CC93DC5356F3763FA64555B1F30C99</UserChecksum>
+        </File>
+        <File dnOrder="24">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">cmsis_armcc.h</Name>
+          <LogicalPath dnOrder="2">packs/CMSIS/CMSIS/Core/Include/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/CMSIS/CMSIS/Core/Include/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">D0A91713174AE0A9464105CD4157DEC1</GeneratedChecksum>
+          <UserChecksum dnOrder="5">D0A91713174AE0A9464105CD4157DEC1</UserChecksum>
+        </File>
+        <File dnOrder="25">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">cmsis_armclang.h</Name>
+          <LogicalPath dnOrder="2">packs/CMSIS/CMSIS/Core/Include/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/CMSIS/CMSIS/Core/Include/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">FB9082D52CC87C29BABCEC7CDA5DA8CD</GeneratedChecksum>
+          <UserChecksum dnOrder="5">FB9082D52CC87C29BABCEC7CDA5DA8CD</UserChecksum>
+        </File>
+        <File dnOrder="26">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">cmsis_armclang_ltm.h</Name>
+          <LogicalPath dnOrder="2">packs/CMSIS/CMSIS/Core/Include/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/CMSIS/CMSIS/Core/Include/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">787D64C13CE3DCD1082EA06108F51EC6</GeneratedChecksum>
+          <UserChecksum dnOrder="5">787D64C13CE3DCD1082EA06108F51EC6</UserChecksum>
+        </File>
+        <File dnOrder="27">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">cmsis_compiler.h</Name>
+          <LogicalPath dnOrder="2">packs/CMSIS/CMSIS/Core/Include/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/CMSIS/CMSIS/Core/Include/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">60385A5C6C9882B5D30709A1F6EAEC35</GeneratedChecksum>
+          <UserChecksum dnOrder="5">60385A5C6C9882B5D30709A1F6EAEC35</UserChecksum>
+        </File>
+        <File dnOrder="28">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">cmsis_gcc.h</Name>
+          <LogicalPath dnOrder="2">packs/CMSIS/CMSIS/Core/Include/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/CMSIS/CMSIS/Core/Include/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">B2E4B79E96D9481B139252F7F1C5924F</GeneratedChecksum>
+          <UserChecksum dnOrder="5">B2E4B79E96D9481B139252F7F1C5924F</UserChecksum>
+        </File>
+        <File dnOrder="29">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">cmsis_iccarm.h</Name>
+          <LogicalPath dnOrder="2">packs/CMSIS/CMSIS/Core/Include/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/CMSIS/CMSIS/Core/Include/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">AF3CC89090034E070238E8A7BE343262</GeneratedChecksum>
+          <UserChecksum dnOrder="5">AF3CC89090034E070238E8A7BE343262</UserChecksum>
+        </File>
+        <File dnOrder="30">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">cmsis_version.h</Name>
+          <LogicalPath dnOrder="2">packs/CMSIS/CMSIS/Core/Include/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/CMSIS/CMSIS/Core/Include/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">8D06BEF47A08B8A7A91DE48D1C5DFDAB</GeneratedChecksum>
+          <UserChecksum dnOrder="5">8D06BEF47A08B8A7A91DE48D1C5DFDAB</UserChecksum>
+        </File>
+        <File dnOrder="31">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">configuration.h</Name>
+          <LogicalPath dnOrder="2">config/default/</LogicalPath>
+          <PhysicalPath dnOrder="3">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">76016C9804D6DE17B74C92D82294562E</GeneratedChecksum>
+          <UserChecksum dnOrder="5">45A2BDA0EBBE3C45F3A869964E226C89</UserChecksum>
+        </File>
+        <File dnOrder="32">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">core_cm4.h</Name>
+          <LogicalPath dnOrder="2">packs/CMSIS/CMSIS/Core/Include/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/CMSIS/CMSIS/Core/Include/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">CD5F1A2F242BE3D7B766157EEBF09823</GeneratedChecksum>
+          <UserChecksum dnOrder="5">CD5F1A2F242BE3D7B766157EEBF09823</UserChecksum>
+        </File>
+        <File dnOrder="33">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">dac.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">A035CED6D4D5E4D5A6DC74106D550F61</GeneratedChecksum>
+          <UserChecksum dnOrder="5">A035CED6D4D5E4D5A6DC74106D550F61</UserChecksum>
+        </File>
+        <File dnOrder="34">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">definitions.h</Name>
+          <LogicalPath dnOrder="2">config/default/</LogicalPath>
+          <PhysicalPath dnOrder="3">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">E1E9DF9B5935D342C0A97070ED074A39</GeneratedChecksum>
+          <UserChecksum dnOrder="5">F881CFF68FC83915D13D965A24A416C1</UserChecksum>
+        </File>
+        <File dnOrder="35">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">device.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">F2324EE31BD3AEEDF608352E97F2B6AF</GeneratedChecksum>
+          <UserChecksum dnOrder="5">F2324EE31BD3AEEDF608352E97F2B6AF</UserChecksum>
+        </File>
+        <File dnOrder="36">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">device_cache.h</Name>
+          <LogicalPath dnOrder="2">config/default/</LogicalPath>
+          <PhysicalPath dnOrder="3">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">85D3482D395C59BDFF268B01940CDDDE</GeneratedChecksum>
+          <UserChecksum dnOrder="5">85D3482D395C59BDFF268B01940CDDDE</UserChecksum>
+        </File>
+        <File dnOrder="37">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">dmac.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">60B6C2FB2A772C4580451E9B84B5D6CB</GeneratedChecksum>
+          <UserChecksum dnOrder="5">60B6C2FB2A772C4580451E9B84B5D6CB</UserChecksum>
+        </File>
+        <File dnOrder="38">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">dsu.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">1D5C524F37334EFC120F428377AF8834</GeneratedChecksum>
+          <UserChecksum dnOrder="5">1D5C524F37334EFC120F428377AF8834</UserChecksum>
+        </File>
+        <File dnOrder="39">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">eic.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">C016CD1443F212340AA4E8CB1400671C</GeneratedChecksum>
+          <UserChecksum dnOrder="5">C016CD1443F212340AA4E8CB1400671C</UserChecksum>
+        </File>
+        <File dnOrder="40">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">evsys.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">ED5C7059A68A2F35B8B3C8C36B0E4D9D</GeneratedChecksum>
+          <UserChecksum dnOrder="5">ED5C7059A68A2F35B8B3C8C36B0E4D9D</UserChecksum>
+        </File>
+        <File dnOrder="41">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">freqm.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">04758945C02187E61CF048DC86B37514</GeneratedChecksum>
+          <UserChecksum dnOrder="5">04758945C02187E61CF048DC86B37514</UserChecksum>
+        </File>
+        <File dnOrder="42">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">gclk.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">BFC9DE31D5C51B61A6C65C39191B96BB</GeneratedChecksum>
+          <UserChecksum dnOrder="5">BFC9DE31D5C51B61A6C65C39191B96BB</UserChecksum>
+        </File>
+        <File dnOrder="43">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">hmatrixb.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">3110C57C7655F1B057F4C9F327F20120</GeneratedChecksum>
+          <UserChecksum dnOrder="5">3110C57C7655F1B057F4C9F327F20120</UserChecksum>
+        </File>
+        <File dnOrder="44">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">i2s.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">3A13B8F6BADC780F6ED51563DE9D3B9F</GeneratedChecksum>
+          <UserChecksum dnOrder="5">3A13B8F6BADC780F6ED51563DE9D3B9F</UserChecksum>
+        </File>
+        <File dnOrder="45">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">icm.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">1BED6FDA1402C6530DCC62D78EAFECED</GeneratedChecksum>
+          <UserChecksum dnOrder="5">1BED6FDA1402C6530DCC62D78EAFECED</UserChecksum>
+        </File>
+        <File dnOrder="46">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">mclk.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">F3AC6182DA83B693A58E00EEAB1C182B</GeneratedChecksum>
+          <UserChecksum dnOrder="5">F3AC6182DA83B693A58E00EEAB1C182B</UserChecksum>
+        </File>
+        <File dnOrder="47">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">mpu_armv7.h</Name>
+          <LogicalPath dnOrder="2">packs/CMSIS/CMSIS/Core/Include/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/CMSIS/CMSIS/Core/Include/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">A0246C3B848A6A45D54CE5DA8DF3B9C8</GeneratedChecksum>
+          <UserChecksum dnOrder="5">A0246C3B848A6A45D54CE5DA8DF3B9C8</UserChecksum>
+        </File>
+        <File dnOrder="48">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">nvmctrl.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">8B00960965AF1FC0EA2A5CA0D0479ECE</GeneratedChecksum>
+          <UserChecksum dnOrder="5">8B00960965AF1FC0EA2A5CA0D0479ECE</UserChecksum>
+        </File>
+        <File dnOrder="49">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">osc32kctrl.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">4EF452EFE819B07A4A0D24DCC1F2CDB1</GeneratedChecksum>
+          <UserChecksum dnOrder="5">4EF452EFE819B07A4A0D24DCC1F2CDB1</UserChecksum>
+        </File>
+        <File dnOrder="50">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">oscctrl.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">CE2281B92FBC82BE3A8D9FCCAB2ACDCA</GeneratedChecksum>
+          <UserChecksum dnOrder="5">CE2281B92FBC82BE3A8D9FCCAB2ACDCA</UserChecksum>
+        </File>
+        <File dnOrder="51">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">pac.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">FE2934B76928FF53F24A34EB45A82EC4</GeneratedChecksum>
+          <UserChecksum dnOrder="5">FE2934B76928FF53F24A34EB45A82EC4</UserChecksum>
+        </File>
+        <File dnOrder="52">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">pcc.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">D4DC5406456C8B4533D1D535A697551D</GeneratedChecksum>
+          <UserChecksum dnOrder="5">D4DC5406456C8B4533D1D535A697551D</UserChecksum>
+        </File>
+        <File dnOrder="53">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">pdec.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">7EAB6E0B9B9E339E8E599B8A4FB62527</GeneratedChecksum>
+          <UserChecksum dnOrder="5">7EAB6E0B9B9E339E8E599B8A4FB62527</UserChecksum>
+        </File>
+        <File dnOrder="54">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">plib_clock.h</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/clock/</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/clock/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">0416F129713FDF989ACC1FC57065125C</GeneratedChecksum>
+          <UserChecksum dnOrder="5">0416F129713FDF989ACC1FC57065125C</UserChecksum>
+        </File>
+        <File dnOrder="55">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">plib_cmcc.h</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/cmcc/</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/cmcc/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">4209AA8D29CCA5F4F705D4A6C8722DDB</GeneratedChecksum>
+          <UserChecksum dnOrder="5">4209AA8D29CCA5F4F705D4A6C8722DDB</UserChecksum>
+        </File>
+        <File dnOrder="56">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">plib_eic.h</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/eic/</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/eic/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">561B91F09E91AE246416F68BB53A1AD8</GeneratedChecksum>
+          <UserChecksum dnOrder="5">561B91F09E91AE246416F68BB53A1AD8</UserChecksum>
+        </File>
+        <File dnOrder="57">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">plib_evsys.h</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/evsys</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/evsys/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">CCAEF942C66AF995876DFD85CEFF611F</GeneratedChecksum>
+          <UserChecksum dnOrder="5">CCAEF942C66AF995876DFD85CEFF611F</UserChecksum>
+        </File>
+        <File dnOrder="58">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">plib_nvic.h</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/nvic/</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/nvic/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">E95AB23B866AA0CE6F0ABF637E9E2C83</GeneratedChecksum>
+          <UserChecksum dnOrder="5">E95AB23B866AA0CE6F0ABF637E9E2C83</UserChecksum>
+        </File>
+        <File dnOrder="59">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">plib_nvmctrl.h</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/nvmctrl/</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/nvmctrl/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">40F57C9F86846CED4A37532A5A40DE49</GeneratedChecksum>
+          <UserChecksum dnOrder="5">40F57C9F86846CED4A37532A5A40DE49</UserChecksum>
+        </File>
+        <File dnOrder="60">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">plib_port.h</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/port/</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/port/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">B9AE53673A901DC3731493F29E2C3266</GeneratedChecksum>
+          <UserChecksum dnOrder="5">0BDE15A385C84DEAC855B2111BBC41C1</UserChecksum>
+        </File>
+        <File dnOrder="61">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">plib_qspi.h</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/qspi/</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/qspi/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">46627FB58B9BC666547AADFCC5FCFBEE</GeneratedChecksum>
+          <UserChecksum dnOrder="5">E8EC6F240809E0526768B181D8EBFDD7</UserChecksum>
+        </File>
+        <File dnOrder="62">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">plib_qspi_common.h</Name>
+          <LogicalPath dnOrder="2">config/default/peripheral/qspi/</LogicalPath>
+          <PhysicalPath dnOrder="3">/peripheral/qspi/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">3F5E0C829C39E76F7F21E40A3477C64A</GeneratedChecksum>
+          <UserChecksum dnOrder="5">C8B5E81CB2CEC7EDF46D9054AB610098</UserChecksum>
+        </File>
+        <File dnOrder="63">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">pm.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">F59103E02538FB891FF943692F0E5FA3</GeneratedChecksum>
+          <UserChecksum dnOrder="5">F59103E02538FB891FF943692F0E5FA3</UserChecksum>
+        </File>
+        <File dnOrder="64">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">port.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">8874FE75005A93C02B0C567D49EE962A</GeneratedChecksum>
+          <UserChecksum dnOrder="5">8874FE75005A93C02B0C567D49EE962A</UserChecksum>
+        </File>
+        <File dnOrder="65">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">pukcc.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">9A3AC6359F3E3890EBAB5134F9AE2A31</GeneratedChecksum>
+          <UserChecksum dnOrder="5">9A3AC6359F3E3890EBAB5134F9AE2A31</UserChecksum>
+        </File>
+        <File dnOrder="66">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">qspi.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">CE8C1F3E117DD39D6F913B08371C2923</GeneratedChecksum>
+          <UserChecksum dnOrder="5">CE8C1F3E117DD39D6F913B08371C2923</UserChecksum>
+        </File>
+        <File dnOrder="67">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">ramecc.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">EE76DC1B356F391FE36AB5818F76A173</GeneratedChecksum>
+          <UserChecksum dnOrder="5">EE76DC1B356F391FE36AB5818F76A173</UserChecksum>
+        </File>
+        <File dnOrder="68">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">rstc.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">67FC16FF1AC1BD7078FBA1E00AF1BA08</GeneratedChecksum>
+          <UserChecksum dnOrder="5">67FC16FF1AC1BD7078FBA1E00AF1BA08</UserChecksum>
+        </File>
+        <File dnOrder="69">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">rtc.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">7453A365486E526AAC7527C257C34626</GeneratedChecksum>
+          <UserChecksum dnOrder="5">7453A365486E526AAC7527C257C34626</UserChecksum>
+        </File>
+        <File dnOrder="70">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">samd51j19a.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/pio/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/pio/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">8B7095BCE104DE068E56E61FF6034E63</GeneratedChecksum>
+          <UserChecksum dnOrder="5">8B7095BCE104DE068E56E61FF6034E63</UserChecksum>
+        </File>
+        <File dnOrder="71">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">sdhc.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">1C31B85A7AEEEE749EC1001979AA95FC</GeneratedChecksum>
+          <UserChecksum dnOrder="5">1C31B85A7AEEEE749EC1001979AA95FC</UserChecksum>
+        </File>
+        <File dnOrder="72">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">sercom.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">12B9F8412C94FBCE700FF16DD57F0064</GeneratedChecksum>
+          <UserChecksum dnOrder="5">12B9F8412C94FBCE700FF16DD57F0064</UserChecksum>
+        </File>
+        <File dnOrder="73">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">supc.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">431754DBCFE26717426844B4057E1F70</GeneratedChecksum>
+          <UserChecksum dnOrder="5">431754DBCFE26717426844B4057E1F70</UserChecksum>
+        </File>
+        <File dnOrder="74">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">tc.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">A89DF45A2EBF46A5F3B4F0D5DAE9870E</GeneratedChecksum>
+          <UserChecksum dnOrder="5">A89DF45A2EBF46A5F3B4F0D5DAE9870E</UserChecksum>
+        </File>
+        <File dnOrder="75">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">tcc.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">4FD328BA7708290A2075615DF4860F40</GeneratedChecksum>
+          <UserChecksum dnOrder="5">4FD328BA7708290A2075615DF4860F40</UserChecksum>
+        </File>
+        <File dnOrder="76">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">toolchain_specifics.h</Name>
+          <LogicalPath dnOrder="2">config/default/</LogicalPath>
+          <PhysicalPath dnOrder="3">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">840848BBD7970DF9AF3E06A438C4F910</GeneratedChecksum>
+          <UserChecksum dnOrder="5">840848BBD7970DF9AF3E06A438C4F910</UserChecksum>
+        </File>
+        <File dnOrder="77">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">trng.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">239D0E51F1FCC9201172BFA247954A7C</GeneratedChecksum>
+          <UserChecksum dnOrder="5">239D0E51F1FCC9201172BFA247954A7C</UserChecksum>
+        </File>
+        <File dnOrder="78">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">usb.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">AB2C2B7F9734F6F86451F7FB49966FFF</GeneratedChecksum>
+          <UserChecksum dnOrder="5">AB2C2B7F9734F6F86451F7FB49966FFF</UserChecksum>
+        </File>
+        <File dnOrder="79">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">user.h</Name>
+          <LogicalPath dnOrder="2">config/default/</LogicalPath>
+          <PhysicalPath dnOrder="3">/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4"/>
+          <UserChecksum dnOrder="5"/>
+        </File>
+        <File dnOrder="80">
+          <Type dnOrder="0">HEADER</Type>
+          <Name dnOrder="1">wdt.h</Name>
+          <LogicalPath dnOrder="2">packs/ATSAMD51J19A_DFP/component/</LogicalPath>
+          <PhysicalPath dnOrder="3">/../../packs/ATSAMD51J19A_DFP/component/</PhysicalPath>
+          <GeneratedChecksum dnOrder="4">05AC443949DAFEA1207C2F5F1DD676BB</GeneratedChecksum>
+          <UserChecksum dnOrder="5">05AC443949DAFEA1207C2F5F1DD676BB</UserChecksum>
+        </File>
+      </Files>
+      <Settings dnOrder="1">
+        <Setting append="true" category="C32" delimiter=";" dnOrder="0" key="extra-include-directories" value="../src;../src/config/default;../src/packs/ATSAMD51J19A_DFP;../src/packs/CMSIS/CMSIS/Core/Include;../src/packs/CMSIS/;../src/arm"/>
+        <Setting category="C32-LD" dnOrder="1" key="heap-size" value="512"/>
+        <Setting category="C32-LD" dnOrder="2" key="no-device-startup-code" value="true"/>
+        <Setting append="true" category="C32-LD" delimiter=";" dnOrder="3" key="preprocessor-macros" value=""/>
+        <Setting category="C32Global" dnOrder="4" key="mdtcm" value=""/>
+        <Setting category="C32Global" dnOrder="5" key="mitcm" value=""/>
+        <Setting category="C32Global" dnOrder="6" key="mstacktcm" value="false"/>
+      </Settings>
+    </Manifest>
+    <Settings dnOrder="4">
+      <Setting dnOrder="0" key="CMSISPath" value=".\dev_packs\arm\CMSIS\5.6.0"/>
+      <Setting dnOrder="1" key="DFPPath" value=".\dev_packs\Microchip\SAMD51_DFP\3.2.50\samd51a\atdf\ATSAMD51J19A.atdf"/>
+      <Setting dnOrder="2" key="FORCE_OPTIMIZATION" value="false"/>
+      <Setting dnOrder="3" key="GENERATE_BACKUP" value="true"/>
+      <Setting dnOrder="4" key="MERGE_STRATEGY" value="USER_ALL"/>
+      <Setting dnOrder="5" key="PackageFilter" value="bsp;core;csp;ethercat;"/>
+    </Settings>
+  </Configurator>
+</Configuration>
