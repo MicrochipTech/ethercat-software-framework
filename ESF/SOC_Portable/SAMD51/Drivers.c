@@ -1782,7 +1782,7 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
         /* Get the Intra DWORD dummy clock count */
         u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
         /* Add Intra DWORD dummy clocks, avoid for last byte */
-        if (1 != u16XfrLen) {
+        if (1 != u32Length) {
             while (u8dummy_clk_cnt--)
             {
                 QSPI_Read(&u8rxData, u8rxLen);
@@ -1791,7 +1791,7 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
             }
         }
 #endif
-	} while (--u16XfrLen);
+	} while (--u32Length);
 	
 	SPIChipSelectDisable();
 
