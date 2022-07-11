@@ -6,12 +6,31 @@
                    projectFiles="true">
       <logicalFolder name="f1" displayName="config" projectFiles="true">
         <logicalFolder name="f1" displayName="default" projectFiles="true">
+          <logicalFolder name="f3" displayName="driver" projectFiles="true">
+            <logicalFolder name="f1" displayName="spi" projectFiles="true">
+              <logicalFolder name="f1" displayName="src" projectFiles="true">
+                <itemPath>../src/config/default/driver/spi/src/drv_spi_local.h</itemPath>
+              </logicalFolder>
+              <itemPath>../src/config/default/driver/spi/drv_spi.h</itemPath>
+              <itemPath>../src/config/default/driver/spi/drv_spi_definitions.h</itemPath>
+            </logicalFolder>
+            <itemPath>../src/config/default/driver/driver.h</itemPath>
+            <itemPath>../src/config/default/driver/driver_common.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f4" displayName="osal" projectFiles="true">
+            <itemPath>../src/config/default/osal/osal.h</itemPath>
+            <itemPath>../src/config/default/osal/osal_impl_basic.h</itemPath>
+            <itemPath>../src/config/default/osal/osal_definitions.h</itemPath>
+          </logicalFolder>
           <logicalFolder name="f1" displayName="peripheral" projectFiles="true">
             <logicalFolder name="f1" displayName="clock" projectFiles="true">
               <itemPath>../src/config/default/peripheral/clock/plib_clock.h</itemPath>
             </logicalFolder>
             <logicalFolder name="f8" displayName="cmcc" projectFiles="true">
               <itemPath>../src/config/default/peripheral/cmcc/plib_cmcc.h</itemPath>
+            </logicalFolder>
+            <logicalFolder name="f10" displayName="dmac" projectFiles="true">
+              <itemPath>../src/config/default/peripheral/dmac/plib_dmac.h</itemPath>
             </logicalFolder>
             <logicalFolder name="f2" displayName="eic" projectFiles="true">
               <itemPath>../src/config/default/peripheral/eic/plib_eic.h</itemPath>
@@ -38,6 +57,16 @@
             </logicalFolder>
           </logicalFolder>
           <logicalFolder name="f2" displayName="system" projectFiles="true">
+            <logicalFolder name="f3" displayName="cache" projectFiles="true">
+              <itemPath>../src/config/default/system/cache/sys_cache.h</itemPath>
+            </logicalFolder>
+            <logicalFolder name="f4" displayName="debug" projectFiles="true">
+              <itemPath>../src/config/default/system/debug/sys_debug.h</itemPath>
+            </logicalFolder>
+            <logicalFolder name="f5" displayName="dma" projectFiles="true">
+              <itemPath>../src/config/default/system/dma/sys_dma.h</itemPath>
+              <itemPath>../src/config/default/system/dma/sys_dma_mapping.h</itemPath>
+            </logicalFolder>
             <logicalFolder name="f1" displayName="int" projectFiles="true">
               <itemPath>../src/config/default/system/int/sys_int.h</itemPath>
               <itemPath>../src/config/default/system/int/sys_int_mapping.h</itemPath>
@@ -52,6 +81,9 @@
           <itemPath>../src/config/default/toolchain_specifics.h</itemPath>
           <itemPath>../src/config/default/configuration.h</itemPath>
           <itemPath>../src/config/default/user.h</itemPath>
+          <itemPath>../src/config/default/device.h</itemPath>
+          <itemPath>../src/config/default/device_vectors.h</itemPath>
+          <itemPath>../src/config/default/interrupts.h</itemPath>
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="f2" displayName="packs" projectFiles="true">
@@ -163,12 +195,22 @@
                    projectFiles="true">
       <logicalFolder name="f1" displayName="config" projectFiles="true">
         <logicalFolder name="f1" displayName="default" projectFiles="true">
+          <logicalFolder name="f4" displayName="driver" projectFiles="true">
+            <logicalFolder name="f1" displayName="spi" projectFiles="true">
+              <logicalFolder name="f1" displayName="src" projectFiles="true">
+                <itemPath>../src/config/default/driver/spi/src/drv_spi.c</itemPath>
+              </logicalFolder>
+            </logicalFolder>
+          </logicalFolder>
           <logicalFolder name="f1" displayName="peripheral" projectFiles="true">
             <logicalFolder name="f1" displayName="clock" projectFiles="true">
               <itemPath>../src/config/default/peripheral/clock/plib_clock.c</itemPath>
             </logicalFolder>
             <logicalFolder name="f2" displayName="cmcc" projectFiles="true">
               <itemPath>../src/config/default/peripheral/cmcc/plib_cmcc.c</itemPath>
+            </logicalFolder>
+            <logicalFolder name="f10" displayName="dmac" projectFiles="true">
+              <itemPath>../src/config/default/peripheral/dmac/plib_dmac.c</itemPath>
             </logicalFolder>
             <logicalFolder name="f3" displayName="eic" projectFiles="true">
               <itemPath>../src/config/default/peripheral/eic/plib_eic.c</itemPath>
@@ -197,6 +239,12 @@
             <itemPath>../src/config/default/stdio/xc32_monitor.c</itemPath>
           </logicalFolder>
           <logicalFolder name="f3" displayName="system" projectFiles="true">
+            <logicalFolder name="f2" displayName="cache" projectFiles="true">
+              <itemPath>../src/config/default/system/cache/sys_cache.c</itemPath>
+            </logicalFolder>
+            <logicalFolder name="f3" displayName="dma" projectFiles="true">
+              <itemPath>../src/config/default/system/dma/sys_dma.c</itemPath>
+            </logicalFolder>
             <logicalFolder name="f1" displayName="int" projectFiles="true">
               <itemPath>../src/config/default/system/int/src/sys_int.c</itemPath>
             </logicalFolder>
@@ -247,6 +295,10 @@
     <Elem>../../../../Source/ESC</Elem>
     <Elem>../../../../SOC_Portable/SAMD51</Elem>
     <Elem>../src</Elem>
+    <Elem>../../../../../../../Previous readings/Latest_Revc_ESF - Copy change code/ESF/Demo/ESF_EVB_LAN9253/firmware/src/config/default</Elem>
+    <Elem>C:/Users/I69107/OneDrive - Microchip Technology Inc/Desktop/ectc</Elem>
+    <Elem>../../../../../../../Previous readings/New folder/Latest_Revc_ESF - Copy - Copy/ESF/Demo/ESF_EVB_LAN9253/firmware/src/config/default/driver</Elem>
+    <Elem>../../../../../../../Previous readings/Latest_Revc_ESF_Copy_change_code/ESF/Demo/ESF_EVB_LAN9253/firmware/src/config/default</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -265,6 +317,8 @@
         <pack name="CMSIS" vendor="ARM" version="5.4.0"/>
         <pack name="SAMD51_DFP" vendor="Microchip" version="3.2.55"/>
       </packs>
+      <ScriptingSettings>
+      </ScriptingSettings>
       <compileType>
         <linkerTool>
           <linkerLibItems>
@@ -282,6 +336,7 @@
       </compileType>
       <makeCustomizationType>
         <makeCustomizationPreStepEnabled>false</makeCustomizationPreStepEnabled>
+        <makeUseCleanTarget>false</makeUseCleanTarget>
         <makeCustomizationPreStep>"\\10.41.200.104\lint\lint-nt.exe" -t2 -"format=%(%f:%l: %)%t %n: %m" -width(0,4) -iC:\Users\i52915\Documents\Jutland2\lint std.lnt -os(_LINT.txt) -zero(700) PcLintConfig\ProjectModules.lnt</makeCustomizationPreStep>
         <makeCustomizationPostStepEnabled>false</makeCustomizationPostStepEnabled>
         <makeCustomizationPostStep></makeCustomizationPostStep>
@@ -352,6 +407,7 @@
                   value="DC_SUPPORTED;INDIRECT_MODE;ESF_PDI=SPI;SPI=1;SQI=0"/>
         <property key="strict-ansi" value="false"/>
         <property key="support-ansi" value="false"/>
+        <property key="tentative-definitions" value=""/>
         <property key="toplevel-reordering" value=""/>
         <property key="unaligned-access" value=""/>
         <property key="use-cci" value="false"/>
@@ -383,6 +439,7 @@
       </C32-AS>
       <C32-CO>
         <property key="coverage-enable" value=""/>
+        <property key="stack-guidance" value="false"/>
       </C32-CO>
       <C32-LD>
         <property key="additional-options-use-response-files" value="false"/>
@@ -463,6 +520,7 @@
         <property key="omit-pack-options" value="1"/>
         <property key="relaxed-math" value="false"/>
         <property key="save-temps" value="false"/>
+        <property key="stack-smashing" value=""/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
       <ICD4Tool>
@@ -527,6 +585,8 @@
         <pack name="CMSIS" vendor="ARM" version="5.4.0"/>
         <pack name="SAMD51_DFP" vendor="Microchip" version="3.2.55"/>
       </packs>
+      <ScriptingSettings>
+      </ScriptingSettings>
       <compileType>
         <linkerTool>
           <linkerLibItems>
@@ -544,6 +604,7 @@
       </compileType>
       <makeCustomizationType>
         <makeCustomizationPreStepEnabled>false</makeCustomizationPreStepEnabled>
+        <makeUseCleanTarget>false</makeUseCleanTarget>
         <makeCustomizationPreStep></makeCustomizationPreStep>
         <makeCustomizationPostStepEnabled>false</makeCustomizationPostStepEnabled>
         <makeCustomizationPostStep></makeCustomizationPostStep>
@@ -605,7 +666,7 @@
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="true"/>
-        <property key="make-warnings-into-errors" value="true"/>
+        <property key="make-warnings-into-errors" value="false"/>
         <property key="optimization-level" value=""/>
         <property key="place-data-into-section" value="true"/>
         <property key="post-instruction-scheduling" value="default"/>
@@ -614,6 +675,7 @@
                   value="DC_SUPPORTED;BECKHOFF_MODE;ESF_PDI=SPI;SPI=1;SQI=0"/>
         <property key="strict-ansi" value="false"/>
         <property key="support-ansi" value="false"/>
+        <property key="tentative-definitions" value=""/>
         <property key="toplevel-reordering" value=""/>
         <property key="unaligned-access" value=""/>
         <property key="use-cci" value="false"/>
@@ -645,6 +707,7 @@
       </C32-AS>
       <C32-CO>
         <property key="coverage-enable" value=""/>
+        <property key="stack-guidance" value="false"/>
       </C32-CO>
       <C32-LD>
         <property key="additional-options-use-response-files" value="false"/>
@@ -725,6 +788,7 @@
         <property key="omit-pack-options" value="1"/>
         <property key="relaxed-math" value="false"/>
         <property key="save-temps" value="false"/>
+        <property key="stack-smashing" value=""/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
       <ICD4Tool>
@@ -782,15 +846,17 @@
         <targetDevice>ATSAMD51J19A</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>AtmelIceTool</platformTool>
+        <platformTool>pk4hybrid</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>2.30</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <packs>
-        <pack name="SAMD51_DFP" vendor="Microchip" version="3.2.55"/>
         <pack name="CMSIS" vendor="ARM" version="5.4.0"/>
+        <pack name="SAMD51_DFP" vendor="Microchip" version="3.5.95"/>
       </packs>
+      <ScriptingSettings>
+      </ScriptingSettings>
       <compileType>
         <linkerTool>
           <linkerLibItems>
@@ -808,6 +874,7 @@
       </compileType>
       <makeCustomizationType>
         <makeCustomizationPreStepEnabled>false</makeCustomizationPreStepEnabled>
+        <makeUseCleanTarget>false</makeUseCleanTarget>
         <makeCustomizationPreStep></makeCustomizationPreStep>
         <makeCustomizationPostStepEnabled>false</makeCustomizationPostStepEnabled>
         <makeCustomizationPostStep></makeCustomizationPostStep>
@@ -820,12 +887,15 @@
         <property key="communication.activationmode" value="nohv"/>
         <property key="communication.interface" value="swd"/>
         <property key="communication.speed" value="2.000"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
         <property key="firmware.path"
                   value="Press to browse for a specific firmware version"/>
         <property key="firmware.toolpack"
                   value="Press to select which tool pack to use"/>
         <property key="firmware.update.action" value="firmware.update.use.latest"/>
+        <property key="freeze.timers" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>
         <property key="memories.configurationmemory" value="true"/>
@@ -869,7 +939,7 @@
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="true"/>
-        <property key="make-warnings-into-errors" value="true"/>
+        <property key="make-warnings-into-errors" value="false"/>
         <property key="optimization-level" value=""/>
         <property key="place-data-into-section" value="true"/>
         <property key="post-instruction-scheduling" value="default"/>
@@ -878,6 +948,7 @@
                   value="DC_SUPPORTED;DIRECT_MODE;ESF_PDI=SPI;SPI=1;SQI=0"/>
         <property key="strict-ansi" value="false"/>
         <property key="support-ansi" value="false"/>
+        <property key="tentative-definitions" value=""/>
         <property key="toplevel-reordering" value=""/>
         <property key="unaligned-access" value=""/>
         <property key="use-cci" value="false"/>
@@ -909,6 +980,7 @@
       </C32-AS>
       <C32-CO>
         <property key="coverage-enable" value=""/>
+        <property key="stack-guidance" value="false"/>
       </C32-CO>
       <C32-LD>
         <property key="additional-options-use-response-files" value="false"/>
@@ -989,6 +1061,7 @@
         <property key="omit-pack-options" value="1"/>
         <property key="relaxed-math" value="false"/>
         <property key="save-temps" value="false"/>
+        <property key="stack-smashing" value=""/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
       <ICD4Tool>
@@ -1039,6 +1112,137 @@
         <property key="programoptions.testmodeentrymethod" value="VDDFirst"/>
         <property key="voltagevalue" value="3.25"/>
       </ICD4Tool>
+      <Tool>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UpdateOptions"
+                  value="ToolFirmwareOption.UseLatest"/>
+        <property key="ToolFirmwareToolPack"
+                  value="Press to select which tool pack to use"/>
+        <property key="communication.activationmode" value="nohv"/>
+        <property key="communication.interface" value="swd"/>
+        <property key="communication.interface.jtag" value="2wire"/>
+        <property key="communication.speed" value="2.000"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="debugoptions.simultaneous.debug" value="false"/>
+        <property key="debugoptions.useswbreakpoints" value="true"/>
+        <property key="firmware.path"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="firmware.toolpack"
+                  value="Press to select which tool pack to use"/>
+        <property key="firmware.update.action" value="firmware.update.use.latest"/>
+        <property key="freeze.timers" value="false"/>
+        <property key="memories.aux" value="false"/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.configurationmemory2" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.exclude.configurationmemory" value="true"/>
+        <property key="memories.flashdata" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.instruction.ram.ranges"
+                  value="${memories.instruction.ram.ranges}"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges" value="0-7ffff"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmerToGoFilePath"
+                  value="D:/ECTC/ESF_Latest_v1.23_revc _Copy/ethercat-software-framework-public-new-feature-esf-evb-lan9253@82ed38fe351/ESF/Demo/ESF_EVB_LAN9253/firmware/ESF_EVB_LAN9253/debug/LAN9253_D51_SPI_direct_mode/LAN9253_D51_SPI_direct_mode_ptg"/>
+        <property key="programmerToGoImageName" value="LAN9253_D51_SPI_direct_mode_ptg"/>
+        <property key="programoptions.donoteraseauxmem" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.ledbrightness" value="5"/>
+        <property key="programoptions.pgcconfig" value="pull down"/>
+        <property key="programoptions.pgcresistor.value" value="4.7"/>
+        <property key="programoptions.pgdconfig" value="pull down"/>
+        <property key="programoptions.pgdresistor.value" value="4.7"/>
+        <property key="programoptions.pgmentry.voltage" value="low"/>
+        <property key="programoptions.pgmspeed" value="Med"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges"
+                  value="${memories.dataflash.default}"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges" value=""/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.program.otpconfig" value="false"/>
+        <property key="programoptions.programcalmem" value="false"/>
+        <property key="programoptions.programuserotp" value="false"/>
+        <property key="programoptions.testmodeentrymethod" value="VDDFirst"/>
+        <property key="ptgProgramImage" value="true"/>
+        <property key="ptgSendImage" value="true"/>
+        <property key="toolpack.updateoptions"
+                  value="toolpack.updateoptions.uselatestoolpack"/>
+        <property key="toolpack.updateoptions.packversion"
+                  value="Press to select which tool pack to use"/>
+        <property key="voltagevalue" value="3.25"/>
+      </Tool>
+      <pk4hybrid>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UpdateOptions"
+                  value="ToolFirmwareOption.UseLatest"/>
+        <property key="ToolFirmwareToolPack"
+                  value="Press to select which tool pack to use"/>
+        <property key="communication.activationmode" value="nohv"/>
+        <property key="communication.interface" value="swd"/>
+        <property key="communication.interface.jtag" value="2wire"/>
+        <property key="communication.speed" value="2.000"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="debugoptions.simultaneous.debug" value="false"/>
+        <property key="debugoptions.useswbreakpoints" value="true"/>
+        <property key="freeze.timers" value="false"/>
+        <property key="memories.aux" value="false"/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.configurationmemory2" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.exclude.configurationmemory" value="true"/>
+        <property key="memories.flashdata" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.instruction.ram.ranges"
+                  value="${memories.instruction.ram.ranges}"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges" value="0-7ffff"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmerToGoImageName" value="LAN9253_D51_SPI_direct_mode_ptg"/>
+        <property key="programoptions.donoteraseauxmem" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.ledbrightness" value="5"/>
+        <property key="programoptions.pgcconfig" value="pull down"/>
+        <property key="programoptions.pgcresistor.value" value="4.7"/>
+        <property key="programoptions.pgdconfig" value="pull down"/>
+        <property key="programoptions.pgdresistor.value" value="4.7"/>
+        <property key="programoptions.pgmentry.voltage" value="low"/>
+        <property key="programoptions.pgmspeed" value="Med"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges"
+                  value="${memories.dataflash.default}"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges" value=""/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.program.otpconfig" value="false"/>
+        <property key="programoptions.programcalmem" value="false"/>
+        <property key="programoptions.programuserotp" value="false"/>
+        <property key="programoptions.testmodeentrymethod" value="VDDFirst"/>
+        <property key="ptgProgramImage" value="true"/>
+        <property key="ptgSendImage" value="true"/>
+        <property key="toolpack.updateoptions"
+                  value="toolpack.updateoptions.uselatestoolpack"/>
+        <property key="toolpack.updateoptions.packversion"
+                  value="Press to select which tool pack to use"/>
+        <property key="voltagevalue" value="3.25"/>
+      </pk4hybrid>
     </conf>
     <conf name="LAN9253_D51_SQI_Indirect_mode" type="2">
       <toolsSet>
@@ -1055,6 +1259,8 @@
         <pack name="CMSIS" vendor="ARM" version="5.4.0"/>
         <pack name="SAMD51_DFP" vendor="Microchip" version="3.2.55"/>
       </packs>
+      <ScriptingSettings>
+      </ScriptingSettings>
       <compileType>
         <linkerTool>
           <linkerLibItems>
@@ -1072,6 +1278,7 @@
       </compileType>
       <makeCustomizationType>
         <makeCustomizationPreStepEnabled>false</makeCustomizationPreStepEnabled>
+        <makeUseCleanTarget>false</makeUseCleanTarget>
         <makeCustomizationPreStep>"\\10.41.200.104\lint\lint-nt.exe" -t2 -"format=%(%f:%l: %)%t %n: %m" -width(0,4) -i\\10.41.200.104\lint\lnt au-misra2.lnt -iC:\Users\i52915\Documents\Jutland2\lint std.lnt -os(_LINT.txt) -zero(700) PcLintConfig\ProjectModules.lnt</makeCustomizationPreStep>
         <makeCustomizationPostStepEnabled>false</makeCustomizationPostStepEnabled>
         <makeCustomizationPostStep></makeCustomizationPostStep>
@@ -1142,6 +1349,7 @@
                   value="DC_SUPPORTED;INDIRECT_MODE;ESF_PDI=SQI;SPI=0;SQI=1"/>
         <property key="strict-ansi" value="false"/>
         <property key="support-ansi" value="false"/>
+        <property key="tentative-definitions" value=""/>
         <property key="toplevel-reordering" value=""/>
         <property key="unaligned-access" value=""/>
         <property key="use-cci" value="false"/>
@@ -1173,6 +1381,7 @@
       </C32-AS>
       <C32-CO>
         <property key="coverage-enable" value=""/>
+        <property key="stack-guidance" value="false"/>
       </C32-CO>
       <C32-LD>
         <property key="additional-options-use-response-files" value="false"/>
@@ -1253,6 +1462,7 @@
         <property key="omit-pack-options" value="1"/>
         <property key="relaxed-math" value="false"/>
         <property key="save-temps" value="false"/>
+        <property key="stack-smashing" value=""/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
       <ICD4Tool>
@@ -1317,6 +1527,8 @@
         <pack name="CMSIS" vendor="ARM" version="5.4.0"/>
         <pack name="SAMD51_DFP" vendor="Microchip" version="3.2.55"/>
       </packs>
+      <ScriptingSettings>
+      </ScriptingSettings>
       <compileType>
         <linkerTool>
           <linkerLibItems>
@@ -1334,6 +1546,7 @@
       </compileType>
       <makeCustomizationType>
         <makeCustomizationPreStepEnabled>false</makeCustomizationPreStepEnabled>
+        <makeUseCleanTarget>false</makeUseCleanTarget>
         <makeCustomizationPreStep></makeCustomizationPreStep>
         <makeCustomizationPostStepEnabled>false</makeCustomizationPostStepEnabled>
         <makeCustomizationPostStep></makeCustomizationPostStep>
@@ -1346,12 +1559,15 @@
         <property key="communication.activationmode" value="nohv"/>
         <property key="communication.interface" value="swd"/>
         <property key="communication.speed" value="2.000"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
         <property key="firmware.path"
                   value="Press to browse for a specific firmware version"/>
         <property key="firmware.toolpack"
                   value="Press to select which tool pack to use"/>
         <property key="firmware.update.action" value="firmware.update.use.latest"/>
+        <property key="freeze.timers" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>
         <property key="memories.configurationmemory" value="true"/>
@@ -1404,6 +1620,7 @@
                   value="DC_SUPPORTED;DIRECT_MODE;ESF_PDI=SQI;SPI=0;SQI=1"/>
         <property key="strict-ansi" value="false"/>
         <property key="support-ansi" value="false"/>
+        <property key="tentative-definitions" value=""/>
         <property key="toplevel-reordering" value=""/>
         <property key="unaligned-access" value=""/>
         <property key="use-cci" value="false"/>
@@ -1435,6 +1652,7 @@
       </C32-AS>
       <C32-CO>
         <property key="coverage-enable" value=""/>
+        <property key="stack-guidance" value="false"/>
       </C32-CO>
       <C32-LD>
         <property key="additional-options-use-response-files" value="false"/>
@@ -1515,6 +1733,7 @@
         <property key="omit-pack-options" value="1"/>
         <property key="relaxed-math" value="false"/>
         <property key="save-temps" value="false"/>
+        <property key="stack-smashing" value=""/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
       <ICD4Tool>
@@ -1565,6 +1784,52 @@
         <property key="programoptions.testmodeentrymethod" value="VDDFirst"/>
         <property key="voltagevalue" value="3.25"/>
       </ICD4Tool>
+      <Tool>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="communication.activationmode" value="nohv"/>
+        <property key="communication.interface" value="swd"/>
+        <property key="communication.speed" value="2.000"/>
+        <property key="debugoptions.debug-startup" value="Use system settings"/>
+        <property key="debugoptions.reset-behaviour" value="Use system settings"/>
+        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.path"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="firmware.toolpack"
+                  value="Press to select which tool pack to use"/>
+        <property key="firmware.update.action" value="firmware.update.use.latest"/>
+        <property key="freeze.timers" value="false"/>
+        <property key="memories.aux" value="false"/>
+        <property key="memories.bootflash" value="true"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.configurationmemory2" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.exclude.configurationmemory" value="true"/>
+        <property key="memories.flashdata" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.instruction.ram.ranges"
+                  value="${memories.instruction.ram.ranges}"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.ranges" value="0-3ffff"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmerToGoFilePath"
+                  value="D:/ECTC/ESF_Latest_v1.23_revc _Copy/ethercat-software-framework-public-new-feature-esf-evb-lan9253@82ed38fe351/ESF/Demo/ESF_EVB_LAN9253/firmware/ESF_EVB_LAN9253/debug/LAN9253_D51_SQI_direct_mode/LAN9253_D51_SQI_direct_mode_ptg"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preservedataflash.ranges"
+                  value="${memories.dataflash.default}"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveeeprom.ranges" value=""/>
+        <property key="programoptions.preserveprogram.ranges" value=""/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.programuserotp" value="false"/>
+        <property key="toolpack.updateoptions"
+                  value="toolpack.updateoptions.uselatestoolpack"/>
+        <property key="toolpack.updateoptions.packversion"
+                  value="Press to select which tool pack to use"/>
+        <property key="voltagevalue" value=""/>
+      </Tool>
     </conf>
   </confs>
 </configurationDescriptor>
