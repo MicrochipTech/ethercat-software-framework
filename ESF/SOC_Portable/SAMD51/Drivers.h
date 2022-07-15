@@ -48,16 +48,16 @@
 #define SYNC1                                       EIC_PIN_1
 #define ESCIRQ                                      EIC_PIN_7
 
-/* Configured PA20 and PA21 pins 
+/* Configured PA20, PA21, PA22 pins 
  * These are available as pinouts for J13 header from LAN9253_SAMD51_SVB
  * PA20 --> Pin 1 from J13 header
  * PA21 --> Pin 3 from J13 header
- * 
+ * PA22 --> Pin 5 from J13 header
  * Can be modified with appropriate pins for specific use 
  */
 #define GPIO_T_PDI                                  PORT_PIN_PA20
 #define GPIO_T_MCU                                  PORT_PIN_PA21
-
+#define GPIO_T_MEA                                  PORT_PIN_PA22
 #if (ESF_PDI == SPI)
 #define QSPI_Sync_Wait()    {\
                                 while(EtherCAT_QSPITransmissionBusy()) {\
@@ -91,7 +91,7 @@ extern "C" {
 	void	ESC_BYTE_TEST_Register_Read(UINT8 *pu8Data);
     void    CRITICAL_SECTION_ENTER(void);
     void    CRITICAL_SECTION_LEAVE(void);
-
+  
 #if (ESF_PDI == SQI)
     void	SQI_SetConfiguration(UINT8 *byDummyByteCnt);
     void    ReBuild_SQI_SetCfg_data ();

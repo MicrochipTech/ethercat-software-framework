@@ -45,7 +45,6 @@
 #undef _9252_HW_
 #define _9252_HW_ 0
 #include "ESC_Utils.h"
-
 BOOL gbALEvtOpEnabled = FALSE;
 UALEVENT         gEscALEvent;
 #if (ESF_PDI == SPI) || (ESF_PDI == SQI)
@@ -171,7 +170,6 @@ UINT8 LAN925x_Init(void)
 	// Write 0x5c - 0x00000001
 	u32data = 0x00000000;
 	MCHP_ESF_PDI_WRITE(LAN925x_CSR_INT_EN, (UINT8*)&u32data, DWORD_LENGTH);
-
 	do {
 		u32intMask = 0x93;
 		HW_EscWriteDWord(u32intMask, ESC_AL_EVENTMASK_OFFSET);
@@ -893,7 +891,7 @@ void EscRead(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
                 u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
             }
 
-            MCHP_ESF_PDI_FASTREAD(u16Address, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+             MCHP_ESF_PDI_FASTREAD(u16Address, (UINT8*)&u32Val.Val, DWORD_LENGTH);
 
             for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
             *pu8Data++ = u32Val.v[u8Itr];
@@ -1315,6 +1313,7 @@ void HW_EscWrite(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
 		u16Address += u8ValidDataLen;
 		u16Len -= u8ValidDataLen;
 	}
+    
 
 #endif
 #elif (ESF_PDI == HBI)

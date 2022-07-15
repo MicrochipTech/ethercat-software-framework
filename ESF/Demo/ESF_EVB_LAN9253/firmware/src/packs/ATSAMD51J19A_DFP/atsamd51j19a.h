@@ -517,6 +517,8 @@ void ICM_Handler                   ( void );
 void PUKCC_Handler                 ( void );
 void QSPI_Handler                  ( void );
 void SDHC0_Handler                 ( void );
+void DMAC_0_Handler                ( void );
+void DMAC_1_Handler                ( void );
 #endif /* DONT_USE_PREDEFINED_PERIPHERALS_HANDLERS */
 /* Defines for Deprecated Interrupt and Exceptions handler names */
 #define MemManage_Handler         MemoryManagement_Handler        /**< \deprecated  Backward compatibility*/

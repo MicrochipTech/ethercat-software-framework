@@ -44,44 +44,19 @@
 #include "plib_qspi_spi.h"
 #include "string.h" // memmove
 #include "ESF_Config.h"
+#include "../../driver/spi/src/drv_spi_local.h"
+#include "driver/spi/drv_spi.h"
+
 
 qspi_spi_obj qspiObj;
 
-
-void QSPI_Initialize(void)
-{
-    /* Reset and Disable the qspi Module */
-    QSPI_REGS->QSPI_CTRLA = QSPI_CTRLA_SWRST_Msk;
-
-    // Set Mode Register values
-    /* MODE = SPI */
-    /* LOOPEN = 0 */
-    /* WDRBT = 0 */
-    /* SMEMREG = 0 */
-    /* CSMODE = NORELOAD */
-    /* DATALEN = 0x0 */
-    /* DLYCBT = 0 */
-    /* DLYCS = 0 */
-    QSPI_REGS->QSPI_CTRLB = QSPI_CTRLB_MODE_SPI | QSPI_CTRLB_CSMODE_NORELOAD | QSPI_CTRLB_DATALEN(0x0) | QSPI_CTRLB_LOOPEN(0);
-
-    // Set serial clock register
-    QSPI_REGS->QSPI_BAUD = (QSPI_BAUD_BAUD(GET_BAUD(ESF_PDI_FREQUENCY)))  ;
-
-    // Enable the qspi Module
-    /* LASTXFER = 0 */
-    QSPI_REGS->QSPI_CTRLA = QSPI_CTRLA_ENABLE_Msk;
-
-    while((QSPI_REGS->QSPI_STATUS & QSPI_STATUS_ENABLE_Msk) != QSPI_STATUS_ENABLE_Msk)
-    {
-        /* Wait for QSPI enable flag to set */
-    }
-}
 
 bool QSPI_WriteRead (void* pTransmitData, size_t txSize, void* pReceiveData, size_t rxSize)
 {
     bool isRequestAccepted = false;
     uint32_t dummyData;
-
+    
+    
     /* Verify the request */
     if((((txSize > 0) && (pTransmitData != NULL)) || ((rxSize > 0) && (pReceiveData != NULL))) && (qspiObj.transferIsBusy == false))
     {
@@ -151,7 +126,7 @@ bool QSPI_WriteRead (void* pTransmitData, size_t txSize, void* pReceiveData, siz
                 qspiObj.dummySize--;
             }
         }
-
+         
         if ((int)rxSize > 0)
         {
             /* Enable receive interrupt to complete the transfer in ISR context */
@@ -176,7 +151,6 @@ bool QSPI_Read(void* pReceiveData, size_t rxSize)
 {
     return(QSPI_WriteRead(NULL, 0, pReceiveData, rxSize));
 }
-
 bool QSPI_TransferSetup (QSPI_TRANSFER_SETUP * setup, uint32_t spiSourceClock )
 {
     uint32_t scbr;
@@ -202,7 +176,7 @@ bool QSPI_TransferSetup (QSPI_TRANSFER_SETUP * setup, uint32_t spiSourceClock )
     }
 
     /* Set up clock polarity, phase, and baud rate */
-    QSPI_REGS->QSPI_BAUD= (uint32_t)setup->clockPolarity | (uint32_t)setup->clockPhase | QSPI_BAUD_BAUD(scbr);
+    QSPI_REGS->QSPI_BAUD= (uint32_t)setup->clockPolarity | (uint32_t)setup->clockPhase | QSPI_BAUD_BAUD(GET_BAUD(ESF_PDI_FREQUENCY));
 
     /* Set up number of bits per transfer */
     QSPI_REGS->QSPI_CTRLB = (QSPI_REGS->QSPI_CTRLB & ~QSPI_CTRLB_DATALEN_Msk) | (uint32_t)setup->dataBits;
@@ -214,7 +188,7 @@ bool QSPI_TransferSetup (QSPI_TRANSFER_SETUP * setup, uint32_t spiSourceClock )
     {
         /* Wait for QSPI enable flag to set */
     }
-    
+
     return true;
 }
 
