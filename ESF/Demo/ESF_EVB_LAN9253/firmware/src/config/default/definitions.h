@@ -58,15 +58,13 @@
 #include "peripheral/port/plib_port.h"
 #include "peripheral/clock/plib_clock.h"
 #include "peripheral/nvic/plib_nvic.h"
-#include "peripheral/dmac/plib_dmac.h"
 #include "peripheral/systick/plib_systick.h"
 #include "peripheral/cmcc/plib_cmcc.h"
-#include "driver/spi/drv_spi.h"
 #include "peripheral/eic/plib_eic.h"
 #include "system/int/sys_int.h"
 #include "system/ports/sys_ports.h"
 #include "app.h"
-#include "driver/spi/drv_spi_definitions.h"
+
 
 
 // DOM-IGNORE-BEGIN
@@ -187,10 +185,7 @@ void SYS_Tasks ( void );
 
 typedef struct
 {
-    /* SPI0 Driver Object */
-    SYS_MODULE_OBJ drvSPI0;
-
-
+    char RESERVED;
 } SYSTEM_OBJECTS;
 
 

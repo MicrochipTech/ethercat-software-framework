@@ -40,40 +40,17 @@
 #include "ecatslv.h"
 #include "ESC_Utils.h"
 
-#define GPIO_T_PDI PORT_PIN_PA20
-#define GPIO_T_MCU PORT_PIN_PA21
-#define GPIO_T_MEA PORT_PIN_PA22
-
-
-#define SPI_DMA_MAX_TX_SIZE 1024
-#define SPI_DMA_MAX_RX_SIZE 1024
-#define SPI_INIT_DUMMY 3
-#define SPI_DUMMY 5
-static OSAL_SEM_HANDLE_TYPE txSyncSem;
-static OSAL_SEM_HANDLE_TYPE rxSyncSem;
-DRV_SPI_TRANSFER_SETUP setup;
-static DRV_SPI_TRANSFER_HANDLE transferTxHandle;
-static DRV_SPI_TRANSFER_HANDLE transferRxHandle;
-volatile UINT8 isDMAComplete=1;
-UINT8 rx_data[2048];
-
 #if (ESF_PDI == SPI)
 
 volatile CHAR gchEtherCATQSPITransmission = false;
 
 void EtherCAT_TransmissionFlagClear(void);
-void EtherCAT_QSPI_CallbackRegistration(void); 
+void EtherCAT_QSPI_CallbackRegistration(void);
 
 /* Function declarations */
 static void SPIChipSelectDisable(void);
 static void SPIChipSelectEnable(void);
-
-void DRV_SPIReceive(UINT8 *const pu8Data, UINT32 u32Length);
-void DRV_SPITransfer(UINT8 *const pu8Data, UINT32 u32Length);
-static bool _SPI_Tx(UINT8 *const pu8Data, UINT32 size);
-static bool _SPI_Rx(UINT8 *const pu8Data, UINT32 size);
-void _APP_MyTransferEventHandler(DRV_SPI_TRANSFER_EVENT event,
-            DRV_SPI_TRANSFER_HANDLE t_handle, uintptr_t context);
+static UINT8   EtherCAT_QSPITransmissionBusy(void);
 #elif (ESF_PDI == SQI)
 static UINT8 gau8rx_data[32] = {0};
 #endif
@@ -134,6 +111,11 @@ void EtherCAT_TransmissionFlagClear(void)
     gchEtherCATQSPITransmission = false;
 }
 
+static UINT8 EtherCAT_QSPITransmissionBusy(void)
+{
+    return (gchEtherCATQSPITransmission == false);
+}
+
 void EtherCAT_QSPI_CallbackRegistration(void)
 {
     QSPI_CallbackRegister (ECAT_SPI_Callback, 0);
@@ -160,22 +142,56 @@ void ESC_BYTE_TEST_Register_Read (UINT8 *pu8Data)
 	can be considered functional */
 #if (ESF_PDI == SPI)
 	UINT8 u8Len = 4;
+    UINT8 u8txData = 0, u8rxData = 0;
+    UINT8 u8txLen = 1, u8rxLen = 1;
+    
     SPIChipSelectEnable();
     
-    UINT8 tx_data[4];
-    tx_data[0] = CMD_SERIAL_READ;
- 
-   
-    tx_data[1] = (UINT8)HIBYTE(LAN925x_BYTE_ORDER_REG);
-    
-    
-    tx_data[2] = (UINT8)LOBYTE(LAN925x_BYTE_ORDER_REG);
-   
-    DRV_SPITransfer(tx_data,3);
-    
-    DRV_SPIReceive(pu8Data,u8Len);
+    while(QSPI_IsBusy());
 
-    SPIChipSelectDisable();
+    u8txData = CMD_SERIAL_READ;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    
+    u8txData = (UINT8)HIBYTE(LAN925x_BYTE_ORDER_REG);
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[0] = u8rxData;
+    
+    u8txData = (UINT8)LOBYTE(LAN925x_BYTE_ORDER_REG);
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[1] = u8rxData;
+	
+	do
+	{
+		if (0x1 == u8Len)
+		{
+			u8txData = READ_TERMINATION_BYTE;
+		}
+        else
+        {
+            u8txData = 0;
+        }
+		QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		while(QSPI_IsBusy());
+		*pu8Data++ = u8rxData;
+	} while (--u8Len);
+
+	SPIChipSelectDisable();
 #elif (ESF_PDI == SQI)
     qspi_memory_xfer_t qspi_xfer;
     UINT8 u8dummy_cycle = 0;
@@ -390,9 +406,28 @@ void SPI_SetConfiguration(UINT8 *pu8DummyByteCnt)
     u8txData = CMD_SQI_SETCFG;
 
     SPIChipSelectEnable();
-
-    DRV_SPITransfer(&u8txData,u8txLen);
-    DRV_SPITransfer(pu8DummyByteCnt,u8Len);
+    
+    while(QSPI_IsBusy());
+	
+    /* Send command */
+    QSPI_Write(&u8txData, u8txLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    
+    /* Now write set cfg data */
+	do
+	{
+        QSPI_Write(pu8DummyByteCnt, u8txLen);
+        QSPI_Sync_Wait();
+        while(QSPI_IsBusy())
+        {
+            ;
+        }
+        pu8DummyByteCnt++;
+	} while (--u8Len);
     
     SPIChipSelectDisable();
 }
@@ -410,8 +445,19 @@ void SPI_DisableQuadMode()
     UINT8 u8txData = 0, u8txLen = 1;
     
     u8txData = CMD_RESET_SQI;
-
-    DRV_SPITransfer(&u8txData,u8txLen);
+    
+    SPIChipSelectEnable();
+    
+    while(QSPI_IsBusy());
+	
+    /* Send command */
+    QSPI_Write(&u8txData, u8txLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    SPIChipSelectDisable();
 }
 #endif
 
@@ -516,275 +562,6 @@ void start_timer(void)
 	NVIC_EnableIRQ(SysTick_IRQn);
 }
 
-/*******************************************************************************
-    Function:
-         _SPI_Rx
-
-    Summary:
-        Checks SPI Receive
-    Description:
-        This routine checks if SPI Receive is complete.
-*******************************************************************************/
-static bool _SPI_Rx(UINT8 * const pu8Data, UINT32 size)
-{
-    
-    DRV_SPI_ReadTransferAdd(handle, pu8Data, size, &transferRxHandle);
-
-    if(transferRxHandle == DRV_SPI_TRANSFER_HANDLE_INVALID)
-    {
-        // Error handling here
-        return false;
-    }
-   
-    while(isDMAComplete)
-    {
-    }
-    isDMAComplete=1;
-    return true;
-}
-
-/*******************************************************************************
-    Function:
-         _SPI_Tx
-
-    Summary:
-        Checks SPI Transfer
-    Description:
-        This routine checks if SPI Transfer is complete.
-*******************************************************************************/
-static bool _SPI_Tx(UINT8 *const pu8Data, UINT32 size)
-{
-    DRV_SPI_WriteTransferAdd(handle, pu8Data, size, &transferTxHandle);
-    
-    if(transferTxHandle == DRV_SPI_TRANSFER_HANDLE_INVALID)
-    {
-        // Error handling here
-        return false;
-    }
-
-    while(isDMAComplete)
-    {
-    }
-    isDMAComplete=1;
-
-    return true;
-}
-
-/*******************************************************************************
-    Function:
-         DRV_SPIReceive
-
-    Summary:
-         Read SPI DMA Data
-    Description:
-        Receives data from the module through the SPI bus.
-*******************************************************************************/
-void DRV_SPIReceive(UINT8 *const pu8Data, UINT32 u32Length)
-{
-    bool ret = true;
-    UINT8 *pData;
-
-    pData = pu8Data;
-
-#if (ESF_PDI == SPI)
-    while ((true == ret) && (u32Length > SPI_DMA_MAX_RX_SIZE))
-    {
-        ret = _SPI_Rx(pData, SPI_DMA_MAX_RX_SIZE);
-        u32Length -= SPI_DMA_MAX_RX_SIZE;
-        pData += SPI_DMA_MAX_RX_SIZE;
-    }
-#endif
-
-    if ((true == ret) && (u32Length > 0))
-    {
-        ret = _SPI_Rx(pData, u32Length);
-    }
-}
-
-/*******************************************************************************
-    Function:
-         DRV_SPITransfer
-
-    Summary:
-         Write SPI DMA Data
-    Description:
-        Transfers data from the module through the SPI bus.
-*******************************************************************************/
-void DRV_SPITransfer(UINT8 *const pu8Data, UINT32 u32Length)
-{
-    bool ret = true;
-    UINT8 *pData;
-
-    pData = pu8Data;
-
-#if (ESF_PDI == SPI)
-    while ((true == ret) && (u32Length > SPI_DMA_MAX_TX_SIZE))
-    {
-        ret = _SPI_Tx(pData, SPI_DMA_MAX_TX_SIZE);
-        u32Length -= SPI_DMA_MAX_TX_SIZE;
-        pData += SPI_DMA_MAX_TX_SIZE;
-    }
-#endif
-
-    if ((true == ret) && (u32Length > 0))
-    {
-        ret = _SPI_Tx(pData, u32Length);
-    }
-}
-
-// *****************************************************************************
-/* SPI Driver Transfer Event Handler Function Pointer
-
-   Function
-    _APP_MyTransferEventHandler 
-   Summary
-    Pointer to a SPI Driver Transfer Event handler function
-
-   Description
-    This data type defines the required function signature for the SPI driver
-    transfer event handling callback function. A client must register a pointer
-    using the transfer event handling function whose function signature (parameter
-    and return value types) match the types specified by this function pointer
-    in order to receive transfer related event calls back from the driver.
-
-    The parameters and return values are described here and a partial example
-    implementation is provided.
-
-  Parameters:
-    event -             Identifies the type of event
-
-    transferHandle -    Handle identifying the transfer to which the event relates
-
-    context -           Value identifying the context of the application that
-                        registered the event handling function.
-
-  Returns:
-    None.
-
-  Example:
-    <code>
-    void APP_MyTransferEventHandler( DRV_SPI_TRANSFER_EVENT event,
-                                   DRV_SPI_TRANSFER_HANDLE transferHandle,
-                                   uintptr_t context )
-    {
-        MY_APP_DATA_STRUCT pAppData = (MY_APP_DATA_STRUCT) context;
-
-        switch(event)
-        {
-            case DRV_SPI_TRANSFER_EVENT_COMPLETE:
-
-                // Handle the completed transfer.
-                break;
-
-            case DRV_SPI_TRANSFER_EVENT_ERROR:
-
-                // Handle error.
-                break;
-        }
-    }
-    </code>
-
-  Remarks:
-    - If the event is DRV_SPI_TRANSFER_EVENT_COMPLETE, it means that the data was
-      transferred successfully.
-
-    - If the event is DRV_SPI_TRANSFER_EVENT_ERROR, it means that the data was not
-      transferred successfully.
-
-    - The transferHandle parameter contains the transfer handle of the transfer
-      request that is associated with the event.
-
-    - The context parameter contains the a handle to the client context,
-      provided at the time the event handling function was registered using the
-      DRV_SPI_TransferEventHandlerSet function.  This context handle value is
-      passed back to the client as the "context" parameter.  It can be any value
-      necessary to identify the client context or instance (such as a pointer to
-      the client's data) of the client that made the transfer add request.
-
-    - The event handler function executes in interrupt context of the peripheral.
-      Hence it is recommended of the application to not perform process
-      intensive or blocking operations with in this function.
-
-    - The DRV_SPI_ReadTransferAdd, DRV_SPI_WriteTransferAdd and
-      DRV_SPI_WriteReadTransferAdd functions can be called in the event handler
-      to add a transfer request to the driver queue. These functions can only
-      be called to add transfers to the driver instance whose event handler is
-      running. For example, SPI2 driver transfer requests cannot be added in SPI1
-      driver event handler. Similarly, SPIx transfer requests should not be added
-      in event handler of any other peripheral.
-*/
-
-
-void _APP_MyTransferEventHandler(DRV_SPI_TRANSFER_EVENT event,
-            DRV_SPI_TRANSFER_HANDLE t_handle, uintptr_t context)
-{
-     switch(event)
-    {
-        case DRV_SPI_TRANSFER_EVENT_COMPLETE:
-           
-            if (transferTxHandle == t_handle)
-            {
-                isDMAComplete=0;
-                
-            }
-            else if (transferRxHandle == t_handle)
-            {  
-                isDMAComplete=0; 
-            }
-
-            break;
-
-        case DRV_SPI_TRANSFER_EVENT_ERROR:
-            
-            break;
-
-        default:
-            break;
-    }
-}
-
-/*******************************************************************************
-    Function:
-         _SPI_initialize
-
-    Summary:
-         SPI Initialization
-    Description:
-        Initializes the SPI object for the WiFi driver.
-*******************************************************************************/
-void _SPI_initialize(void)
-{
-     if (OSAL_RESULT_TRUE != OSAL_SEM_Create(&txSyncSem, OSAL_SEM_TYPE_COUNTING, 10, 0))
-    {
-        return;
-    }
-
-    if (OSAL_RESULT_TRUE != OSAL_SEM_Create(&rxSyncSem, OSAL_SEM_TYPE_COUNTING, 10, 0))
-    {
-        return;
-    }
-     
-        handle=DRV_SPI_Open(DRV_SPI_INDEX_0, DRV_IO_INTENT_EXCLUSIVE);
-
-        if (handle==DRV_HANDLE_INVALID)
-        {
-            while(1);
-        }
-    DRV_SPI_TransferEventHandlerSet( handle,_APP_MyTransferEventHandler , 0);
-    bool a;
-    setup.baudRateInHz = ESF_PDI_FREQUENCY*1000000;
-    setup.clockPhase = DRV_SPI_CLOCK_PHASE_VALID_TRAILING_EDGE;
-    setup.clockPolarity = DRV_SPI_CLOCK_POLARITY_IDLE_LOW;
-    setup.dataBits = DRV_SPI_DATA_BITS_8;
-    setup.chipSelect = SYS_PORT_PIN_NONE;
-    setup.csPolarity = DRV_SPI_CS_POLARITY_ACTIVE_LOW;
-    a=DRV_SPI_TransferSetup ( handle, &setup );
-    if(a==false)
-    {
-        while(1);
-    }
-   
-}
 #ifdef _IS_SPI_INDIRECT_MODE_ACCESS
 /* 
     Function: LAN9252SPI_Write
@@ -1650,6 +1427,8 @@ void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 #ifdef IS_SUPPORT_DUMMY_CYCLE
     UINT32 u8dummy_clk_cnt = 0;
 #endif
+    UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
 
 	/* Core CSR and Process RAM accesses can have any alignment and length */
 	if (u16Addr < 0x3000)
@@ -1688,40 +1467,55 @@ void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 	SPIChipSelectEnable();
 
-#ifdef IS_SUPPORT_DUMMY_CYCLE   
-    u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
-    UINT8 tx_size=SPI_INIT_DUMMY+u8dummy_clk_cnt;
-    UINT8 tx_data[100];
-    tx_data[0] = CMD_SERIAL_WRITE;
-    
-    
-    tx_data[1]= (UINT8)(u16Addr >> 8);
-    
-    
-    tx_data[2] = (UINT8)u16Addr;
-    
-    
-    DRV_SPITransfer(tx_data,tx_size);
-    
-#endif
+		
+	u8txData = CMD_SERIAL_WRITE;
+	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
 	
-#ifdef IS_SUPPORT_DUMMY_CYCLE 
-/* Get the Intra DWORD dummy clock count */     
-u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
-
-UINT32 txd_size= u32Length+((u32Length-1)*u8dummy_clk_cnt);
-UINT16 u8Itr;
-/* Add Intra DWORD dummy clocks, avoid for last byte */
- for(u8Itr=0;u8Itr<txd_size;u8Itr+=(u8dummy_clk_cnt+1))
-    {
-        rx_data[u8Itr]=*pu8Data;
-		pu8Data++;
-    }
-	DRV_SPITransfer(rx_data,txd_size);
     
+	u8txData = (UINT8)(u16Addr >> 8);
+	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+	
+	gEscALEvent.Byte[0] = u8rxData;
+    
+    u8txData = (UINT8)u16Addr;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+	
+	gEscALEvent.Byte[1] = u8rxData;
+#ifdef IS_SUPPORT_DUMMY_CYCLE    
+	/* Initial Dummy cycle added by dummy read */
+	u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
+	while (u8dummy_clk_cnt--)
+	{
+		QSPI_Read(&u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		
+	}
 #endif
-	SPIChipSelectDisable();
+	do
+	{
+        u8txData = *pu8Data++;
+        QSPI_Write(&u8txData, u8txLen);
+        QSPI_Sync_Wait();
+        
+#ifdef IS_SUPPORT_DUMMY_CYCLE        
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (1 != u32Length) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                
+            }
+        }
+#endif
+	} while (--u32Length);
 
+	SPIChipSelectDisable();
 }
 
 /* 
@@ -1745,7 +1539,9 @@ void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 	UINT8 u8dummy_clk_cnt = 0;
 #endif
 	UINT32 u32ModLen = 0;
-
+    UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
+	
 	/* Core CSR and Process RAM accesses can have any alignment and length */
 	if (u16Addr < 0x3000)
 	{
@@ -1779,39 +1575,67 @@ void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 	}
 	SPIChipSelectEnable();
 
-#ifdef IS_SUPPORT_DUMMY_CYCLE 
-    u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
-    UINT8 tx_size=SPI_INIT_DUMMY+u8dummy_clk_cnt;
-    UINT8 tx_data[100];
-    tx_data[0] = CMD_SERIAL_READ;
     
     
-    tx_data[1]= (UINT8)(u16Addr >> 8);
+    u8txData = CMD_SERIAL_READ;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
     
     
-    tx_data[2] = (UINT8)u16Addr;
+    u8txData = (UINT8)(u16Addr >> 8);
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
     
+    gEscALEvent.Byte[0] = u8rxData;
     
-    DRV_SPITransfer(tx_data,tx_size);
-
+    u8txData = (UINT8)u16Addr;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    
+    gEscALEvent.Byte[1] = u8rxData;
+#ifdef IS_SUPPORT_DUMMY_CYCLE    
+	/* Initial Dummy cycle added by dummy read */
+	u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
+	while (u8dummy_clk_cnt--)
+	{
+		QSPI_Read(&u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		
+	}
 #else
-    DRV_SPIReceive(&u8rxData, u8rxLen);
-	
+    QSPI_Read(&u8rxData, u8rxLen);
+	QSPI_Sync_Wait();
 #endif    
-#ifdef IS_SUPPORT_DUMMY_CYCLE
- /* Get the Intra DWORD dummy clock count */
-    u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
-    UINT32 rx_size= u32Length+((u32Length-1)*u8dummy_clk_cnt);
-    UINT16 u8Itr;
-    /* Add Intra DWORD dummy clocks, avoid for last byte */
-    DRV_SPIReceive(rx_data,rx_size);
-   
+	do
+	{
+		if (1 == u32Length)
+		{
+            u8txData = READ_TERMINATION_BYTE;
+		}
+        else
+        {
+            u8txData = 0;
+        }
+        QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+        QSPI_Sync_Wait();
+        
+		*pu8data++ = u8rxData;
+#ifdef IS_SUPPORT_DUMMY_CYCLE        
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (1 != u32Length) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                
+            }
+        }
 #endif
+	} while (--u32Length);
+
 	SPIChipSelectDisable();	
-	 for(u8Itr=0;u8Itr<rx_size;u8Itr+=(u8dummy_clk_cnt+1))
-    {
-        *pu8data++=rx_data[u8Itr];
-    }
 }
 
 /* 
@@ -1829,14 +1653,15 @@ void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 
 void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-	UINT8 u8StartAlignSize = 0; 
+	UINT8 u8StartAlignSize = 0, u8Itr = 0;
 #ifdef IS_SUPPORT_DUMMY_CYCLE
     UINT8 u8dummy_clk_cnt = 0;
-    UINT8 u8dummy_clk_cnt_1 = 0;
 #endif
 	UINT16 u16XfrLen = 0;
 	UINT32 u32ModLen = 0;
-    UINT8 u8txData = 0;
+    UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
+	
 	/* Core CSR and Process RAM accesses can have any alignment and length */
 	if (u16Addr < 0x3000)
 	{
@@ -1880,64 +1705,99 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	{
 		u16XfrLen = (u32Length & 0x7F) | 0x80;
 		u16XfrLen |= ((u32Length & 0x3F80) << 1);
-	}
-    
+	}	
 	SPIChipSelectEnable();
-    
-/* 1 default dummy + extra dummies based on address that needs to be accessed. 
-	   As per UNG_JUTLAND2-104, "For Fast reads with Non DWORD aligned address, 
-	   Dummy data will be sent before the actual data. 
-	   So to read 2001 you will get a dummy byte and then data in address 2001. 
-	   Sw needs to handle dummy data in case of non DWORD address reads" */	
-#ifdef IS_SUPPORT_DUMMY_CYCLE 
-    u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
-    u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
-    UINT8 tx_size=SPI_DUMMY+u8dummy_clk_cnt+u8StartAlignSize+(u8StartAlignSize*u8dummy_clk_cnt_1);
-    UINT8 tx_data[100];
+	
     u8txData = CMD_FAST_READ;
-    tx_data[0]=u8txData;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
 	
     
-	tx_data[1]= (UINT8)(u16Addr >> 8);
+	u8txData = (UINT8)(u16Addr >> 8);
+	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+	
+	gEscALEvent.Byte[0] = u8rxData;
     
+    u8txData = (UINT8)u16Addr;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
     
-    tx_data[2] = (UINT8)u16Addr;
-    
+    gEscALEvent.Byte[1] = u8rxData;
+	
     /* Send Transfer length */
-    tx_data[3] = (UINT8)(LOBYTE(u16XfrLen));
-    
+    u8txData = (UINT8)(LOBYTE(u16XfrLen));
+    QSPI_Write(&u8txData, u8txLen);
+    QSPI_Sync_Wait();
     
 	/* Two byte Xfr length */
 	if (u32Length > ONE_BYTE_MAX_XFR_LEN)
 	{
-        tx_data[4] = (UINT8)(HIBYTE(u16XfrLen));
-        DRV_SPITransfer(tx_data, tx_size);
+        u8txData = (UINT8)(HIBYTE(u16XfrLen));
+        QSPI_Write(&u8txData, u8txLen);
+        QSPI_Sync_Wait();
+        
 	}
-  
-    else
-    {
-        DRV_SPITransfer(tx_data, (tx_size-1));
-    }
+#ifdef IS_SUPPORT_DUMMY_CYCLE	
+    /* Initial Dummy cycle added by dummy read */
+	u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
+	while (u8dummy_clk_cnt--)
+	{
+		QSPI_Read(&u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		
+	}
 #else
-    DRV_SPIReceive(&u8rxData, u8rxLen);
+    QSPI_Read(&u8rxData, u8rxLen);
+	QSPI_Sync_Wait();
 #endif
+	/* 1 default dummy + extra dummies based on address that needs to be accessed. 
+	   As per UNG_JUTLAND2-104, "For Fast reads with Non DWORD aligned address, 
+	   Dummy data will be sent before the actual data. 
+	   So to read 2001 you will get a dummy byte and then data in address 2001. 
+	   Sw needs to handle dummy data in case of non DWORD address reads" */
+	for (u8Itr = 0; u8Itr < u8StartAlignSize; u8Itr++) 
+	{
+        QSPI_Read(&u8rxData, u8rxLen);
+        QSPI_Sync_Wait();
+#ifdef IS_SUPPORT_DUMMY_CYCLE        
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+        while (u8dummy_clk_cnt--)
+        {
+            QSPI_Read(&u8rxData, u8rxLen);
+            QSPI_Sync_Wait();               
+        }
+#endif
+	}
+    
 	
-#ifdef IS_SUPPORT_DUMMY_CYCLE
-    /* Get the Intra DWORD dummy clock count */
-    u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
-    UINT32 rx_size= u32Length+((u32Length-1)*u8dummy_clk_cnt);
-    UINT16 u8Iter;
-    /* Add Intra DWORD dummy clocks, avoid for last byte */
-    DRV_SPIReceive(rx_data,rx_size);
+	do
+	{
+        QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+        QSPI_Sync_Wait();
+        
+		*pu8Data++ = u8rxData;
+#ifdef IS_SUPPORT_DUMMY_CYCLE		
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (1 != u32Length) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                
+            }
+        }
 #endif
+	} while (--u32Length);
+	
 	SPIChipSelectDisable();
-    for(u8Iter=0;u8Iter<rx_size;u8Iter+=(u8dummy_clk_cnt+1))
-    {
-        *pu8Data++=rx_data[u8Iter];
-    } 
-}
 
+}
 #endif
+
 #ifdef _IS_SPI_BECKHOFF_MODE_ACCESS
 /* 
     Function: BeckhoffSPI_Write
@@ -2218,6 +2078,7 @@ void LAN9252SQI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT16 u16Len)
 {
 	UINT32_VAL u32Val;
 	UINT8 u8StartAlignSize = 0, u8EndAlignSize = 0,u8Itr = 0;
+    UINT8 *p8Data = NULL;
     
 	/* Address and length */
 	u32Val.w[0] = u16Addr;
@@ -2235,14 +2096,25 @@ void LAN9252SQI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT16 u16Len)
 		u8EndAlignSize = (((u8EndAlignSize + 4) & 0xC) - u8EndAlignSize);
 	}
     
-	MCHP_ESF_PDI_READ(LAN925x_ECAT_PRAM_RD_DATA_FIFO_REG, u32Val.v, u16Len+u8StartAlignSize+u8EndAlignSize);
+    //UNG_J2_SIP-35 - creating memory from heap to read and corrected the receive buffer
+    //UNG_JUTLAND2-317
+    p8Data = (UINT8 *) malloc (sizeof(UINT8) * (u16Len+u8StartAlignSize+u8EndAlignSize));
+    if (p8Data == NULL) {
+        /* we simply return in case of failure,
+         * caller will handle as it does not read anything
+         */
+        return;
+    }
+
+	MCHP_ESF_PDI_READ(LAN925x_ECAT_PRAM_RD_DATA_FIFO_REG, p8Data, u16Len+u8StartAlignSize+u8EndAlignSize);
     
     //https://jira.microchip.com/browse/UNG_JUTLAND2-278
     //Fix is added for odd address failure
     for (u8Itr = 0; u8Itr < u16Len; u8Itr++)
     {
-       *pu8Data++ = u32Val.v[u8Itr+((u16Addr & 0x3))];
+       *pu8Data++ = p8Data[u8Itr + u8StartAlignSize];
     }
+    free(p8Data);
 }
 
 /* 
@@ -2528,7 +2400,6 @@ void ESF_PDI_Init()
     /* These GPIO's used to measure the Tpdi and Tmcu */
     MCHP_ESF_GPIO_OUTPUT_EN(GPIO_T_PDI);
     MCHP_ESF_GPIO_OUTPUT_EN(GPIO_T_MCU);
-    MCHP_ESF_GPIO_OUTPUT_EN(GPIO_T_MEA);
 #endif
 #if (ESF_PDI == SQI)
     
@@ -2567,10 +2438,9 @@ void ESF_PDI_Init()
 	ReBuild_SPI_SetCfg_data ();
     
     /* SQI Set configuration for dummy cycle */
-    SPI_SetConfiguration(gau8DummyCntArr);
+    SPI_SetConfiguration (gau8DummyCntArr);
 #endif
 #endif
 #endif
 
 }
-

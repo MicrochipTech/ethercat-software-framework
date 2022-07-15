@@ -50,7 +50,7 @@
  * Configuration parameter for frequency selection
  * Frequency value should be given in MHz.
  */
-#define ESF_PDI_FREQUENCY 20
+#define ESF_PDI_FREQUENCY 60
 #define IS_SUPPORT_DUMMY_CYCLE
 
 /*
@@ -121,7 +121,7 @@
 #endif	/* ESF_PDI */
 
 /* EEPROM Emulation Feature can be enabled by uncommenting below macro */
-//#define _IS_EEPROM_EMULATION_SUPPORT               1
+#define _IS_EEPROM_EMULATION_SUPPORT               1
 
 /* Cycle Time measurement for PDI */
 #define MEASURE_CYCLE_TIME

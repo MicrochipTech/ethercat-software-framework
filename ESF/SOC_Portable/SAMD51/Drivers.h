@@ -57,7 +57,7 @@
  */
 #define GPIO_T_PDI                                  PORT_PIN_PA20
 #define GPIO_T_MCU                                  PORT_PIN_PA21
-#define GPIO_T_MEA                                  PORT_PIN_PA22
+
 #if (ESF_PDI == SPI)
 #define QSPI_Sync_Wait()    {\
                                 while(EtherCAT_QSPITransmissionBusy()) {\
@@ -91,7 +91,7 @@ extern "C" {
 	void	ESC_BYTE_TEST_Register_Read(UINT8 *pu8Data);
     void    CRITICAL_SECTION_ENTER(void);
     void    CRITICAL_SECTION_LEAVE(void);
-  
+
 #if (ESF_PDI == SQI)
     void	SQI_SetConfiguration(UINT8 *byDummyByteCnt);
     void    ReBuild_SQI_SetCfg_data ();
