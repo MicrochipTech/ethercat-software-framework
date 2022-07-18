@@ -70,7 +70,7 @@ Interface definition of QSPI PLIB.
  */
 
 /* Master clock frequency in MHz */
-#define MCLK_FREQ 120
+#define MCLK_FREQ   120
 #define GET_BAUD(P_FREQ)  ((MCLK_FREQ/P_FREQ) - 1)
 
 // *****************************************************************************

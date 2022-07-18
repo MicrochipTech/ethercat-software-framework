@@ -119,7 +119,7 @@
 /* -------- DMAC_DSTADDR : (DMAC Offset: 0x08) (R/W 32) Block Transfer Destination Address -------- */
 #define DMAC_DSTADDR_DSTADDR_Pos              _U_(0)                                               /**< (DMAC_DSTADDR) Transfer Destination Address Position */
 #define DMAC_DSTADDR_DSTADDR_Msk              (_U_(0xFFFFFFFF) << DMAC_DSTADDR_DSTADDR_Pos)        /**< (DMAC_DSTADDR) Transfer Destination Address Mask */
-#define DM  AC_DSTADDR_DSTADDR(value)           (DMAC_DSTADDR_DSTADDR_Msk & ((value) << DMAC_DSTADDR_DSTADDR_Pos))
+#define DMAC_DSTADDR_DSTADDR(value)           (DMAC_DSTADDR_DSTADDR_Msk & ((value) << DMAC_DSTADDR_DSTADDR_Pos))
 #define DMAC_DSTADDR_Msk                      _U_(0xFFFFFFFF)                                      /**< (DMAC_DSTADDR) Register Mask  */
 
 /* CRC mode */

@@ -91,7 +91,7 @@ extern "C" {
 	void	ESC_BYTE_TEST_Register_Read(UINT8 *pu8Data);
     void    CRITICAL_SECTION_ENTER(void);
     void    CRITICAL_SECTION_LEAVE(void);
-  
+
 #if (ESF_PDI == SQI)
     void	SQI_SetConfiguration(UINT8 *byDummyByteCnt);
     void    ReBuild_SQI_SetCfg_data ();

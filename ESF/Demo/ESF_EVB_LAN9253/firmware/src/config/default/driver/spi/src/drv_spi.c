@@ -61,6 +61,12 @@
 static DRV_SPI_OBJ gDrvSPIObj[DRV_SPI_INSTANCES_NUMBER];
 /* Dummy data being transmitted by TX DMA */
 static CACHE_ALIGN uint8_t txDummyData[4];
+/*RX and TX transfer Handle*/
+DRV_SPI_TRANSFER_HANDLE transferTxHandle;
+DRV_SPI_TRANSFER_HANDLE transferRxHandle;
+/*Rx and Tx transaction check*/
+volatile UINT8 gis_Tx_DMAComplete = 1;
+volatile UINT8 gis_Rx_DMAComplete = 1;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -1063,6 +1069,145 @@ void DRV_SPI_Close( DRV_HANDLE handle )
     OSAL_MUTEX_Unlock(&(dObj->mutexClientObjects));
 
     return;
+}
+
+void _SPI_initialize(void)
+{
+     
+    bool isFlag;
+    
+    handle = DRV_SPI_Open(DRV_SPI_INDEX_0, DRV_IO_INTENT_EXCLUSIVE);
+
+        if (handle == DRV_HANDLE_INVALID)
+        {
+            while(1);
+        }
+    
+        DRV_SPI_TransferEventHandlerSet( handle,_APP_MyTransferEventHandler , 0);
+    
+    setup.baudRateInHz = ESF_PDI_FREQUENCY*1000000;
+    setup.clockPhase = DRV_SPI_CLOCK_PHASE_VALID_TRAILING_EDGE;
+    setup.clockPolarity = DRV_SPI_CLOCK_POLARITY_IDLE_LOW;
+    setup.dataBits = DRV_SPI_DATA_BITS_8;
+    setup.chipSelect = SYS_PORT_PIN_NONE;
+    setup.csPolarity = DRV_SPI_CS_POLARITY_ACTIVE_LOW;
+    
+    isFlag = DRV_SPI_TransferSetup ( handle, &setup );
+    if(isFlag == false)
+    {
+        while(1);
+    }
+   
+}
+
+void DRV_SPIReceive(UINT8 *const pu8Data, UINT32 u32Length)
+{
+    bool ret = true;
+    UINT8 *rx8Data;
+
+    rx8Data = pu8Data;
+
+    while ((true == ret) && (u32Length > SPI_DMA_MAX_RX_SIZE))
+    {
+        ret = _SPI_Rx(rx8Data, SPI_DMA_MAX_RX_SIZE);
+        u32Length -= SPI_DMA_MAX_RX_SIZE;
+        rx8Data += SPI_DMA_MAX_RX_SIZE;
+    }
+
+    if ((true == ret) && (u32Length > 0))
+    {
+        ret = _SPI_Rx(rx8Data, u32Length);
+    }
+}
+
+void DRV_SPITransfer(UINT8 *const pu8Data, UINT32 u32Length)
+{
+    bool ret = true;
+    UINT8 *tx8Data;
+
+    tx8Data = pu8Data;
+
+    while ((true == ret) && (u32Length > SPI_DMA_MAX_TX_SIZE))
+    {
+        ret = _SPI_Tx(tx8Data, SPI_DMA_MAX_TX_SIZE);
+        u32Length -= SPI_DMA_MAX_TX_SIZE;
+        tx8Data += SPI_DMA_MAX_TX_SIZE;
+    }
+
+    if ((true == ret) && (u32Length > 0))
+    {
+        ret = _SPI_Tx(tx8Data, u32Length);
+    }
+}
+
+bool _SPI_Rx(UINT8 * const pu8Data, UINT32 u32size)
+{
+    //static DRV_SPI_TRANSFER_HANDLE transferRxHandle;
+    
+    DRV_SPI_ReadTransferAdd(handle, pu8Data, u32size, &transferRxHandle);
+
+    if(transferRxHandle == DRV_SPI_TRANSFER_HANDLE_INVALID)
+    {
+        // Error handling here
+        return false;
+    }
+   
+    while(gis_Rx_DMAComplete)
+    {
+    }
+    gis_Rx_DMAComplete = 1;
+    
+    return true;
+}
+
+bool _SPI_Tx(UINT8 *const pu8Data, UINT32 u32size)
+{
+    //static DRV_SPI_TRANSFER_HANDLE transferTxHandle;
+
+    DRV_SPI_WriteTransferAdd(handle, pu8Data, u32size, &transferTxHandle);
+    
+    if(transferTxHandle == DRV_SPI_TRANSFER_HANDLE_INVALID)
+    {
+        // Error handling here
+        return false;
+    }
+
+    while(gis_Tx_DMAComplete)
+    {
+    }
+    gis_Tx_DMAComplete = 1;
+
+    return true;
+}
+
+void _APP_MyTransferEventHandler(DRV_SPI_TRANSFER_EVENT event,
+            DRV_SPI_TRANSFER_HANDLE t_handle, uintptr_t context)
+{ 
+    switch(event)
+    {
+        case DRV_SPI_TRANSFER_EVENT_COMPLETE:
+           
+            if (transferTxHandle == t_handle)
+            {   
+                //Checks for completion of SPI transfer
+                gis_Tx_DMAComplete = 0;
+                
+            }
+            else if (transferRxHandle == t_handle)
+            {  
+                //Checks for completion of SPI Receive
+                gis_Rx_DMAComplete = 0; 
+            }
+
+            break;
+
+        case DRV_SPI_TRANSFER_EVENT_ERROR:
+            
+            break;
+
+        default:
+            break;
+    }
 }
 
 void DRV_SPI_TransferEventHandlerSet(

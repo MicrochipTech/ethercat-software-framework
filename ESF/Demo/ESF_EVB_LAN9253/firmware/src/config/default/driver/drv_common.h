@@ -281,6 +281,7 @@ extern DRV_HANDLE handle;
     None.
 */
 
+
 #define DRV_HANDLE_INVALID  (((DRV_HANDLE) -1))
 
 

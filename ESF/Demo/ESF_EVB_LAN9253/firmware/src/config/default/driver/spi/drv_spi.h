@@ -52,6 +52,7 @@
 #include "drv_spi_definitions.h"
 #include "../drv.h"
 #include "system/system.h"
+#include "LAN925x.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -60,7 +61,9 @@
 
 #endif
 // DOM-IGNORE-END
-
+#define SPI_DMA_MAX_TX_SIZE 1024
+#define SPI_DMA_MAX_RX_SIZE 1024
+DRV_SPI_TRANSFER_SETUP setup;
 // *****************************************************************************
 // *****************************************************************************
 // Section: Data Types
@@ -508,6 +511,149 @@ DRV_HANDLE DRV_SPI_Open(const SYS_MODULE_INDEX index, const DRV_IO_INTENT ioInte
 */
 
 void DRV_SPI_Close( const DRV_HANDLE handle);
+
+//*******************************************************************************
+/*  Function:
+        void _SPI_initialize(void);
+
+    Summary:
+        SPI Initialization
+ 
+    Description:
+        Initializes the SPI object for DMA driver.
+*/
+void _SPI_initialize(void);
+
+//*******************************************************************************
+/*  Function:
+      void DRV_SPIReceive(UINT8 *const pu8Data, UINT32 u32Length);
+
+    Summary:
+      Read SPI DMA Data
+    
+    Description:
+      Receives data from the module through the SPI bus.
+*/
+
+void DRV_SPIReceive(UINT8 *const pu8Data, UINT32 u32Length);
+
+//*******************************************************************************
+/*  Function:
+       void DRV_SPITransfer(UINT8 *const pu8Data, UINT32 u32Length);
+
+    Summary:
+       Write SPI DMA Data
+    Description:
+       Transfers data from the module through the SPI bus.
+*/
+void DRV_SPITransfer(UINT8 *const pu8Data, UINT32 u32Length);
+
+//*******************************************************************************
+/*  Function:
+       static bool _SPI_Tx(UINT8 *const pu8Data, UINT32 u32size)
+
+    Summary:
+       Checks SPI Transfer
+    Description:
+       This routine checks if SPI Transfer is complete.
+*/
+bool _SPI_Tx(UINT8 *const pu8Data, UINT32 u32size);
+
+//*******************************************************************************
+/*  Function:
+       static bool _SPI_Rx(UINT8 * const pu8Data, UINT32 u32size)
+
+    Summary:
+       Checks SPI Receive
+    Description:
+       This routine checks if SPI Receive is complete.
+*/
+bool _SPI_Rx(UINT8 * const pu8Data, UINT32 u32size);
+
+// *****************************************************************************
+/* SPI Driver Transfer Event Handler Function Pointer
+
+   Function
+     void _APP_MyTransferEventHandler(DRV_SPI_TRANSFER_EVENT event,
+            DRV_SPI_TRANSFER_HANDLE t_handle, uintptr_t context)
+   Summary
+     Pointer to a SPI Driver Transfer Event handler function
+
+   Description
+    This data type defines the required function signature for the SPI driver
+    transfer event handling callback function. A client must register a pointer
+    using the transfer event handling function whose function signature (parameter
+    and return value types) match the types specified by this function pointer
+    in order to receive transfer related event calls back from the driver.
+
+    The parameters and return values are described here and a partial example
+    implementation is provided.
+
+  Parameters:
+    event -             Identifies the type of event
+
+    transferHandle -    Handle identifying the transfer to which the event relates
+
+    context -           Value identifying the context of the application that
+                        registered the event handling function.
+
+  Returns:
+    None.
+
+  Example:
+    <code>
+    void APP_MyTransferEventHandler( DRV_SPI_TRANSFER_EVENT event,
+                                   DRV_SPI_TRANSFER_HANDLE transferHandle,
+                                   uintptr_t context )
+    {
+        MY_APP_DATA_STRUCT pAppData = (MY_APP_DATA_STRUCT) context;
+
+        switch(event)
+        {
+            case DRV_SPI_TRANSFER_EVENT_COMPLETE:
+
+                // Handle the completed transfer.
+                break;
+
+            case DRV_SPI_TRANSFER_EVENT_ERROR:
+
+                // Handle error.
+                break;
+        }
+    }
+    </code>
+
+  Remarks:
+    - If the event is DRV_SPI_TRANSFER_EVENT_COMPLETE, it means that the data was
+      transferred successfully.
+
+    - If the event is DRV_SPI_TRANSFER_EVENT_ERROR, it means that the data was not
+      transferred successfully.
+
+    - The transferHandle parameter contains the transfer handle of the transfer
+      request that is associated with the event.
+
+    - The context parameter contains the a handle to the client context,
+      provided at the time the event handling function was registered using the
+      DRV_SPI_TransferEventHandlerSet function.  This context handle value is
+      passed back to the client as the "context" parameter.  It can be any value
+      necessary to identify the client context or instance (such as a pointer to
+      the client's data) of the client that made the transfer add request.
+
+    - The event handler function executes in interrupt context of the peripheral.
+      Hence it is recommended of the application to not perform process
+      intensive or blocking operations with in this function.
+
+    - The DRV_SPI_ReadTransferAdd, DRV_SPI_WriteTransferAdd and
+      DRV_SPI_WriteReadTransferAdd functions can be called in the event handler
+      to add a transfer request to the driver queue. These functions can only
+      be called to add transfers to the driver instance whose event handler is
+      running. For example, SPI2 driver transfer requests cannot be added in SPI1
+      driver event handler. Similarly, SPIx transfer requests should not be added
+      in event handler of any other peripheral.
+*/
+void _APP_MyTransferEventHandler(DRV_SPI_TRANSFER_EVENT event,
+            DRV_SPI_TRANSFER_HANDLE t_handle, uintptr_t context);
 
 // *****************************************************************************
 /*

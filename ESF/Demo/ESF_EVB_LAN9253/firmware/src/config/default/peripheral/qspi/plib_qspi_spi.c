@@ -47,7 +47,6 @@
 #include "../../driver/spi/src/drv_spi_local.h"
 #include "driver/spi/drv_spi.h"
 
-
 qspi_spi_obj qspiObj;
 
 
@@ -55,8 +54,7 @@ bool QSPI_WriteRead (void* pTransmitData, size_t txSize, void* pReceiveData, siz
 {
     bool isRequestAccepted = false;
     uint32_t dummyData;
-    
-    
+
     /* Verify the request */
     if((((txSize > 0) && (pTransmitData != NULL)) || ((rxSize > 0) && (pReceiveData != NULL))) && (qspiObj.transferIsBusy == false))
     {
@@ -126,7 +124,7 @@ bool QSPI_WriteRead (void* pTransmitData, size_t txSize, void* pReceiveData, siz
                 qspiObj.dummySize--;
             }
         }
-         
+
         if ((int)rxSize > 0)
         {
             /* Enable receive interrupt to complete the transfer in ISR context */
@@ -151,6 +149,7 @@ bool QSPI_Read(void* pReceiveData, size_t rxSize)
 {
     return(QSPI_WriteRead(NULL, 0, pReceiveData, rxSize));
 }
+
 bool QSPI_TransferSetup (QSPI_TRANSFER_SETUP * setup, uint32_t spiSourceClock )
 {
     uint32_t scbr;
@@ -188,7 +187,7 @@ bool QSPI_TransferSetup (QSPI_TRANSFER_SETUP * setup, uint32_t spiSourceClock )
     {
         /* Wait for QSPI enable flag to set */
     }
-
+    
     return true;
 }
 
