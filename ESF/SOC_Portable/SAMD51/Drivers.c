@@ -369,16 +369,25 @@ void ReBuild_SPI_SetCfg_data ()
 
 void SPI_SetConfiguration(UINT8 *pu8DummyByteCnt)
 {
-    UINT8 u8Len = 0, u8txData = 0, u8txLen = 1;
+    UINT8 u8Len = 0, u8txData = 0, u8txLen = 1, u8Itr;
     
     u8Len = SETCFG_MAX_DATA_BYTES;
-    u8txData = CMD_SQI_SETCFG;
+    u8Len += 1;
+    //u8txData = CMD_SQI_SETCFG;
+    gau8DmaBuff[0]= CMD_SQI_SETCFG;
+    
+    for(u8Itr = 1;u8Itr <= 40;u8Itr += 1)
+    {
+        gau8DmaBuff[u8Itr] = pu8DummyByteCnt[u8Itr - 1];
+    }
 
     SPIChipSelectEnable();
     /* Send command */
-    DRV_SPITransfer(&u8txData, u8txLen);
+    //DRV_SPITransfer(&u8txData, u8txLen);
     /* Now write set cfg data */
-    DRV_SPITransfer(pu8DummyByteCnt, u8Len);
+    //DRV_SPITransfer(pu8DummyByteCnt, u8Len);
+    
+    DRV_SPITransfer(gau8DmaBuff, u8Len);
     
     SPIChipSelectDisable();
 }

@@ -60,7 +60,7 @@
 /* This is the driver instance object array. */
 static DRV_SPI_OBJ gDrvSPIObj[DRV_SPI_INSTANCES_NUMBER];
 /* Dummy data being transmitted by TX DMA */
-static CACHE_ALIGN uint8_t txDummyData[4];
+static CACHE_ALIGN uint8_t txDummyData[32];
 /*RX and TX transfer Handle*/
 DRV_SPI_TRANSFER_HANDLE transferTxHandle;
 DRV_SPI_TRANSFER_HANDLE transferRxHandle;
