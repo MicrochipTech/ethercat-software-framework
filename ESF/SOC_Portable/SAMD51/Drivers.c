@@ -1374,9 +1374,9 @@ void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {	
 	UINT32 u32ModLen = 0;
 #ifdef IS_SUPPORT_DUMMY_CYCLE
-    UINT8 u8dummy_clk_cnt = 0,u8txLen = 1;
-    UINT16 u16Itr = 0;
-    UINT32 u32txSize = 1;
+    UINT8 u8dummy_clk_cnt = 0,u8txLen = 1, u8dummy_clk_cnt_1 = 0;
+    UINT16 u16Itr = 0, u16dwctr = 0;
+    UINT32 u32txSize = 1, u32interdsize = 0;
 #endif
 
 	/* Core CSR and Process RAM accesses can have any alignment and length */
@@ -1432,12 +1432,34 @@ void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 #ifdef IS_SUPPORT_DUMMY_CYCLE 
 /* Get the Intra DWORD dummy clock count */     
 u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
-u32txSize = u32Length + ((u32Length-1) * u8dummy_clk_cnt);
+u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_WRITE_INTER_DWORD_OFFSET];
+if(u32Length % 4 == 0)
+    {
+        u32interdsize = (u32Length / 4) - 1;
+    }
+else
+    {
+        u32interdsize = (u32Length / 4);
+    }
+if(ESF_PDI_FREQUENCY < 30)
+{
+u32txSize = u32Length + ((u32Length-1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+}
+else
+{
+  u32txSize = u32Length + ((u32Length- u32interdsize) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);  
+}
 /* Add Intra DWORD dummy clocks, avoid for last byte */
  for(u16Itr = 0; u16Itr < u32txSize; u16Itr += (u8dummy_clk_cnt + 1))
     {
+        u16dwctr += 1;
         gau8DmaBuff[u16Itr] = *pu8Data;
 		pu8Data++;
+        if(u16dwctr % 4 == 0 && ESF_PDI_FREQUENCY > 30)
+        {
+            u16Itr += u8dummy_clk_cnt_1 + 1;
+            u16dwctr = 0;
+        }
     }
 
 	DRV_SPITransfer(gau8DmaBuff, u32txSize);
@@ -1466,9 +1488,10 @@ void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 {
 #ifdef IS_SUPPORT_DUMMY_CYCLE	
 	UINT8 u8dummy_clk_cnt = 0,u8txLen = 1;
-    UINT32 u32rxLen = 1;
+    UINT32 u32rxLen = 1, u32interdsize = 0;
 #endif
-    UINT16 u16Itr = 0;
+    UINT8 u8dummy_clk_cnt_1 = 0;
+    UINT16 u16Itr = 0, u16dwctr = 0;
 	UINT32 u32ModLen = 0;
 
 	/* Core CSR and Process RAM accesses can have any alignment and length */
@@ -1522,15 +1545,37 @@ void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 #ifdef IS_SUPPORT_DUMMY_CYCLE
  /* Get the Intra DWORD dummy clock count */
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
-    u32rxLen = u32Length + ((u32Length - 1) * u8dummy_clk_cnt);
-    /* Add Intra DWORD dummy clocks, avoid for last byte */
+    u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_READ_INTER_DWORD_OFFSET];
+    if(u32Length % 4 == 0)
+    {
+        u32interdsize = (u32Length / 4) - 1;
+    }
+    else
+    {
+        u32interdsize = (u32Length / 4);
+    }
+    if(ESF_PDI_FREQUENCY < 30)
+	{
+	u32rxLen = u32Length + ((u32Length - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+    }
+	else
+	{
+	u32rxLen = u32Length + ((u32Length - u32interdsize) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+	}
+	/* Add Intra DWORD dummy clocks, avoid for last byte */
     DRV_SPIReceive(gau8DmaBuff, u32rxLen);
    
 #endif
 	SPIChipSelectDisable();	
 	 for(u16Itr = 0; u16Itr < u32rxLen; u16Itr += (u8dummy_clk_cnt + 1))
     {
+        u16dwctr += 1;
         *pu8data++ = gau8DmaBuff[u16Itr];
+        if(u16dwctr % 4 == 0 && ESF_PDI_FREQUENCY > 30)
+        {
+            u16Itr += u8dummy_clk_cnt_1 + 1;
+            u16dwctr = 0;
+        }
     }
 }
 
@@ -1552,9 +1597,9 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	UINT8 u8StartAlignSize = 0; 
 #ifdef IS_SUPPORT_DUMMY_CYCLE
     UINT8 u8dummy_clk_cnt = 0, u8dummy_clk_cnt_1 = 0, u8txLen = 1;
-    UINT32 u32rxLen = 1;
+    UINT32 u32rxLen = 1, u32interdsize =0;
 #endif
-	UINT16 u16XfrLen = 0, u16Iter = 0;
+	UINT16 u16XfrLen = 0, u16Itr = 0, u16dwctr = 0;
 	UINT32 u32ModLen = 0;
 	/* Core CSR and Process RAM accesses can have any alignment and length */
 	if (u16Addr < 0x3000)
@@ -1639,15 +1684,37 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 #ifdef IS_SUPPORT_DUMMY_CYCLE
     /* Get the Intra DWORD dummy clock count */
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
-    u32rxLen = u32Length + ((u32Length - 1) * u8dummy_clk_cnt);
-    /* Add Intra DWORD dummy clocks, avoid for last byte */
-    DRV_SPIReceive(gau8DmaBuff,u32rxLen);
+    u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_FASTREAD_INTER_DWORD_OFFSET];
+    if(u32Length % 4 == 0)
+    {
+        u32interdsize = (u32Length / 4) - 1;
+    }
+    else
+    {
+        u32interdsize = (u32Length / 4);
+    }
+    if(ESF_PDI_FREQUENCY < 30)
+	{
+	u32rxLen = u32Length + ((u32Length - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+    }
+	else
+	{
+	u32rxLen = u32Length + ((u32Length - u32interdsize) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+	}
+	/* Add Intra DWORD dummy clocks, avoid for last byte */
+    DRV_SPIReceive(gau8DmaBuff, u32rxLen);
 #endif
 	SPIChipSelectDisable();
-    for(u16Iter = 0; u16Iter < u32rxLen; u16Iter += (u8dummy_clk_cnt + 1))
+    for(u16Itr = 0; u16Itr < u32rxLen; u16Itr += (u8dummy_clk_cnt + 1))
     {
-        *pu8Data++=gau8DmaBuff[u16Iter];
-    } 
+        u16dwctr += 1;
+        *pu8Data++ = gau8DmaBuff[u16Itr];
+        if(u16dwctr % 4 == 0 && ESF_PDI_FREQUENCY > 30)
+        {
+            u16Itr += u8dummy_clk_cnt_1 + 1;
+            u16dwctr = 0;
+        }
+    }
 }
 
 #endif
