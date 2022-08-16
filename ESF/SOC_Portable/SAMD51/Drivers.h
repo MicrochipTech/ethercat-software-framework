@@ -122,12 +122,12 @@ extern "C" {
 #endif
 #ifdef _IS_SPI_INDIRECT_MODE_ACCESS
 	/* Function Prototypes */
-	void    LAN9252SPI_Write(UINT16 u16Adddr, UINT8 *pu8Data, UINT8 u8Len);
-	void    LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT8 u8Len);
-	void    LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT8 u8Len);
-	void    LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT16 u16Len);
-	void    LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT16 u16Len);
-	void    LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT16 u16Len);
+	void    LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
+	void    LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
+	void    LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
+	void    LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length);
+	void    LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length);
+	void    LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length);
 #endif
 #ifdef _IS_SQI_DIRECT_MODE_ACCESS
 	/* Function Prototypes */
