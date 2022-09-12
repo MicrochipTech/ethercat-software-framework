@@ -1399,7 +1399,7 @@ void DRV_SPI_WriteTransferAdd (
 )
 {
     
-    DRV_SPI_WriteReadTransferAdd(handle, pTransmitData, txSize,NULL, 0, transferHandle);
+    DRV_SPI_WriteReadTransferAdd(handle, pTransmitData, txSize,pTransmitData, txSize, transferHandle);
 }
 
 void DRV_SPI_ReadTransferAdd (
@@ -1409,7 +1409,8 @@ void DRV_SPI_ReadTransferAdd (
     DRV_SPI_TRANSFER_HANDLE* const transferHandle
 )
 {
-    DRV_SPI_WriteReadTransferAdd(handle, NULL, 0, pReceiveData, rxSize, transferHandle);
+   // UINT8 txbuf[]={0x00,0,0,0xff};
+    DRV_SPI_WriteReadTransferAdd(handle, pReceiveData, rxSize, pReceiveData, rxSize, transferHandle);
 }
 
 DRV_SPI_TRANSFER_EVENT DRV_SPI_TransferStatusGet(const DRV_SPI_TRANSFER_HANDLE transferHandle)

@@ -43,6 +43,7 @@
 #define GPIO_T_PDI PORT_PIN_PA20
 #define GPIO_T_MCU PORT_PIN_PA21
 #define GPIO_T_MEA PORT_PIN_PA22
+#define GPIO_T_TST PORT_PIN_PA23
 
 #define SPI_READ_SETUP_BYTES 3
 #define SPI_WRITE_SETUP_BYTES 3
@@ -460,7 +461,7 @@ void PDI_Timer_Interrupt(void)
 *******************************************************************************/
 
 void ECAT_SysTick_Handler(uintptr_t context)
-{
+{   
     MCHP_ESF_CRITICAL_SECTION_ENTER();
 	ECAT_CheckTimer();
     MCHP_ESF_CRITICAL_SECTION_LEAVE();
@@ -1443,7 +1444,7 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	
 void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-	UINT8 u8BeckhoffCmd = ESC_WR, u8txLen = 0;
+    UINT8 u8BeckhoffCmd = ESC_WR, u8txLen = 0;
     UINT16 u16Itr = 0;
     UINT32 u32txSize = 0;
 	
@@ -1457,21 +1458,22 @@ void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	
     u32txSize = u32Length;
     u8txLen = SPI_WRITE_SETUP_BYTES;  
-    
+    MCHP_ESF_GPIO_SET(GPIO_T_MEA);	
 	gau8DmaBuff[0] = (u16Addr & 0x1FE0) >> 5;
     gau8DmaBuff[1] = ((u16Addr & 0x001F) << 3) | 0x06;
     gau8DmaBuff[2] = (HIBYTE(u16Addr) & 0xE0) | (u8BeckhoffCmd << 2);
     
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
-    
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+    //memset(gau8DmaBuff,0, u32Length);
     for(u16Itr =0 ; u16Itr < u32Length; u16Itr += 1)
     {
         gau8DmaBuff[u16Itr] = *pu8Data;
 		pu8Data++;
     }
-   
+   MCHP_ESF_GPIO_SET(GPIO_T_MEA);
     DRV_SPITransfer(gau8DmaBuff, u32txSize);
-    
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 	SPIChipSelectDisable();
 }
 
@@ -1491,7 +1493,7 @@ void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-	UINT8 u8BeckhoffCmd = ESC_RD_WAIT_STATE, u8txLen = 1;
+    UINT8 u8BeckhoffCmd = ESC_RD_WAIT_STATE;
     
 	
 	/* Non Ether CAT Core CSRs are always DWORD aligned and should be accessed by DWORD length */
@@ -1501,21 +1503,26 @@ void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	}
 	
 	SPIChipSelectEnable();
-
+    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
 	/* AL Event register bits will be outputted on SPI line - 0x220, 0x221 and 0x222 */
-
 	gau8DmaBuff[0] = (u16Addr & 0x1FE0) >> 5;
 	gau8DmaBuff[1] = ((u16Addr & 0x001F) << 3) | 0x06; 
     gau8DmaBuff[2] = (HIBYTE(u16Addr) & 0xE0) | (u8BeckhoffCmd << 2);
-    DRV_SPITransfer(gau8DmaBuff, SPI_READ_SETUP_BYTES);
+    
+    //DRV_SPITransfer(gau8DmaBuff, SPI_READ_SETUP_BYTES);
     /* Master can either wait for 240ns time or use Wait state byte
      * after last byte of addr/cmd or 
      * before initiating the clock for data phase. */
-    memset(gau8DmaBuff, 0 ,sizeof(int)*SPI_READ_SETUP_BYTES);
-    gau8DmaBuff[0] = WAIT_STATE_BYTE;
-	DRV_SPITransfer(gau8DmaBuff, u8txLen);
-    DRV_SPIReceive(pu8Data, u32Length);
-//    memcpy(&pu8Data, gau8DmaBuff, u32Length);
+    //memset(gau8DmaBuff, 0 ,sizeof(int)*SPI_READ_SETUP_BYTES);
+    memset(&gau8DmaBuff[4],0, u32Length);
+    gau8DmaBuff[3] = WAIT_STATE_BYTE;
+    gau8DmaBuff[3+u32Length] = READ_TERMINATION_BYTE;
+	DRV_SPITransfer(gau8DmaBuff, SPI_FASTREAD_SETUP_BYTES - 1);
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+    DRV_SPIReceive(&gau8DmaBuff[4], u32Length);
+    memcpy(pu8Data, &gau8DmaBuff[4],u32Length);
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 	SPIChipSelectDisable();
 }
 #endif
@@ -1944,6 +1951,7 @@ void ESF_PDI_Init()
     MCHP_ESF_GPIO_OUTPUT_EN(GPIO_T_PDI);
     MCHP_ESF_GPIO_OUTPUT_EN(GPIO_T_MCU);
     MCHP_ESF_GPIO_OUTPUT_EN(GPIO_T_MEA);
+    MCHP_ESF_GPIO_OUTPUT_EN(GPIO_T_TST);
 #endif
 #if (ESF_PDI == SQI)
     

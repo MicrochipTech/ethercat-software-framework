@@ -134,14 +134,28 @@ UINT8 LAN925x_Init(void)
 	u32data = 0x00000000;
 	MCHP_ESF_PDI_WRITE(LAN925x_CSR_INT_EN, (UINT8*)&u32data, DWORD_LENGTH);
 
-	do {
-		u32intMask = 0x93;
+   /* UINT16 k = 0;
+	for(UINT16 i=0;i<512;i++)
+    {
+        testBuff[i]= k + 1;
+        k += 1;
+    }
+    MCHP_ESF_PDI_WRITE(0x2008,testBuff,512);
+    MCHP_ESF_PDI_READ(0x2008,readBuff,512);
+        for(UINT8 i=0;i<8;i++)
+    {
+        if(testBuff[i]!=readBuff[i])
+        {
+            break;
+        }
+    }*/
+    do {
+        u32intMask = 0x93;;
 		HW_EscWriteDWord(u32intMask, ESC_AL_EVENTMASK_OFFSET);
 
-		u32intMask = 0;
+		u32intMask = 0x00;
 		HW_EscReadDWord(u32intMask, ESC_AL_EVENTMASK_OFFSET);
 	} while (u32intMask != 0x93);
-
 	/* Read 0x150 register to check if AL Event output is enabled */
 	u32intMask = 0;
 	HW_EscReadDWord(u32intMask, ESC_PDI_CONFIG_OFFSET);
@@ -366,7 +380,8 @@ UINT16 HW_GetALEventRegister(void)
 	  
 	  PDI_Restore_Global_Interrupt();
 
-	  return gEscALEvent.Word;
+	  //return gEscALEvent.Word;
+      return u32Val.w[0];
 	  
 #elif _IS_SPI_DIRECT_MODE_ACCESS
 
@@ -475,7 +490,8 @@ UINT16 HW_GetALEventRegister_Isr(void)
 
 	  MCHP_ESF_PDI_READ(ESC_AL_EVENT_OFFSET, (UINT8*)&u32Val.Val, DWORD_LENGTH);
 
-	  return gEscALEvent.Word;
+	  //return gEscALEvent.Word;
+      return u32Val.w[0];
 	  
 #elif _IS_SPI_DIRECT_MODE_ACCESS
 	  UINT32_VAL u32Val;
