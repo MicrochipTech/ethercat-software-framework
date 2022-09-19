@@ -150,12 +150,13 @@ UINT8 LAN925x_Init(void)
         }
     }*/
     do {
-        u32intMask = 0x93;;
+        u32intMask = 0x93;
 		HW_EscWriteDWord(u32intMask, ESC_AL_EVENTMASK_OFFSET);
 
-		u32intMask = 0x00;
+		u32intMask = 0;
 		HW_EscReadDWord(u32intMask, ESC_AL_EVENTMASK_OFFSET);
 	} while (u32intMask != 0x93);
+
 	/* Read 0x150 register to check if AL Event output is enabled */
 	u32intMask = 0;
 	HW_EscReadDWord(u32intMask, ESC_PDI_CONFIG_OFFSET);
@@ -178,25 +179,10 @@ UINT8 LAN925x_Init(void)
 
 #elif _IS_SPI_DIRECT_MODE_ACCESS
 
-	do
+	 do
 	{
         MCHP_ESF_PDI_READ(LAN925x_BYTE_ORDER_REG, (UINT8*)&u32data, DWORD_LENGTH);
 	} while (0x87654321 != u32data);
-    UINT8 k = 4;
-	for(UINT8 i=0;i<4;i++)
-    {
-        testBuff[i]= k + 1;
-        k += 1;
-    }
-    MCHP_ESF_PDI_WRITE(0x2008,testBuff,4);
-    MCHP_ESF_PDI_FASTREAD(0x2008,readBuff,4);
-    for(UINT8 i=0;i<4;i++)
-    {
-        if(testBuff[i]!=readBuff[i])
-        {
-            break;
-        }
-    }
     
     // Disable interrupt Interrupt Enable register -->
 	// Write 0x5c - 0x00000001

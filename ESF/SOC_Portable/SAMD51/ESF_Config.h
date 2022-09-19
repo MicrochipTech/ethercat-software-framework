@@ -50,8 +50,11 @@
  * Configuration parameter for frequency selection
  * Frequency value should be given in MHz.
  */
-#define ESF_PDI_FREQUENCY 40    
+#define ESF_PDI_FREQUENCY 60    
 #define IS_SUPPORT_DUMMY_CYCLE
+//#define INCLUDE_DUMMY
+/* DMA Enable by default */
+#define ESF_SPI_DMA_EN
 
 /*
  * LAN925x REV C board uses clock from LAN9253,
