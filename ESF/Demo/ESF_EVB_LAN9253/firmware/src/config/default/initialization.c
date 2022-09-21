@@ -67,6 +67,7 @@ DRV_HANDLE handle;
 // *****************************************************************************
 // *****************************************************************************
 // <editor-fold defaultstate="collapsed" desc="DRV_SPI Instance 0 Initialization Data">
+#if (ESF_PDI == SPI)
 #ifdef ESF_SPI_DMA_EN
 /* SPI Client Objects Pool */
 static DRV_SPI_CLIENT_OBJ drvSPI0ClientObjPool[DRV_SPI_CLIENTS_NUMBER_IDX0];
@@ -146,6 +147,7 @@ const DRV_SPI_INIT drvSPI0InitData =
     /* SPI interrupt sources (SPI peripheral and DMA) */
     .interruptSources = &drvSPI0InterruptSources,
 };
+#endif
 #endif
 // </editor-fold>
 

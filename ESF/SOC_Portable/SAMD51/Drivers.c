@@ -419,10 +419,16 @@ void ReBuild_SPI_SetCfg_data ()
     gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET] = GetDummyBytesRequired (SINGLE_SPI, IAT_BYWR, 8, u16SPIClkPeriod);
     gau8DummyCntArr[SPI_WRITE_INTER_DWORD_OFFSET] = GetDummyBytesRequired (SINGLE_SPI, IAT_DWDWR, 32, u16SPIClkPeriod);
    
+    //https://jira.microchip.com/browse/UNG_JUTLAND2-334
+    //Fix is added by making the Intra and Inter Dummy Bytes to 0
 #ifndef INCLUDE_DUMMY
     gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET] = 0;
     gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET] = 0;
     gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET] = 0;
+    
+    gau8DummyCntArr[SPI_READ_INTER_DWORD_OFFSET] = 0;
+    gau8DummyCntArr[SPI_FASTREAD_INTER_DWORD_OFFSET] = 0;
+    gau8DummyCntArr[SPI_WRITE_INTER_DWORD_OFFSET] = 0;
 #endif
 }
 
@@ -654,6 +660,7 @@ void LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 #endif
     UINT8 u8dummy_clk_cnt = 0,u8txLen = 1;
     UINT32 u32txSize = 1;
+    
     SPIChipSelectEnable();
     
     /* Initial Dummy cycle added by dummy write */
@@ -669,6 +676,7 @@ void LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     /* Get the Intra DWORD dummy clock count */     
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
     u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_WRITE_INTER_DWORD_OFFSET];
+    
     if(u32Length % 4 == 0)
     {
         u32interdsize = (u32Length / 4) - 1;
@@ -677,15 +685,17 @@ void LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     {
         u32interdsize = (u32Length / 4);
     }
+    
+    /* No Inter Dummy Bytes needed for Frequency < 30MHz*/
     if(ESF_PDI_FREQUENCY < 30)
     {
-    u32txSize = u32Length + ((u32Length-1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+        u32txSize = u32Length + ((u32Length-1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
     }
     else
     {
-    u32txSize = u32Length + ((u32Length- u32interdsize - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);  
+        u32txSize = u32Length + ((u32Length- u32interdsize - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);  
     }
-    /* Add Intra DWORD dummy clocks, avoid for last byte */
+    /* Add Intra DWORD and Inter DWORD dummy clocks, avoid for last byte */
     for(u16Itr = 0; u16Itr < u32txSize;)
     {
         u16dwctr += 1;
@@ -698,15 +708,15 @@ void LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
         }
         else
         {
-            u16Itr += (u8dummy_clk_cnt + 1);
+            u16Itr += u8dummy_clk_cnt + 1;
         }
         
     }
     DRV_SPITransfer(gau8DmaBuff, u32txSize);
 #else
-   u32txSize = u32Length;
-
-	DRV_SPITransfer(pu8Data, u32txSize);
+    u32txSize = u32Length;
+    /* No Dummy Bytes Included*/
+    DRV_SPITransfer(pu8Data, u32txSize);
 #endif  
     SPIChipSelectDisable();
 #else
@@ -714,7 +724,7 @@ void LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     UINT8 u8txData = 0, u8rxData = 0;
     UINT8 u8txLen = 1, u8rxLen = 1;
 
-     SPIChipSelectEnable();
+    SPIChipSelectEnable();
     
     while(QSPI_IsBusy());
 	
@@ -812,8 +822,10 @@ void LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 #endif 
     UINT8 u8dummy_clk_cnt = 0, u8txLen = 1;
     UINT32 u32rxLen = 1;
+    
     SPIChipSelectEnable();
     
+    /* Initial Dummy cycle added by dummy read */
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
     u8txLen = SPI_READ_SETUP_BYTES + u8dummy_clk_cnt;
     
@@ -826,6 +838,7 @@ void LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     /* Get the Intra DWORD dummy clock count */
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
     u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_READ_INTER_DWORD_OFFSET];
+    
     if(u32Length % 4 == 0)
     {
         u32interdsize = (u32Length / 4) - 1;
@@ -834,15 +847,18 @@ void LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     {
         u32interdsize = (u32Length / 4);
     }
+    
+    /* No Inter Dummy Bytes needed for Frequency < 30MHz*/
     if(ESF_PDI_FREQUENCY < 30)
 	{
-	u32rxLen = u32Length + ((u32Length - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+        u32rxLen = u32Length + ((u32Length - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
     }
 	else
 	{
-	u32rxLen = u32Length + ((u32Length - u32interdsize - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+        u32rxLen = u32Length + ((u32Length - u32interdsize - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
 	}
-	/* Add Intra DWORD dummy clocks, avoid for last byte */
+	
+    /* Add Intra DWORD and Inter DWORD dummy clocks, avoid for last byte */
     DRV_SPIReceive(gau8DmaBuff, u32rxLen);
     
      for(u16Itr = 0; u16Itr < u32rxLen; )
@@ -856,12 +872,12 @@ void LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
         }
         else
         {
-            u16Itr += (u8dummy_clk_cnt + 1);
+            u16Itr += u8dummy_clk_cnt + 1;
         }
     }
 #else
     u32rxLen = u32Length;
-    /* Add Intra DWORD dummy clocks, avoid for last byte */
+    /* No Dummy Bytes Included */
     DRV_SPIReceive(pu8Data, u32rxLen);
 #endif
     SPIChipSelectDisable();	
@@ -975,8 +991,10 @@ void LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 #endif
     UINT8 u8dummy_clk_cnt = 0,u8txLen = 1;
     UINT32 u32rxLen = 1;
-	SPIChipSelectEnable();
-
+	
+    SPIChipSelectEnable();
+     
+    /* Initial Dummy cycle added by dummy fastread */
 	u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
     u8txLen = SPI_READ_SETUP_BYTES + u8dummy_clk_cnt + 1;
     
@@ -984,11 +1002,13 @@ void LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	gau8DmaBuff[1] = (UINT8)(u16Addr >> 8);
     gau8DmaBuff[2] = (UINT8)u16Addr;
     gau8DmaBuff[3] = u32Length;
+    
     DRV_SPITransfer(gau8DmaBuff, u8txLen);  
 #ifdef INCLUDE_DUMMY
 	/* Get the Intra DWORD dummy clock count */
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
     u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_FASTREAD_INTER_DWORD_OFFSET];
+    
     if(u32Length % 4 == 0)
     {
         u32interdsize = (u32Length / 4) - 1;
@@ -997,15 +1017,17 @@ void LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     {
         u32interdsize = (u32Length / 4);
     }
+    
+    /* No Inter Dummy Bytes needed for Frequency < 30MHz*/
     if(ESF_PDI_FREQUENCY < 30)
 	{
-	u32rxLen = u32Length + ((u32Length - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+        u32rxLen = u32Length + ((u32Length - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
     }
 	else
 	{
-	u32rxLen = u32Length + ((u32Length - u32interdsize - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+        u32rxLen = u32Length + ((u32Length - u32interdsize - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
 	}
-	/* Add Intra DWORD dummy clocks, avoid for last byte */
+	/* Add Intra DWORD and Inter DWORD dummy clocks, avoid for last byte */
     DRV_SPIReceive(gau8DmaBuff, u32rxLen);		
     for(u16Itr = 0; u16Itr < u32rxLen; )
     {
@@ -1018,11 +1040,12 @@ void LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
         }
         else
         {
-            u16Itr += (u8dummy_clk_cnt + 1);
+            u16Itr += u8dummy_clk_cnt + 1;
         }
     }
 #else
     u32rxLen = u32Length;
+    /* No Dummy Bytes Included*/
     DRV_SPIReceive(pu8Data,u32rxLen);
 #endif
     SPIChipSelectDisable();
@@ -1180,6 +1203,7 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
  /* Get the Intra DWORD dummy clock count */
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
     u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_READ_INTER_DWORD_OFFSET];
+    
     if(u32Length % 4 == 0)
     {
         u32interdsize = (u32Length / 4) - 1;
@@ -1188,15 +1212,17 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     {
         u32interdsize = (u32Length / 4);
     }
+    
+    /* No Inter Dummy Bytes needed for Frequency < 30MHz*/
     if(ESF_PDI_FREQUENCY < 30)
 	{
-	u32rxLen = u32Length + ((u32Length - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+        u32rxLen = u32Length + ((u32Length - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
     }
 	else
 	{
-	u32rxLen = u32Length + ((u32Length - u32interdsize - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+        u32rxLen = u32Length + ((u32Length - u32interdsize - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
 	}
-	/* Add Intra DWORD dummy clocks, avoid for last byte */
+	/* Add Intra DWORD and Inter DWORD dummy clocks, avoid for last byte */
     DRV_SPIReceive(gau8DmaBuff, u32rxLen);
     
     for(u16Itr = 0; u16Itr < u32rxLen;)
@@ -1210,12 +1236,12 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
         }
         else
         {
-            u16Itr += (u8dummy_clk_cnt + 1);
+            u16Itr += u8dummy_clk_cnt + 1;
         }
     }
 #else 
     u32rxLen = u32Length;
-    /* Add Intra DWORD dummy clocks, avoid for last byte */
+    /* No Dummy Bytes Included */
     DRV_SPIReceive(pu8Data,u32rxLen);
 #endif
 	/* Get the Intra DWORD dummy clock count */
@@ -1403,9 +1429,11 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 	UINT16 u16XfrLen = 0, u16TotalLen = 0;
     UINT32_VAL u32Val;
     UINT32 u32rxLen = 1;
+    
     u8StartAlignSize = (u16Addr & 0x3);
 	u8EndAlignSize = (u32Length & 0x3) + u8StartAlignSize;
-	if (u8EndAlignSize & 0x3){
+	
+    if (u8EndAlignSize & 0x3){
 		u8EndAlignSize = (((u8EndAlignSize + 4) & 0xC) - u8EndAlignSize);
 	}
 	
@@ -1436,11 +1464,14 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 
 	/* Read SPI FIFO */
 	SPIChipSelectEnable();
-
+    
+    /* Initial Dummy cycle added by dummy fastread */
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
     u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+    
     u8txLen = SPI_FASTREAD_SETUP_BYTES + u8dummy_clk_cnt + u8StartAlignSize + (u8StartAlignSize * u8dummy_clk_cnt_1);
-	gau8DmaBuff[0] = CMD_FAST_READ;
+	
+    gau8DmaBuff[0] = CMD_FAST_READ;
 	gau8DmaBuff[1] = (UINT8)0x0;
     gau8DmaBuff[2] = (UINT8)0x04;
 	/* Send Transfer length */
@@ -1460,6 +1491,7 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     /* Get the Intra DWORD dummy clock count */
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
     u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_FASTREAD_INTER_DWORD_OFFSET];
+    
     if(u32Length % 4 == 0)
     {
         u32interdsize = (u32Length / 4) - 1;
@@ -1468,6 +1500,8 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     {
         u32interdsize = (u32Length / 4);
     }
+    
+    /* No Inter Dummy Bytes needed for Frequency < 30MHz*/
     if(ESF_PDI_FREQUENCY < 30)
 	{
 	u32rxLen = u32Length + ((u32Length - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
@@ -1489,11 +1523,12 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
         }
         else
         {
-            u16Itr += (u8dummy_clk_cnt + 1);
+            u16Itr += u8dummy_clk_cnt + 1;
         }
     }
 #else
     u32rxLen = u32Length;
+    /* No Dummy Bytes Included*/
     DRV_SPIReceive(pu8Data,u32rxLen);
 #endif
     /* Get the Intra DWORD dummy clock count */
@@ -1727,7 +1762,7 @@ void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 	MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_WR_CMD_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
 	
 	u8StartAlignSize = (u16Addr & 0x3);
-//	u8EndAlignSize = (u16Len & 3) + u8StartAlignSize;
+    
 	// Changed for a bug identified with HBI - Demux BSP
 	u8EndAlignSize = (u32Length + u8StartAlignSize) & 0x3;
 	if (u8EndAlignSize & 0x3){
@@ -1737,6 +1772,7 @@ void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 	/* Writing to FIFO */
 	SPIChipSelectEnable();
 
+    /* Initial Dummy cycle added by dummy write */
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
     u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
     u8txLen = SPI_WRITE_SETUP_BYTES + u8dummy_clk_cnt + u8StartAlignSize + (u8StartAlignSize * u8dummy_clk_cnt_1);
@@ -1750,22 +1786,24 @@ void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 /* Get the Intra DWORD dummy clock count */     
 u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
 u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_WRITE_INTER_DWORD_OFFSET];
-if(u32Length % 4 == 0)
+    if(u32Length % 4 == 0)
     {
         u32interdsize = (u32Length / 4) - 1;
     }
-else
+    else
     {
         u32interdsize = (u32Length / 4);
     }
-if(ESF_PDI_FREQUENCY < 30)
-{
-u32txSize = u32Length + ((u32Length-1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
-}
-else
-{
-  u32txSize = u32Length + ((u32Length- u32interdsize-1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);  
-}
+
+    /* No Inter Dummy Bytes needed for Frequency < 30MHz*/
+    if(ESF_PDI_FREQUENCY < 30)
+    {
+        u32txSize = u32Length + ((u32Length-1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+    }
+    else
+    {
+        u32txSize = u32Length + ((u32Length- u32interdsize-1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);  
+    }
 /* Add Intra DWORD dummy clocks, avoid for last byte */
  for(u16Itr = 0; u16Itr < u32txSize;)
     {
@@ -1786,7 +1824,7 @@ else
 	DRV_SPITransfer(gau8DmaBuff, u32txSize);
 #else
     u32txSize = u32Length;
-
+    /* No Dummy Bytes Included*/
 	DRV_SPITransfer(pu8Data, u32txSize);
 #endif
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
@@ -2011,6 +2049,7 @@ void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 #ifdef IS_SUPPORT_DUMMY_CYCLE   
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
+    
     u8txLen = SPI_WRITE_SETUP_BYTES + u8dummy_clk_cnt;
     
     gau8DmaBuff[0] = CMD_SERIAL_WRITE;
@@ -2026,23 +2065,26 @@ void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 /* Get the Intra DWORD dummy clock count */     
 u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
 u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_WRITE_INTER_DWORD_OFFSET];
-if(u32Length % 4 == 0)
+
+    if(u32Length % 4 == 0)
     {
         u32interdsize = (u32Length / 4) - 1;
     }
-else
+    else
     {
         u32interdsize = (u32Length / 4);
     }
-if(ESF_PDI_FREQUENCY < 30)
-{
-u32txSize = u32Length + ((u32Length-1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
-}
-else
-{
-  u32txSize = u32Length + ((u32Length- u32interdsize - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);  
-}
-/* Add Intra DWORD dummy clocks, avoid for last byte */
+
+    /* No Inter Dummy Bytes needed for Frequency < 30MHz*/
+    if(ESF_PDI_FREQUENCY < 30)
+    {
+        u32txSize = u32Length + ((u32Length-1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+    }
+    else
+    {
+        u32txSize = u32Length + ((u32Length- u32interdsize - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);  
+    }
+/* Add Intra DWORD and Inter DWORD dummy clocks, avoid for last byte */
  for(u16Itr = 0; u16Itr < u32txSize;)
     {
         u16dwctr += 1;
@@ -2055,7 +2097,7 @@ else
         }
         else
         {
-            u16Itr += (u8dummy_clk_cnt + 1);
+            u16Itr += u8dummy_clk_cnt + 1;
         }
     }
 
@@ -2064,8 +2106,7 @@ else
     
 #else
     u32txSize = u32Length;
-/* Add Intra DWORD dummy clocks, avoid for last byte */
-
+/* No Dummy Bytes Included*/
 	DRV_SPITransfer(pu8Data, u32txSize);
     
 #endif
@@ -2236,6 +2277,7 @@ void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 
 #ifdef IS_SUPPORT_DUMMY_CYCLE 
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
+    
     u8txLen = SPI_READ_SETUP_BYTES + u8dummy_clk_cnt;
     
     gau8DmaBuff[0] = CMD_SERIAL_READ;
@@ -2253,6 +2295,7 @@ void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
  /* Get the Intra DWORD dummy clock count */
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
     u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_READ_INTER_DWORD_OFFSET];
+    
     if(u32Length % 4 == 0)
     {
         u32interdsize = (u32Length / 4) - 1;
@@ -2261,15 +2304,17 @@ void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
     {
         u32interdsize = (u32Length / 4);
     }
+    
+    /* No Inter Dummy Bytes needed for Frequency < 30MHz*/
     if(ESF_PDI_FREQUENCY < 30)
 	{
-	u32rxLen = u32Length + ((u32Length - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+        u32rxLen = u32Length + ((u32Length - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
     }
 	else
 	{
-	u32rxLen = u32Length + ((u32Length - u32interdsize - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+        u32rxLen = u32Length + ((u32Length - u32interdsize - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
 	}
-	/* Add Intra DWORD dummy clocks, avoid for last byte */
+	/* Add Intra DWORD and Inter DWORD dummy clocks, avoid for last byte */
     DRV_SPIReceive(gau8DmaBuff, u32rxLen);
    
 	 for(u16Itr = 0; u16Itr < u32rxLen;)
@@ -2283,13 +2328,13 @@ void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
         }
         else
         {
-            u16Itr += (u8dummy_clk_cnt + 1);
+            u16Itr += u8dummy_clk_cnt + 1;
         }
     }
 
 #else 
     u32rxLen = u32Length ;
-    /* Add Intra DWORD dummy clocks, avoid for last byte */
+    /* No Dummy Bytes Included */
     DRV_SPIReceive(pu8data, u32rxLen);
    
 #endif
@@ -2477,6 +2522,7 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 #ifdef IS_SUPPORT_DUMMY_CYCLE 
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
     u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+    
     u8txLen = SPI_FASTREAD_SETUP_BYTES + u8dummy_clk_cnt + u8StartAlignSize + (u8StartAlignSize * u8dummy_clk_cnt_1);
     
     gau8DmaBuff[0] = CMD_FAST_READ;
@@ -2507,6 +2553,7 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     /* Get the Intra DWORD dummy clock count */
     u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
     u8dummy_clk_cnt_1 = gau8DummyCntArr[SPI_FASTREAD_INTER_DWORD_OFFSET];
+    
     if(u32Length % 4 == 0)
     {
         u32interdsize = (u32Length / 4) - 1;
@@ -2515,16 +2562,19 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     {
         u32interdsize = (u32Length / 4);
     }
+    
+    /* No Inter Dummy Bytes needed for Frequency < 30MHz*/
     if(ESF_PDI_FREQUENCY < 30)
 	{
-	u32rxLen = u32Length + ((u32Length - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+        u32rxLen = u32Length + ((u32Length - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
     }
 	else
 	{
-	u32rxLen = u32Length + ((u32Length - u32interdsize - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
+        u32rxLen = u32Length + ((u32Length - u32interdsize - 1) * u8dummy_clk_cnt) + (u32interdsize * u8dummy_clk_cnt_1);
 	}
-	/* Add Intra DWORD dummy clocks, avoid for last byte */
+	/* Add Intra DWORD and Inter DWORD dummy clocks, avoid for last byte */
     DRV_SPIReceive(gau8DmaBuff, u32rxLen);
+    
     for(u16Itr = 0; u16Itr < u32rxLen;)
     {
         u16dwctr += 1;
@@ -2536,13 +2586,13 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
         }
         else
         {
-            u16Itr += (u8dummy_clk_cnt + 1);
+            u16Itr += u8dummy_clk_cnt + 1;
         }
     }
 
 #else 
     u32rxLen = u32Length ;
-    /* Add Intra DWORD dummy clocks, avoid for last byte */
+    /* No Dummy Bytes Included */
     DRV_SPIReceive(pu8Data,u32rxLen);
 #endif
 	SPIChipSelectDisable();
@@ -2600,8 +2650,8 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 		u16XfrLen = (u32Length & 0x7F) | 0x80;
 		u16XfrLen |= ((u32Length & 0x3F80) << 1);
 	}
-    //MCHP_ESF_GPIO_SET(GPIO_T_MEA);
 	SPIChipSelectEnable();
+    
 	MCHP_ESF_GPIO_SET(GPIO_T_MEA);
     u8txData = CMD_FAST_READ;
     QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
@@ -2634,7 +2684,6 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
         
 	}
     MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
-    //MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 #ifdef IS_SUPPORT_DUMMY_CYCLE	
     /* Initial Dummy cycle added by dummy read */
 	u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
@@ -2739,22 +2788,21 @@ void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	
     u32txSize = u32Length;
     u8txLen = SPI_WRITE_SETUP_BYTES;  
-    MCHP_ESF_GPIO_SET(GPIO_T_MEA);	
+	
 	gau8DmaBuff[0] = (u16Addr & 0x1FE0) >> 5;
     gau8DmaBuff[1] = ((u16Addr & 0x001F) << 3) | 0x06;
     gau8DmaBuff[2] = (HIBYTE(u16Addr) & 0xE0) | (u8BeckhoffCmd << 2);
     
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
-    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
-    //memset(gau8DmaBuff,0, u32Length);
+    
     for(u16Itr =0 ; u16Itr < u32Length; u16Itr += 1)
     {
         gau8DmaBuff[u16Itr] = *pu8Data;
 		pu8Data++;
     }
-   MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+    
     DRV_SPITransfer(gau8DmaBuff, u32txSize);
-    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+    
 	SPIChipSelectDisable();
 #else
     UINT8 u8BeckhoffCmd = ESC_WR;
@@ -2836,8 +2884,7 @@ void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
 #ifdef ESF_SPI_DMA_EN
     UINT8 u8BeckhoffCmd = ESC_RD_WAIT_STATE;
-    
-	
+    	
 	/* Non Ether CAT Core CSRs are always DWORD aligned and should be accessed by DWORD length */
 	if (u16Addr >= 0x3000)
 	{
@@ -2845,26 +2892,27 @@ void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	}
 	
 	SPIChipSelectEnable();
-    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+    
 	/* AL Event register bits will be outputted on SPI line - 0x220, 0x221 and 0x222 */
 	gau8DmaBuff[0] = (u16Addr & 0x1FE0) >> 5;
 	gau8DmaBuff[1] = ((u16Addr & 0x001F) << 3) | 0x06; 
     gau8DmaBuff[2] = (HIBYTE(u16Addr) & 0xE0) | (u8BeckhoffCmd << 2);
     
-    //DRV_SPITransfer(gau8DmaBuff, SPI_READ_SETUP_BYTES);
     /* Master can either wait for 240ns time or use Wait state byte
      * after last byte of addr/cmd or 
      * before initiating the clock for data phase. */
-    //memset(gau8DmaBuff, 0 ,sizeof(int)*SPI_READ_SETUP_BYTES);
-    memset(&gau8DmaBuff[4],0, u32Length);
+    
     gau8DmaBuff[3] = WAIT_STATE_BYTE;
+    
     gau8DmaBuff[3+u32Length] = READ_TERMINATION_BYTE;
+    memset(&gau8DmaBuff[4],0, u32Length);
+    
 	DRV_SPITransfer(gau8DmaBuff, SPI_FASTREAD_SETUP_BYTES - 1);
-    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
-    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+    
     DRV_SPIReceive(&gau8DmaBuff[4], u32Length);
+    
     memcpy(pu8Data, &gau8DmaBuff[4],u32Length);
-    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+
 	SPIChipSelectDisable();
 #else
     UINT8 u8BeckhoffCmd = ESC_RD_WAIT_STATE;

@@ -48,8 +48,6 @@
 
 BOOL gbALEvtOpEnabled = FALSE;
 UALEVENT         gEscALEvent;
-UINT8 testBuff[1024];
-UINT8 readBuff[1024];
 #if (ESF_PDI == SPI) || (ESF_PDI == SQI)
 UINT8 gau8DummyCntArr[SETCFG_MAX_DATA_BYTES] = {0,0,0,0,0,0,1,0,0,2,0,0,1,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,1,0,0};
 #endif
@@ -134,21 +132,6 @@ UINT8 LAN925x_Init(void)
 	u32data = 0x00000000;
 	MCHP_ESF_PDI_WRITE(LAN925x_CSR_INT_EN, (UINT8*)&u32data, DWORD_LENGTH);
 
-   /* UINT16 k = 0;
-	for(UINT16 i=0;i<512;i++)
-    {
-        testBuff[i]= k + 1;
-        k += 1;
-    }
-    MCHP_ESF_PDI_WRITE(0x2008,testBuff,512);
-    MCHP_ESF_PDI_READ(0x2008,readBuff,512);
-        for(UINT8 i=0;i<8;i++)
-    {
-        if(testBuff[i]!=readBuff[i])
-        {
-            break;
-        }
-    }*/
     do {
         u32intMask = 0x93;
 		HW_EscWriteDWord(u32intMask, ESC_AL_EVENTMASK_OFFSET);
@@ -601,7 +584,7 @@ void HW_EscRead(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
 
             u32Val.v[0] = (UINT8)u16Address;
             u32Val.v[1] = (UINT8)(u16Address >> 8);
-            u32Val.v[2] = u16ValidDataLen;
+            u32Val.v[2] = u8ValidDataLen;
             u32Val.v[3] = 0xC0;
 
             PDI_Disable_Global_Interrupt();
@@ -827,98 +810,64 @@ void HW_EscRead(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
 void EscRead(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
 {
 #if (ESF_PDI == SPI)
+    //https://jira.microchip.com/browse/UNG_JUTLAND2-329
+    // Fix is added by reading entire IRQ API length instead of DWORD 
     #if _IS_SPI_INDIRECT_MODE_ACCESS
         UINT32_VAL u32Val;
-        UINT8 u8ValidDataLen = 0, u8Itr = 0;
+        UINT16 u16ValidDataLen = 0, u16Itr = 0;
         UINT8 *pu8Data = (UINT8 *)pmData;
 
         while (u16Len > 0) {
-            u8ValidDataLen = (u16Len > 4) ? 4 : u16Len;
-
-            if (u16Address & 0x1) {
-                u8ValidDataLen = 1;
-            }
-            else if (u16Address & 0x2)
-            {
-                u8ValidDataLen = (u8ValidDataLen >= 2 ) ? 2 : 1;
-            }
-            else if (u8ValidDataLen < 4)
-            {
-                u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
-            }
-
+            u16ValidDataLen = u16Len;
+            
             u32Val.v[0] = (UINT8)u16Address;
             u32Val.v[1] = (UINT8)(u16Address >> 8);
-            u32Val.v[2] = u8ValidDataLen;
+            u32Val.v[2] = u16ValidDataLen;
             u32Val.v[3] = ESC_READ_BYTE;
 
-            MCHP_ESF_PDI_WRITE(ESC_CSR_CMD_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
-            MCHP_ESF_PDI_FASTREAD(ESC_CSR_DATA_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+            MCHP_ESF_PDI_WRITE(ESC_CSR_CMD_REG, (UINT8*)&u32Val.Val, u16ValidDataLen);
+            MCHP_ESF_PDI_FASTREAD(ESC_CSR_DATA_REG, (UINT8*)&u32Val.Val, u16ValidDataLen);
 
-            for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
-            *pu8Data++ = u32Val.v[u8Itr];
+            for (u16Itr = 0; u16Itr < u16ValidDataLen; u16Itr++)
+            *pu8Data++ = u32Val.v[u16Itr];
 
-            u16Address += u8ValidDataLen;
-            u16Len -= u8ValidDataLen;
+            u16Address += u16ValidDataLen;
+            u16Len -= u16ValidDataLen;
         }
     #elif _IS_SPI_BECKHOFF_MODE_ACCESS
 
         UINT32_VAL u32Val;
-        UINT8 u8ValidDataLen = 0, u8Itr = 0;
+        UINT16 u16ValidDataLen = 0, u16Itr = 0;
         UINT8 *pu8Data = (UINT8 *)pmData;
 
         while (u16Len > 0) {
-            u8ValidDataLen = (u16Len > 4) ? 4 : u16Len;
+            u16ValidDataLen = u16Len;
 
-            if (u16Address & 0x1) {
-                u8ValidDataLen = 1;
-            }
-            else if (u16Address & 0x2)
-            {
-                u8ValidDataLen = (u8ValidDataLen >= 2 ) ? 2 : 1;
-            }
-            else if (u8ValidDataLen < 4)
-            {
-                u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
-            }
+            MCHP_ESF_PDI_READ(u16Address, (UINT8*)&u32Val.Val, u16ValidDataLen);
 
-            MCHP_ESF_PDI_READ(u16Address, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+            for (u16Itr = 0; u16Itr < u16ValidDataLen; u16Itr++)
+            *pu8Data++ = u32Val.v[u16Itr];
 
-            for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
-            *pu8Data++ = u32Val.v[u8Itr];
-
-            u16Address += u8ValidDataLen;
-            u16Len -= u8ValidDataLen;
+            u16Address += u16ValidDataLen;
+            u16Len -= u16ValidDataLen;
         }
 
     #elif _IS_SPI_DIRECT_MODE_ACCESS
 
         UINT32_VAL u32Val;
-        UINT8 u8ValidDataLen = 0, u8Itr = 0;
         UINT8 *pu8Data = (UINT8 *)pmData;
+        UINT16 u16ValidDataLen = 0, u16Itr = 0;
 
         while (u16Len > 0) {
-            u8ValidDataLen = (u16Len > 4) ? 4 : u16Len;
+            u16ValidDataLen = u16Len;
 
-            if (u16Address & 0x1) {
-                u8ValidDataLen = 1;
-            }
-            else if (u16Address & 0x2)
-            {
-                u8ValidDataLen = (u8ValidDataLen >= 2 ) ? 2 : 1;
-            }
-            else if (u8ValidDataLen < 4)
-            {
-                u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
-            }
+            MCHP_ESF_PDI_FASTREAD(u16Address, (UINT8*)&u32Val.Val, u16Len);
 
-            MCHP_ESF_PDI_FASTREAD(u16Address, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+            for (u16Itr = 0; u16Itr < u16ValidDataLen; u16Itr++)
+            *pu8Data++ = u32Val.v[u16Itr];
 
-            for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
-            *pu8Data++ = u32Val.v[u8Itr];
-
-            u16Address += u8ValidDataLen;
-            u16Len -= u8ValidDataLen;
+            u16Address += u16ValidDataLen;
+            u16Len -= u16ValidDataLen;
         }
     #endif
 #elif (ESF_PDI == HBI)
@@ -1497,100 +1446,65 @@ void HW_EscWrite(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
 void EscWrite(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len) 
 {
 #if (ESF_PDI == SPI)
-    #if _IS_SPI_INDIRECT_MODE_ACCESS
-
-	UINT32_VAL u32param32_1;
-	UINT8 u8ValidDataLen = 0, u8Itr = 0;
+    //https://jira.microchip.com/browse/UNG_JUTLAND2-329
+    // Fix is added by reading entire IRQ API length instead of DWORD     
+#if _IS_SPI_INDIRECT_MODE_ACCESS
+    UINT32_VAL u32param32_1;
+	UINT16 u16ValidDataLen = 0, u16Itr = 0;
 	UINT8 *pu8Data = (UINT8 *)pmData;
 
 	while (u16Len > 0) {
-		u8ValidDataLen = (u16Len > 4) ? 4 : u16Len;
+		u16ValidDataLen = u16Len;
 		
-		if (u16Address & 0x1) {
-			u8ValidDataLen = 1;
-		}
-		else if (u16Address & 0x2)
-		{
-			u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
-		}
-		else if (u8ValidDataLen < 4)
-		{
-			u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
-		}
-
-		for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
-		u32param32_1.v[u8Itr] = *pu8Data++;
+		for (u16Itr = 0; u16Itr < u16ValidDataLen; u16Itr++)
+		u32param32_1.v[u16Itr] = *pu8Data++;
 		
-		MCHP_ESF_PDI_WRITE(ESC_CSR_DATA_REG, (UINT8*)&u32param32_1.Val, DWORD_LENGTH);
+		MCHP_ESF_PDI_WRITE(ESC_CSR_DATA_REG, (UINT8*)&u32param32_1.Val, u16ValidDataLen);
 
 		u32param32_1.v[0] = (UINT8)u16Address;
 		u32param32_1.v[1] = (UINT8)(u16Address >> 8);
-		u32param32_1.v[2] = u8ValidDataLen;
+		u32param32_1.v[2] = u16ValidDataLen;
 		u32param32_1.v[3] = ESC_WRITE_BYTE;
 
-		MCHP_ESF_PDI_WRITE(ESC_CSR_CMD_REG, (UINT8*)&u32param32_1.Val, DWORD_LENGTH);
+		MCHP_ESF_PDI_WRITE(ESC_CSR_CMD_REG, (UINT8*)&u32param32_1.Val, u16ValidDataLen);
 
-		u16Address += u8ValidDataLen;
-		u16Len -= u8ValidDataLen;
+		u16Address += u16ValidDataLen;
+		u16Len -= u16ValidDataLen;
 	}
 	
 #elif _IS_SPI_BECKHOFF_MODE_ACCESS
 
 	UINT32_VAL u32param32_1;
-	UINT8 u8ValidDataLen = 0, u8Itr = 0;
+	UINT16 u16ValidDataLen = 0, u16Itr = 0;
 	UINT8 *pu8Data = (UINT8 *)pmData;
 
 	while (u16Len > 0) {
-		u8ValidDataLen = (u16Len > 4) ? 4 : u16Len;
+		u16ValidDataLen = u16Len;
 		
-		if (u16Address & 0x1) {
-			u8ValidDataLen = 1;
-		}
-		else if (u16Address & 0x2)
-		{
-			u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
-		}
-		else if (u8ValidDataLen < 4)
-		{
-			u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
-		}
-
-		for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++)
-		u32param32_1.v[u8Itr] = *pu8Data++;
+		for (u16Itr = 0; u16Itr < u16ValidDataLen; u16Itr++)
+		u32param32_1.v[u16Itr] = *pu8Data++;
 		
-		MCHP_ESF_PDI_WRITE(u16Address, (UINT8*)&u32param32_1.Val, DWORD_LENGTH);
+		MCHP_ESF_PDI_WRITE(u16Address, (UINT8*)&u32param32_1.Val, u16ValidDataLen);
 		
-		u16Address += u8ValidDataLen;
-		u16Len -= u8ValidDataLen;
+		u16Address += u16ValidDataLen;
+		u16Len -= u16ValidDataLen;
 	}
 	
 #elif _IS_SPI_DIRECT_MODE_ACCESS
 		UINT32_VAL u32param32_1;
-		UINT8 u8ValidDataLen = 0, u8Itr = 0;
+		UINT16 u16ValidDataLen = 0, u16Itr = 0;
 		UINT8 *pu8Data = (UINT8 *)pmData;
 
 		while (u16Len > 0) {
-			u8ValidDataLen = (u16Len > 4) ? 4 : u16Len;
+			u16ValidDataLen = u16Len;
 			
-			if (u16Address & 0x1) {
-				u8ValidDataLen = 1;
-			}
-			else if (u16Address & 0x2)
-			{
-				u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
-			}
-			else if (u8ValidDataLen < 4)
-			{
-				u8ValidDataLen = (u8ValidDataLen >= 2) ? 2 : 1;
-			}
-
-			for (u8Itr = 0; u8Itr < u8ValidDataLen; u8Itr++) 
-			u32param32_1.v[u8Itr] = *pu8Data++;
+			for (u16Itr = 0; u16Itr < u16ValidDataLen; u16Itr++) 
+			u32param32_1.v[u16Itr] = *pu8Data++;
 			
-			MCHP_ESF_PDI_WRITE(u16Address, (UINT8*)&u32param32_1.Val, DWORD_LENGTH);
+			MCHP_ESF_PDI_WRITE(u16Address, (UINT8*)&u32param32_1.Val, u16ValidDataLen);
 			
-			u16Address += u8ValidDataLen;
-			u16Len -= u8ValidDataLen;
+			u16Address += u16ValidDataLen;
+			u16Len -= u16ValidDataLen;
 		}
     #endif
 #elif (ESF_PDI == HBI)

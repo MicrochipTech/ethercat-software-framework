@@ -51,8 +51,11 @@
  * Frequency value should be given in MHz.
  */
 #define ESF_PDI_FREQUENCY 20    
+
+/* Dummy Cycle Support is Enabled by Default*/
 #define IS_SUPPORT_DUMMY_CYCLE
-//#define INCLUDE_DUMMY
+/* Dummy Bytes can be included when support is enabled*/
+#define INCLUDE_DUMMY
 /* DMA Enable by default */
 #define ESF_SPI_DMA_EN
 

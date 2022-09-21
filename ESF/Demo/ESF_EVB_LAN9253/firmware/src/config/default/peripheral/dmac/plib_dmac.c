@@ -477,7 +477,6 @@ void _DMAC_interruptHandler(uint8_t channel)
 
 void DMAC_0_Handler( void )
 {
-    //MCHP_ESF_GPIO_TOGGLE(PORT_PIN_PA23);
    _DMAC_interruptHandler(0);
 }
 
@@ -485,6 +484,5 @@ void DMAC_1_Handler( void )
 {
    
    _DMAC_interruptHandler(1);
-    //MCHP_ESF_GPIO_TOGGLE(PORT_PIN_PA23);
 }
 

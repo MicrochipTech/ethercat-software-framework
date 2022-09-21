@@ -698,7 +698,6 @@ void _DRV_SPI_TX_DMA_CallbackHandler(
 
         dObj->txDummyDataSize = 0;
     }
-    //_APP_MyTransferEventHandler(event,handle,context);
 }
 
 void _DRV_SPI_RX_DMA_CallbackHandler(
