@@ -62,6 +62,9 @@ void EtherCAT_QSPI_CallbackRegistration(void);
 /* Function declarations */
 static void SPIChipSelectDisable(void);
 static void SPIChipSelectEnable(void);
+#ifndef ESF_SPI_DMA_EN
+static UINT8   EtherCAT_QSPITransmissionBusy(void);
+#endif
 #elif (ESF_PDI == SQI)
 static UINT8 gau8rx_data[32] = {0};
 #endif
@@ -122,6 +125,12 @@ void EtherCAT_TransmissionFlagClear(void)
     gchEtherCATQSPITransmission = false;
 }
 
+#ifndef ESF_SPI_DMA_EN
+static UINT8 EtherCAT_QSPITransmissionBusy(void)
+{
+    return (gchEtherCATQSPITransmission == false);
+}
+#endif
 void EtherCAT_QSPI_CallbackRegistration(void)
 {
     QSPI_CallbackRegister (ECAT_SPI_Callback, 0);
@@ -147,7 +156,8 @@ void ESC_BYTE_TEST_Register_Read (UINT8 *pu8Data)
 	functional, the Byte Order Test Register (BYTE_TEST) should be polled. Once the correct pattern is read, the interface
 	can be considered functional */
 #if (ESF_PDI == SPI)
-	UINT8 u8Len = 4;
+#ifdef ESF_SPI_DMA_EN
+    UINT8 u8Len = 4;
     
     SPIChipSelectEnable();
     
@@ -161,6 +171,59 @@ void ESC_BYTE_TEST_Register_Read (UINT8 *pu8Data)
     DRV_SPIReceive(pu8Data, u8Len);
 
 	SPIChipSelectDisable();
+#else
+    UINT8 u8Len = 4;
+    UINT8 u8txData = 0, u8rxData = 0;
+    UINT8 u8txLen = 1, u8rxLen = 1;
+    
+    SPIChipSelectEnable();
+    
+    while(QSPI_IsBusy());
+
+    u8txData = CMD_SERIAL_READ;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    
+    u8txData = (UINT8)HIBYTE(LAN925x_BYTE_ORDER_REG);
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[0] = u8rxData;
+    
+    u8txData = (UINT8)LOBYTE(LAN925x_BYTE_ORDER_REG);
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[1] = u8rxData;
+	
+	do
+	{
+		if (0x1 == u8Len)
+		{
+			u8txData = READ_TERMINATION_BYTE;
+		}
+        else
+        {
+            u8txData = 0;
+        }
+		QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		while(QSPI_IsBusy());
+		*pu8Data++ = u8rxData;
+	} while (--u8Len);
+
+	SPIChipSelectDisable();
+#endif
 #elif (ESF_PDI == SQI)
     qspi_memory_xfer_t qspi_xfer;
     UINT8 u8dummy_cycle = 0;
@@ -374,6 +437,7 @@ void ReBuild_SPI_SetCfg_data ()
 
 void SPI_SetConfiguration(UINT8 *pu8DummyByteCnt)
 {
+#ifdef ESF_SPI_DMA_EN
     UINT8 u8Len = 0, u8Itr = 0;
     
     u8Len = SETCFG_MAX_DATA_BYTES;
@@ -390,6 +454,38 @@ void SPI_SetConfiguration(UINT8 *pu8DummyByteCnt)
     DRV_SPITransfer(gau8DmaBuff, u8Len);
     
     SPIChipSelectDisable();
+#else
+    UINT8 u8Len = 0, u8txData = 0, u8txLen = 1;
+    
+    u8Len = SETCFG_MAX_DATA_BYTES;
+    u8txData = CMD_SQI_SETCFG;
+
+    SPIChipSelectEnable();
+    
+    while(QSPI_IsBusy());
+	
+    /* Send command */
+    QSPI_Write(&u8txData, u8txLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    
+    /* Now write set cfg data */
+	do
+	{
+        QSPI_Write(pu8DummyByteCnt, u8txLen);
+        QSPI_Sync_Wait();
+        while(QSPI_IsBusy())
+        {
+            ;
+        }
+        pu8DummyByteCnt++;
+	} while (--u8Len);
+    
+    SPIChipSelectDisable();
+#endif
 }
 
 /*******************************************************************************
@@ -402,11 +498,30 @@ void SPI_SetConfiguration(UINT8 *pu8DummyByteCnt)
 
 void SPI_DisableQuadMode()
 {
+#ifdef ESF_SPI_DMA_EN
     UINT8 u8txData = 0, u8txLen = 1;
     
     u8txData = CMD_RESET_SQI;
 
     DRV_SPITransfer(&u8txData, u8txLen);
+#else
+    UINT8 u8txData = 0, u8txLen = 1;
+    
+    u8txData = CMD_RESET_SQI;
+    
+    SPIChipSelectEnable();
+    
+    while(QSPI_IsBusy());
+	
+    /* Send command */
+    QSPI_Write(&u8txData, u8txLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    SPIChipSelectDisable();
+#endif
 }
 #endif
 
@@ -531,6 +646,7 @@ void start_timer(void)
 
 void LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
+#ifdef ESF_SPI_DMA_EN
 #ifdef INCLUDE_DUMMY
     UINT8 u8dummy_clk_cnt_1 = 0;
     UINT16 u16Itr = 0, u16dwctr = 0;
@@ -593,6 +709,80 @@ void LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	DRV_SPITransfer(pu8Data, u32txSize);
 #endif  
     SPIChipSelectDisable();
+#else
+    UINT8 u8dummy_clk_cnt = 0;
+    UINT8 u8txData = 0, u8rxData = 0;
+    UINT8 u8txLen = 1, u8rxLen = 1;
+
+     SPIChipSelectEnable();
+    
+    while(QSPI_IsBusy());
+	
+    u8txData = CMD_SERIAL_WRITE;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    
+    u8txData = (UINT8)(u16Addr >> 8);
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[0] = u8rxData;
+    
+    u8txData = (UINT8)u16Addr;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[1] = u8rxData;
+
+    /* Initial Dummy cycle added by dummy write */
+    u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
+	while (u8dummy_clk_cnt--)
+	{
+		QSPI_Read(&u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		while(QSPI_IsBusy())
+		{
+			;
+		}
+	}
+    
+	do
+	{
+        u8txData = *pu8Data++;
+        QSPI_Write(&u8txData, u8txLen);
+        QSPI_Sync_Wait();
+        while(QSPI_IsBusy())
+        {
+            ;
+        }
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (1 != u32Length) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                while(QSPI_IsBusy())
+                {
+                    ;
+                }
+            }
+        }
+	} while (--u32Length);
+   
+    SPIChipSelectDisable();
+#endif
 }
 
 /* 
@@ -614,6 +804,7 @@ void LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 void LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
+#ifdef ESF_SPI_DMA_EN
 #ifdef INCLUDE_DUMMY
     UINT8 u8dummy_clk_cnt_1 = 0;
     UINT16 u16Itr = 0, u16dwctr = 0;
@@ -674,6 +865,89 @@ void LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     DRV_SPIReceive(pu8Data, u32rxLen);
 #endif
     SPIChipSelectDisable();	
+#else
+    UINT8 u8dummy_clk_cnt = 0;
+    UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
+    
+    SPIChipSelectEnable();
+    
+    while(QSPI_IsBusy());
+
+    u8txData = CMD_SERIAL_READ;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    
+    u8txData = (UINT8)(u16Addr >> 8);
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[0] = u8rxData;
+    
+    u8txData = (UINT8)u16Addr;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[1] = u8rxData;
+    
+    /* Initial Dummy cycle added by dummy read */
+    u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
+	while (u8dummy_clk_cnt--)
+	{
+		QSPI_Read(&u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		while(QSPI_IsBusy())
+		{
+			;
+		}
+	}
+    
+	do
+	{
+		if (1 == u32Length)
+		{
+			u8txData = READ_TERMINATION_BYTE;
+		}
+        else
+        {
+            u8txData = 0;
+        }
+		QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		while(QSPI_IsBusy())
+		{
+			;
+		}
+		*pu8Data++ = u8rxData;
+        
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (1 != u32Length) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                while(QSPI_IsBusy())
+                {
+                    ;
+                }
+            }
+        }
+	} while (--u32Length);
+    
+	SPIChipSelectDisable();
+#endif
 }
 
 /* 
@@ -693,6 +967,7 @@ void LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 void LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
+#ifdef ESF_SPI_DMA_EN
 #ifdef INCLUDE_DUMMY
     UINT8 u8dummy_clk_cnt_1 = 0;
     UINT16 u16Itr = 0, u16dwctr = 0;
@@ -751,6 +1026,100 @@ void LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     DRV_SPIReceive(pu8Data,u32rxLen);
 #endif
     SPIChipSelectDisable();
+#else
+    UINT8 u8dummy_clk_cnt = 0;
+    UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
+
+	SPIChipSelectEnable();
+
+	while(QSPI_IsBusy())
+	{
+		;
+	}
+
+	u8txData = CMD_FAST_READ;
+	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    
+    u8txData = (UINT8)(u16Addr >> 8);
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[0] = u8rxData;
+    
+    u8txData = (UINT8)u16Addr;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[1] = u8rxData;
+    
+	/* Send Transfer length */
+	QSPI_Write(&u32Length, u8rxLen);
+    QSPI_Sync_Wait();
+	while(QSPI_IsBusy())
+	{
+		;
+	}
+
+    /* Initial Dummy cycle added by dummy read */
+	u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
+	while (u8dummy_clk_cnt--)
+	{
+		QSPI_Read(&u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		while(QSPI_IsBusy())
+		{
+			;
+		}
+	}
+	
+	do
+	{
+		if (1 == u32Length)
+		{
+			u8txData = READ_TERMINATION_BYTE;
+		}
+        else
+        {
+            u8txData = 0;
+        }
+        QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+        QSPI_Sync_Wait();
+        while(QSPI_IsBusy())
+        {
+            ;
+        }
+		*pu8Data++ = u8rxData;
+        
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (1 != u32Length) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                while(QSPI_IsBusy())
+                {
+                    ;
+                }
+            }
+        }
+	} while (--u32Length);
+
+	SPIChipSelectDisable();		
+#endif
 }
 
 /* 
@@ -770,6 +1139,7 @@ void LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 {
+#ifdef ESF_SPI_DMA_EN
 #ifdef INCLUDE_DUMMY
     UINT16 u16Itr = 0, u16dwctr = 0; 
     UINT32 u32interdsize = 0;
@@ -855,6 +1225,157 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
     
 	SPIChipSelectDisable();
+#else
+    UINT32_VAL u32Val;
+	UINT8 u8StartAlignSize = 0, u8EndAlignSize = 0, u8dummy_clk_cnt = 0;
+    UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
+    
+	/* Address and length */
+	u32Val.w[0] = u16Addr;
+	u32Val.w[1] = u32Length;
+	MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_RD_ADDR_LENGTH_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+
+	/* Read command */
+	u32Val.Val = 0x80000000;
+	MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_RD_CMD_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+
+	u8StartAlignSize = (u16Addr & 0x3);
+	u8EndAlignSize = (u32Length + u8StartAlignSize) & 0x3;
+	if (u8EndAlignSize & 0x3){
+		u8EndAlignSize = (((u8EndAlignSize + 4) & 0xC) - u8EndAlignSize);
+	}
+
+	/* Read SPI FIFO */
+	SPIChipSelectEnable();
+ 
+    while(QSPI_IsBusy());    
+
+    u8txData = CMD_SERIAL_READ;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    
+    u8txData = (UINT8)0x0;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[0] = u8rxData;
+    
+    u8txData = (UINT8)0x04;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[1] = u8rxData;
+    
+    /* Initial Dummy cycle added by dummy read */
+	u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
+	while (u8dummy_clk_cnt--)
+	{
+		QSPI_Read(&u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		while(QSPI_IsBusy())
+		{
+			;
+		}
+	}
+
+	while (u8StartAlignSize--)
+	{
+        /* Start align read byte */
+        QSPI_Read(&u8rxData, u8rxLen);
+        QSPI_Sync_Wait();
+        while(QSPI_IsBusy())
+        {
+            ;
+        }
+        
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (0 != u8StartAlignSize) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                while(QSPI_IsBusy())
+                {
+                    ;
+                }
+            }
+        }
+	}
+    
+
+    
+	while (u32Length--)
+	{
+		if (0 == u32Length)
+		{
+			u8txData = READ_TERMINATION_BYTE;
+		}
+        else
+        {
+            u8txData = 0;
+        }
+		QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+        QSPI_Sync_Wait();
+        while(QSPI_IsBusy());
+        *pu8Data++ = u8rxData;
+        
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (0 != u32Length) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                while(QSPI_IsBusy())
+                {
+                    ;
+                }
+            }
+        }
+	}
+
+	while (u8EndAlignSize--)
+	{
+        /* End align size Byte */
+    	QSPI_Read(&u8rxData, u8rxLen);  
+        QSPI_Sync_Wait();
+        while(QSPI_IsBusy())
+        {
+            ;
+        }
+        
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (0 != u8EndAlignSize) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                while(QSPI_IsBusy())
+                {
+                    ;
+                }
+            }
+        }
+	}
+    
+	SPIChipSelectDisable();
+#endif
 }
 
 /* 
@@ -873,6 +1394,7 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 
 void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 {
+#ifdef ESF_SPI_DMA_EN
 #ifdef INCLUDE_DUMMY
     UINT16 u16Itr = 0, u16dwctr = 0;
     UINT32 u32interdsize = 0;
@@ -981,6 +1503,193 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
 
 	SPIChipSelectDisable();
+#else
+    UINT32_VAL u32Val;
+	UINT8 u8StartAlignSize = 0, u8EndAlignSize = 0, u8dummy_clk_cnt = 0;
+	UINT16 u16XfrLen = 0, u16TotalLen = 0;
+    UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
+
+	u8StartAlignSize = (u16Addr & 0x3);
+	u8EndAlignSize = (u32Length & 0x3) + u8StartAlignSize;
+	if (u8EndAlignSize & 0x3){
+		u8EndAlignSize = (((u8EndAlignSize + 4) & 0xC) - u8EndAlignSize);
+	}
+	
+	u16TotalLen = u32Length + u8StartAlignSize + u8EndAlignSize;
+	
+	/* From DOS, "For the one byte transfer length format,	bit 7 is low and bits 6-0 specify the 
+	length up to 127 bytes. For the two byte transfer length format, bit 7 of the first byte
+	is high and bits 6-0 specify the lower 7 bits of the length. Bits 6-0 of the of the second byte 
+	field specify the upper 7 bits of the length with a maximum transfer length of 16,383 bytes (16K-1)" */ 
+	if (u16TotalLen <= ONE_BYTE_MAX_XFR_LEN)
+	{
+		u16XfrLen = u16TotalLen; 
+	}
+	else  
+	{
+		u16XfrLen = (u16TotalLen & 0x7F) | 0x80;
+		u16XfrLen |= ((u16TotalLen & 0x3F80) << 1);
+	}
+	
+	/* Address and length */
+	u32Val.w[0] = u16Addr;
+	u32Val.w[1] = u32Length;
+	MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_RD_ADDR_LENGTH_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+
+	/* Read command */
+	u32Val.Val = 0x80000000;
+	MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_RD_CMD_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+
+	/* Read SPI FIFO */
+	SPIChipSelectEnable();
+
+	while(QSPI_IsBusy())
+	{
+		;
+	}
+
+	u8txData = CMD_FAST_READ;
+	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    
+    u8txData = (UINT8)0x0;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[0] = u8rxData;
+    
+    u8txData = (UINT8)0x04;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+	QSPI_Sync_Wait();
+	while(QSPI_IsBusy())
+    {
+        ;
+    }
+	gEscALEvent.Byte[1] = u8rxData;
+
+	/* Send Transfer length */
+    u8txData = LOBYTE(u16XfrLen);
+    QSPI_Write(&u8txData, 1);
+    QSPI_Sync_Wait();
+	while(QSPI_IsBusy())
+	{
+		;
+	}
+
+	/* Two byte Xfr length */
+	if (u32Length > ONE_BYTE_MAX_XFR_LEN)
+	{
+        u8txData = HIBYTE(u16XfrLen);
+        QSPI_Write(&u8txData, u8txLen);
+        QSPI_Sync_Wait();
+        while(QSPI_IsBusy())
+        {
+            ;
+        }
+	}
+	
+	/* Initial Dummy cycle added by dummy read */
+	u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
+	while (u8dummy_clk_cnt--)
+	{
+		QSPI_Read(&u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		while(QSPI_IsBusy())
+		{
+			;
+		}
+	}
+    
+	while (u8StartAlignSize--)
+	{
+        /* Start align Byte */
+        QSPI_Read(&u8rxData, u8rxLen);
+        QSPI_Sync_Wait();
+        while(QSPI_IsBusy())
+        {
+            ;
+        }
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (0 != u8StartAlignSize) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                while(QSPI_IsBusy())
+                {
+                    ;
+                }
+            }
+        }
+	}
+
+
+	while (u32Length--)
+	{
+		if (0 == u32Length)
+		{
+			u8txData = READ_TERMINATION_BYTE;
+		}
+        else
+        {
+            u8txData = 0;
+        }
+        QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+        QSPI_Sync_Wait();
+        while(QSPI_IsBusy());
+        *pu8Data++ = u8rxData;
+        
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (0 != u32Length) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                while(QSPI_IsBusy())
+                {
+                    ;
+                }
+            }
+        }
+	}
+
+	while (u8EndAlignSize--)
+	{
+        /* End align size Byte */
+        QSPI_Read(&u8rxData, u8rxLen); 
+        QSPI_Sync_Wait();
+        while(QSPI_IsBusy());
+        
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (0 != u8EndAlignSize) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                while(QSPI_IsBusy())
+                {
+                    ;
+                }
+            }
+        }
+	}
+
+	SPIChipSelectDisable();
+#endif
 }
 
 /* 
@@ -1000,6 +1709,7 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 
 void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 {
+#ifdef ESF_SPI_DMA_EN
 #ifdef INCLUDE_DUMMY
     UINT16 u16Itr = 0, u16dwctr = 0;
     UINT32 u32interdsize = 0;
@@ -1085,6 +1795,149 @@ else
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
 	
 	SPIChipSelectDisable();	
+#else
+    UINT32_VAL u32Val;
+	UINT8 u8StartAlignSize = 0, u8EndAlignSize = 0, u8dummy_clk_cnt = 0; 
+    UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
+
+	/* Address and length */
+	u32Val.w[0] = u16Addr;
+	u32Val.w[1] = u32Length;
+	MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_WR_ADDR_LENGTH_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+
+	/* write command */
+	u32Val.Val = 0x80000000;
+	MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_WR_CMD_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+	
+	u8StartAlignSize = (u16Addr & 0x3);
+//	u8EndAlignSize = (u16Len & 3) + u8StartAlignSize;
+	// Changed for a bug identified with HBI - Demux BSP
+	u8EndAlignSize = (u32Length + u8StartAlignSize) & 0x3;
+	if (u8EndAlignSize & 0x3){
+		u8EndAlignSize = (((u8EndAlignSize + 4) & 0xC) - u8EndAlignSize);
+	}
+	
+	/* Writing to FIFO */
+	SPIChipSelectEnable();
+
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+
+    u8txData = CMD_SERIAL_WRITE;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+	while(QSPI_IsBusy())
+	{
+		;
+	}
+    
+	u8txData = (UINT8)0x0;
+	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+	while(QSPI_IsBusy())
+	{
+		;
+	}
+	gEscALEvent.Byte[0] = u8rxData;
+    
+    u8txData = (UINT8)0x20;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[1] = u8rxData;
+	
+	/* Initial Dummy cycle added by dummy write */
+	u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
+	while (u8dummy_clk_cnt--)
+	{
+		QSPI_Read(&u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		while(QSPI_IsBusy())
+		{
+			;
+		}
+	}
+    
+	while (u8StartAlignSize--)
+	{
+        QSPI_Write(&u8txData, u8txLen);
+        QSPI_Sync_Wait();
+        while((QSPI_IsBusy()))
+        {
+            ;
+        }
+        
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (0 != u8StartAlignSize) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                while(QSPI_IsBusy())
+                {
+                    ;
+                }
+            }
+        }
+	}
+    
+	while (u32Length--)
+	{
+        u8txData = *pu8Data;
+		QSPI_Write(&u8txData, u8txLen);
+        QSPI_Sync_Wait();
+        while(QSPI_IsBusy());
+        pu8Data++;
+        
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (0 != u32Length) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                while(QSPI_IsBusy())
+                {
+                    ;
+                }
+            }
+        }
+	}
+
+	while (u8EndAlignSize--)
+	{        
+        u8txData = 0x0;
+		QSPI_Write(&u8txData, u8txLen);
+        QSPI_Sync_Wait();
+        while(QSPI_IsBusy());
+        
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (0 != u8EndAlignSize) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                while(QSPI_IsBusy())
+                {
+                    ;
+                }
+            }
+        }
+	}
+	
+	SPIChipSelectDisable();	
+#endif
 }
 #endif
 
@@ -1110,6 +1963,7 @@ else
 
 void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
+#ifdef ESF_SPI_DMA_EN
 #ifdef INCLUDE_DUMMY
     UINT8 u8dummy_clk_cnt_1 = 0;
     UINT16 u16Itr = 0, u16dwctr = 0;
@@ -1216,6 +2070,108 @@ else
     
 #endif
 	SPIChipSelectDisable();
+#else
+    UINT32 u32ModLen = 0;
+#ifdef IS_SUPPORT_DUMMY_CYCLE
+    UINT32 u8dummy_clk_cnt = 0;
+#endif
+    UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
+
+	/* Core CSR and Process RAM accesses can have any alignment and length */
+	if (u16Addr < 0x3000)
+	{
+		/* DWORD Buffering - Applicable for Write only */
+		if (u32Length > 1)
+		{
+			u16Addr |= 0xC000; 	/* addr[15:14]=11 */
+		}
+		else
+		{
+			/* Do Nothing */
+		}
+	}
+	else
+	{
+		/* Non Core CSR length will be adjusted if it is not DWORD aligned */
+		u32ModLen = u32Length % 4;
+		if (1 == u32ModLen)
+		{
+			u32Length = u32Length + 3;
+		}
+		else if (2 == u32ModLen)
+		{
+			u32Length = u32Length + 2;
+		}
+		else if (3 == u32ModLen)
+		{
+			u32Length = u32Length + 1;
+		}
+		else
+		{
+			/* Do nothing if length is 0 since it is DWORD access */
+		}
+	}
+
+	SPIChipSelectEnable();
+
+	MCHP_ESF_GPIO_SET(GPIO_T_MEA);	
+	u8txData = CMD_SERIAL_WRITE;
+	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+	
+    
+	u8txData = (UINT8)(u16Addr >> 8);
+	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+	
+	gEscALEvent.Byte[0] = u8rxData;
+    
+    u8txData = (UINT8)u16Addr;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+	
+	gEscALEvent.Byte[1] = u8rxData;
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+#ifdef IS_SUPPORT_DUMMY_CYCLE    
+	/* Initial Dummy cycle added by dummy read */
+	u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
+	MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+    while (u8dummy_clk_cnt--)
+	{
+		QSPI_Read(&u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		
+	} 
+    #endif
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+     	do
+	{
+        u8txData = *pu8Data++;
+        QSPI_Write(&u8txData, u8txLen);
+        QSPI_Sync_Wait();
+    
+#ifdef IS_SUPPORT_DUMMY_CYCLE        
+        /* Get the Intra DWORD dummy clock count */
+        MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (1 != u32Length) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                
+            }
+        }
+        MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+#endif
+	} while (--u32Length);
+    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+
+	SPIChipSelectDisable();
+#endif
 
 }
 
@@ -1236,6 +2192,7 @@ else
 
 void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 {
+#ifdef ESF_SPI_DMA_EN
 #ifdef INCLUDE_DUMMY	
 	UINT8 u8dummy_clk_cnt_1 = 0;
     UINT16 u16Itr = 0, u16dwctr = 0;
@@ -1337,6 +2294,109 @@ void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
    
 #endif
 	SPIChipSelectDisable();
+#else
+    #ifdef IS_SUPPORT_DUMMY_CYCLE	
+	UINT8 u8dummy_clk_cnt = 0;
+#endif
+	UINT32 u32ModLen = 0;
+    UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
+	
+	/* Core CSR and Process RAM accesses can have any alignment and length */
+	if (u16Addr < 0x3000)
+	{
+		if (u32Length>1)
+		{
+			/* Use Auto-increment if number of bytes to read is more than 1 */
+			u16Addr |= 0x4000;			
+		}
+
+	}
+	else
+	{
+		/* Non Core CSR length will be adjusted if it is not DWORD aligned */
+		u32ModLen = u32Length % 4; 
+		if (1 == u32ModLen)
+		{
+			u32Length = u32Length + 3; 
+		}
+		else if (2 == u32ModLen)
+		{
+			u32Length = u32Length + 2; 
+		}
+		else if (3 == u32ModLen)
+		{
+			u32Length = u32Length + 1; 
+		}
+		else 
+		{
+			/* Do nothing if length is 0 since it is DWORD access */
+		}
+	}
+	SPIChipSelectEnable();
+
+    
+    
+    u8txData = CMD_SERIAL_READ;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    
+    
+    u8txData = (UINT8)(u16Addr >> 8);
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    
+    gEscALEvent.Byte[0] = u8rxData;
+    
+    u8txData = (UINT8)u16Addr;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    
+    gEscALEvent.Byte[1] = u8rxData;
+#ifdef IS_SUPPORT_DUMMY_CYCLE    
+	/* Initial Dummy cycle added by dummy read */
+	u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
+	while (u8dummy_clk_cnt--)
+	{
+		QSPI_Read(&u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		
+	}
+#else
+    QSPI_Read(&u8rxData, u8rxLen);
+	QSPI_Sync_Wait();
+#endif    
+	do
+	{
+		if (1 == u32Length)
+		{
+            u8txData = READ_TERMINATION_BYTE;
+		}
+        else
+        {
+            u8txData = 0;
+        }
+        QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+        QSPI_Sync_Wait();
+        
+		*pu8data++ = u8rxData;
+#ifdef IS_SUPPORT_DUMMY_CYCLE        
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (1 != u32Length) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                
+            }
+        }
+#endif
+	} while (--u32Length);
+
+	SPIChipSelectDisable();	
+#endif
 }
 
 /* 
@@ -1354,6 +2414,7 @@ void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 
 void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
+#ifdef ESF_SPI_DMA_EN
 	UINT8 u8StartAlignSize = 0; 
 #ifdef INCLUDE_DUMMY
     UINT16 u16Itr = 0, u16dwctr = 0;
@@ -1485,8 +2546,165 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     DRV_SPIReceive(pu8Data,u32rxLen);
 #endif
 	SPIChipSelectDisable();
-}
+#else
+    UINT8 u8StartAlignSize = 0, u8Itr = 0;
+#ifdef IS_SUPPORT_DUMMY_CYCLE
+    UINT8 u8dummy_clk_cnt = 0;
+#endif
+	UINT16 u16XfrLen = 0;
+	UINT32 u32ModLen = 0;
+    UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
+	
+	/* Core CSR and Process RAM accesses can have any alignment and length */
+	if (u16Addr < 0x3000)
+	{
+		/* Use Auto-increment for incrementing byte address*/
+		u16Addr |= 0x4000;			
+		
+		/* To calculate initial number of dummy bytes which is based on starting address */
+		u8StartAlignSize = (u16Addr & 0x3); 
+	}
+	else 
+	{  	/* System CSRs are DWORD aligned and are a DWORD in length. Non- DWORD aligned / non-DWORD length access 
+	is not supported. */
+		u32ModLen = u32Length % 4;
+		if (1 == u32ModLen)
+		{
+			u32Length = u32Length + 3;
+		}
+		else if (2 == u32ModLen)
+		{
+			u32Length = u32Length + 2;
+		}
+		else if (3 == u32ModLen)
+		{
+			u32Length = u32Length + 1;
+		}
+		else
+		{
+			/* Do nothing is length is 0 */
+		}		
+	}
 
+	/* From DOS, "For the one byte transfer length format,	bit 7 is low and bits 6-0 specify the 
+	length up to 127 bytes. For the two byte transfer length format, bit 7 of the first byte
+	is high and bits 6-0 specify the lower 7 bits of the length. Bits 6-0 of the of the second byte 
+	field specify the upper 7 bits of the length with a maximum transfer length of 16,383 bytes (16K-1)" */ 
+	if (u32Length <= ONE_BYTE_MAX_XFR_LEN)
+	{
+		u16XfrLen = u32Length; 
+	}
+	else  
+	{
+		u16XfrLen = (u32Length & 0x7F) | 0x80;
+		u16XfrLen |= ((u32Length & 0x3F80) << 1);
+	}
+    //MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+	SPIChipSelectEnable();
+	MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+    u8txData = CMD_FAST_READ;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+	
+    
+	u8txData = (UINT8)(u16Addr >> 8);
+	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+	
+	gEscALEvent.Byte[0] = u8rxData;
+    
+    u8txData = (UINT8)u16Addr;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    
+    gEscALEvent.Byte[1] = u8rxData;
+	
+    /* Send Transfer length */
+    u8txData = (UINT8)(LOBYTE(u16XfrLen));
+    QSPI_Write(&u8txData, u8txLen);
+    QSPI_Sync_Wait();
+    
+	/* Two byte Xfr length */
+	if (u32Length > ONE_BYTE_MAX_XFR_LEN)
+	{
+        u8txData = (UINT8)(HIBYTE(u16XfrLen));
+        QSPI_Write(&u8txData, u8txLen);
+        QSPI_Sync_Wait();
+        
+	}
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+    //MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+#ifdef IS_SUPPORT_DUMMY_CYCLE	
+    /* Initial Dummy cycle added by dummy read */
+	u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
+    
+    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+	while (u8dummy_clk_cnt--)
+	{
+		QSPI_Read(&u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		
+	}
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+#else
+    QSPI_Read(&u8rxData, u8rxLen);
+	QSPI_Sync_Wait();
+#endif
+	/* 1 default dummy + extra dummies based on address that needs to be accessed. 
+	   As per UNG_JUTLAND2-104, "For Fast reads with Non DWORD aligned address, 
+	   Dummy data will be sent before the actual data. 
+	   So to read 2001 you will get a dummy byte and then data in address 2001. 
+	   Sw needs to handle dummy data in case of non DWORD address reads" */
+	for (u8Itr = 0; u8Itr < u8StartAlignSize; u8Itr++) 
+	{
+        
+        QSPI_Read(&u8rxData, u8rxLen);
+        QSPI_Sync_Wait();
+        
+#ifdef IS_SUPPORT_DUMMY_CYCLE    
+        MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+        while (u8dummy_clk_cnt--)
+        {
+            QSPI_Read(&u8rxData, u8rxLen);
+            QSPI_Sync_Wait();               
+        }
+        MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+#endif
+	}
+    
+	
+	do
+	{
+        
+        QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+        QSPI_Sync_Wait();
+        
+		*pu8Data++ = u8rxData;
+#ifdef IS_SUPPORT_DUMMY_CYCLE		
+        MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+        /* Get the Intra DWORD dummy clock count */
+        u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+        /* Add Intra DWORD dummy clocks, avoid for last byte */
+        if (1 != u32Length) {
+            while (u8dummy_clk_cnt--)
+            {
+                QSPI_Read(&u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                
+            }
+        }
+        MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+        
+#endif
+	} while (--u32Length);
+	MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+	SPIChipSelectDisable();
+#endif
+}
 #endif
 
 #ifdef _IS_SPI_BECKHOFF_MODE_ACCESS
@@ -1506,7 +2724,8 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	
 void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-	UINT8 u8BeckhoffCmd = ESC_WR, u8txLen = 0;
+#ifdef ESF_SPI_DMA_EN
+    UINT8 u8BeckhoffCmd = ESC_WR, u8txLen = 0;
     UINT16 u16Itr = 0;
     UINT32 u32txSize = 0;
 	
@@ -1537,6 +2756,66 @@ void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     DRV_SPITransfer(gau8DmaBuff, u32txSize);
     MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 	SPIChipSelectDisable();
+#else
+    UINT8 u8BeckhoffCmd = ESC_WR;
+    UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
+	
+	/* Non Ether CAT Core CSRs are always DWORD aligned and should be accessed by DWORD length */
+	if (u16Addr >= 0x3000)
+	{
+		u32Length = 4; 
+	}
+	
+	SPIChipSelectEnable();
+	
+	while(QSPI_IsBusy())
+	{
+		;
+	}
+	
+	u8txData = (u16Addr & 0x1FE0) >> 5;
+    
+    
+    
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[0] = u8rxData;
+    
+    u8txData = ((u16Addr & 0x001F) << 3) | 0x06;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[1] = u8rxData;
+    
+    u8txData = (HIBYTE(u16Addr) & 0xE0) | (u8BeckhoffCmd << 2);
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    	
+	do
+	{
+        u8txData = *pu8Data++;
+        QSPI_Write(&u8txData, u8txLen);
+        QSPI_Sync_Wait();
+        while(QSPI_IsBusy())
+        {
+            ;
+        }
+	} while (--u32Length);
+	
+	SPIChipSelectDisable();
+#endif
 }
 
 /* 
@@ -1555,6 +2834,7 @@ void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
+#ifdef ESF_SPI_DMA_EN
     UINT8 u8BeckhoffCmd = ESC_RD_WAIT_STATE;
     
 	
@@ -1586,6 +2866,79 @@ void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     memcpy(pu8Data, &gau8DmaBuff[4],u32Length);
     MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 	SPIChipSelectDisable();
+#else
+    UINT8 u8BeckhoffCmd = ESC_RD_WAIT_STATE;
+    UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
+	
+	/* Non Ether CAT Core CSRs are always DWORD aligned and should be accessed by DWORD length */
+	if (u16Addr >= 0x3000)
+	{
+		u32Length = 4;
+	}
+	
+	SPIChipSelectEnable();
+
+	/* AL Event register bits will be outputted on SPI line - 0x220, 0x221 and 0x222 */
+	while(QSPI_IsBusy())
+	{
+		;
+	}
+
+	u8txData = (u16Addr & 0x1FE0) >> 5;
+	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+	QSPI_Sync_Wait();
+	while(QSPI_IsBusy())
+	{
+		;
+	}
+	gEscALEvent.Byte[0] = u8rxData;
+    
+    u8txData = ((u16Addr & 0x001F) << 3) | 0x06;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[1] = u8rxData;
+    
+    u8txData = (HIBYTE(u16Addr) & 0xE0) | (u8BeckhoffCmd << 2);
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+	
+    /* Master can either wait for 240ns time or use Wait state byte
+     * after last byte of addr/cmd or 
+     * before initiating the clock for data phase. */
+    u8txData = WAIT_STATE_BYTE;
+	QSPI_Write(&u8txData, u8txLen);
+	QSPI_Sync_Wait();
+	while(QSPI_IsBusy())
+	{
+		;
+	}
+	u8txData = 0;
+	do
+	{
+		if (1 == u32Length)
+		{
+			u8txData = READ_TERMINATION_BYTE;
+		}
+		QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+        QSPI_Sync_Wait();
+        while(QSPI_IsBusy())
+        {
+            ;
+        }
+		*pu8Data++ = u8rxData;
+	} while (--u32Length);
+	
+	SPIChipSelectDisable();
+#endif
 }
 #endif
 
@@ -2057,3 +3410,4 @@ void ESF_PDI_Init()
 #endif
 
 }
+

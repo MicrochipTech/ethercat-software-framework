@@ -50,6 +50,35 @@
 qspi_spi_obj qspiObj;
 
 
+void QSPI_Initialize(void)
+{
+    /* Reset and Disable the qspi Module */
+    QSPI_REGS->QSPI_CTRLA = QSPI_CTRLA_SWRST_Msk;
+
+    // Set Mode Register values
+    /* MODE = SPI */
+    /* LOOPEN = 0 */
+    /* WDRBT = 0 */
+    /* SMEMREG = 0 */
+    /* CSMODE = NORELOAD */
+    /* DATALEN = 0x0 */
+    /* DLYCBT = 0 */
+    /* DLYCS = 0 */
+    QSPI_REGS->QSPI_CTRLB = QSPI_CTRLB_MODE_SPI | QSPI_CTRLB_CSMODE_NORELOAD | QSPI_CTRLB_DATALEN(0x0) | QSPI_CTRLB_LOOPEN(0);
+
+    // Set serial clock register
+    QSPI_REGS->QSPI_BAUD = (QSPI_BAUD_BAUD(GET_BAUD(ESF_PDI_FREQUENCY)))  ;
+
+    // Enable the qspi Module
+    /* LASTXFER = 0 */
+    QSPI_REGS->QSPI_CTRLA = QSPI_CTRLA_ENABLE_Msk;
+
+    while((QSPI_REGS->QSPI_STATUS & QSPI_STATUS_ENABLE_Msk) != QSPI_STATUS_ENABLE_Msk)
+    {
+        /* Wait for QSPI enable flag to set */
+    }
+}
+
 bool QSPI_WriteRead (void* pTransmitData, size_t txSize, void* pReceiveData, size_t rxSize)
 {
     bool isRequestAccepted = false;

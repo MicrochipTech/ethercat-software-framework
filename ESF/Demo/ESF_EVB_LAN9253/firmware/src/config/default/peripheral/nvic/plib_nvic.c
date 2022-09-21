@@ -70,7 +70,7 @@ void NVIC_Initialize( void )
     NVIC_EnableIRQ(DMAC_1_IRQn);
     NVIC_SetPriority(EIC_EXTINT_7_IRQn, 7);
     NVIC_EnableIRQ(EIC_EXTINT_7_IRQn);
-    NVIC_SetPriority(QSPI_IRQn, 7);
+    NVIC_SetPriority(QSPI_IRQn, 2);
     NVIC_EnableIRQ(QSPI_IRQn);
 
 

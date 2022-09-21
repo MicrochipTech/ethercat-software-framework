@@ -601,7 +601,7 @@ void HW_EscRead(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len)
 
             u32Val.v[0] = (UINT8)u16Address;
             u32Val.v[1] = (UINT8)(u16Address >> 8);
-            u32Val.v[2] = u8ValidDataLen;
+            u32Val.v[2] = u16ValidDataLen;
             u32Val.v[3] = 0xC0;
 
             PDI_Disable_Global_Interrupt();
