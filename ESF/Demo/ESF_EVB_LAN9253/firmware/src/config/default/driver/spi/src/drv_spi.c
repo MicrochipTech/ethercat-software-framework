@@ -1398,9 +1398,9 @@ void DRV_SPI_WriteTransferAdd (
 )
 {
 #ifdef INCLUDE_DUMMY
-    DRV_SPI_WriteReadTransferAdd(handle, pTransmitData, txSize,pTransmitData, txSize, transferHandle);
+    DRV_SPI_WriteReadTransferAdd(handle, pTransmitData, txSize, pTransmitData, txSize, transferHandle);
 #else
-    DRV_SPI_WriteReadTransferAdd(handle, pTransmitData, txSize,NULL, 0, transferHandle);
+    DRV_SPI_WriteReadTransferAdd(handle, pTransmitData, txSize, NULL, 0, transferHandle);
 #endif
 }
 

@@ -101,6 +101,7 @@ extern "C" {
     void    EtherCAT_QSPI_CallbackRegistration(void);
     void    EtherCAT_TransmissionFlagClear(void);
     void    ECAT_SPI_Callback (uintptr_t context);
+    UINT32  DMA_Buffsize_Calculate (UINT8 u8Intra_Byte_Dummy, UINT8 u8Inter_Dword_Dummy, UINT32 u32Length);
 #endif
 	UINT16	PDI_GetTimer();
 	void	PDI_ClearTimer(void);
@@ -112,22 +113,33 @@ extern "C" {
 #ifdef _IS_SPI_BECKHOFF_MODE_ACCESS
 	/* Function Prototypes */
 	void    BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
+    void    BeckhoffSPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
 	void    BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
+    void    BeckhoffSPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
 #endif
 #ifdef _IS_SPI_DIRECT_MODE_ACCESS
 	/* Function Prototypes */
 	void    LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
+    void    LAN9253SPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
 	void    LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length);
+    void    LAN9253SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length);
 	void    LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
+    void    LAN9253SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT8 u8StartAlignSize, UINT16 u16XfrLen, UINT32 u32Length);
 #endif
 #ifdef _IS_SPI_INDIRECT_MODE_ACCESS
 	/* Function Prototypes */
 	void    LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
+    void    LAN9252SPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
 	void    LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
+    void    LAN9252SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
 	void    LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
+    void    LAN9252SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length);
 	void    LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length);
+    void    LAN9252SPI_DMA_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT8 u8StartAlignSize, UINT8 u8EndAlignSize, UINT32 u32Length);
 	void    LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length);
+    void    LAN9252SPI_DMA_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16XfrLen, UINT8 u8StartAlignSize, UINT8 u8EndAlignSize, UINT32 u32Length);
 	void    LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length);
+    void    LAN9252SPI_DMA_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT8 u8StartAlignSize, UINT8 u8EndAlignSize, UINT32 u32Length);
 #endif
 #ifdef _IS_SQI_DIRECT_MODE_ACCESS
 	/* Function Prototypes */

@@ -91,6 +91,7 @@ bool QSPI_IsBusy();
 
 void QSPI_Handler(void);
 
+
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus // Provide C++ Compatibility
 }
