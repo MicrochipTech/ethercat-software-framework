@@ -53,11 +53,11 @@
 #define ESF_PDI_FREQUENCY 20    
 
 /* Dummy Cycle Support is Enabled by Default*/
-#define IS_SUPPORT_DUMMY_CYCLE
+#define IS_SUPPORT_DUMMY_CYCLE 1
 /* Dummy Bytes can be included when support is enabled*/
-#define INCLUDE_DUMMY
+#define INCLUDE_DUMMY 1
 /* DMA Enable by default */
-#define ESF_SPI_DMA_EN
+//#define ESF_SPI_DMA_EN 1
 
 /*
  * LAN925x REV C board uses clock from LAN9253,

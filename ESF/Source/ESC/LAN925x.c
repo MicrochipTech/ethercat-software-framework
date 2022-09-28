@@ -48,6 +48,8 @@
 
 BOOL gbALEvtOpEnabled = FALSE;
 UALEVENT         gEscALEvent;
+UINT8 readBuff[1024];
+UINT8 testBuff[1024];
 #if (ESF_PDI == SPI) || (ESF_PDI == SQI)
 UINT8 gau8DummyCntArr[SETCFG_MAX_DATA_BYTES] = {0,0,0,0,0,0,1,0,0,2,0,0,1,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,1,0,0};
 #endif
@@ -171,6 +173,20 @@ UINT8 LAN925x_Init(void)
 	// Write 0x5c - 0x00000001
 	u32data = 0x00000000;
 	MCHP_ESF_PDI_WRITE(LAN925x_CSR_INT_EN, (UINT8*)&u32data, DWORD_LENGTH);
+    
+    for(UINT16 i=0;i<512;i++)
+    {
+        testBuff[i]= i + 1;
+    }
+    MCHP_ESF_PDI_WRITE(0x2000,testBuff,512);
+    MCHP_ESF_PDI_READ(0x2000,readBuff,512);
+    for(UINT16 i=0;i<128;i++)
+    {
+        if(testBuff[i]!=readBuff[i])
+        {
+            break;
+        }
+    }
 
 	do {
 		u32intMask = 0x93;

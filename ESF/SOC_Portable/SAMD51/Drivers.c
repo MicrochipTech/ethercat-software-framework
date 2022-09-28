@@ -40,31 +40,20 @@
 #include "ecatslv.h"
 #include "ESC_Utils.h"
 
-#define GPIO_T_PDI PORT_PIN_PA20
-#define GPIO_T_MCU PORT_PIN_PA21
-#define GPIO_T_MEA PORT_PIN_PA22
-
-#define SPI_READ_SETUP_BYTES 3
-#define SPI_WRITE_SETUP_BYTES 3
-#define SPI_FASTREAD_SETUP_BYTES 5
 /*gau8DmaBuff size should be set after considering the byte length, Inter DWord and Intra byte dummy bytes
- * Maximum DMA_BUFF_SIZE of the array can be set by taking byte_length to be SPI_DMA_MAX_RX_SIZE & SPI_DMA_MAX_TX_SIZE*/
-#define DMA_BUFF_SIZE 2048 
+ * Maximum DMA_BUFF_SIZE of the array can be set by taking byte_length to be SPI_DMA_MAX_RX_SIZE & SPI_DMA_MAX_TX_SIZE*/ 
 UINT8 gau8DmaBuff[DMA_BUFF_SIZE];
 
 #if (ESF_PDI == SPI)
 
 volatile CHAR gchEtherCATQSPITransmission = false;
 
-void EtherCAT_TransmissionFlagClear(void);
-void EtherCAT_QSPI_CallbackRegistration(void);
-
 /* Function declarations */
 static void SPIChipSelectDisable(void);
 static void SPIChipSelectEnable(void);
-#ifndef ESF_SPI_DMA_EN
+void EtherCAT_TransmissionFlagClear(void);
+void EtherCAT_QSPI_CallbackRegistration(void);
 static UINT8   EtherCAT_QSPITransmissionBusy(void);
-#endif
 #elif (ESF_PDI == SQI)
 static UINT8 gau8rx_data[32] = {0};
 #endif
@@ -125,12 +114,11 @@ void EtherCAT_TransmissionFlagClear(void)
     gchEtherCATQSPITransmission = false;
 }
 
-#ifndef ESF_SPI_DMA_EN
 static UINT8 EtherCAT_QSPITransmissionBusy(void)
 {
     return (gchEtherCATQSPITransmission == false);
 }
-#endif
+
 void EtherCAT_QSPI_CallbackRegistration(void)
 {
     QSPI_CallbackRegister (ECAT_SPI_Callback, 0);
@@ -433,41 +421,301 @@ void ReBuild_SPI_SetCfg_data ()
     gau8DummyCntArr[SPI_WRITE_INTER_DWORD_OFFSET] = 0;
 #endif
 }
-
 /*******************************************************************************
     Function:
-        UINT32 DMA_Buffsize_Calculate (UINT8 u8intra_byte_dummy, UINT8 u8inter_dword_dummy);
+         void   HandleSetupState (UINT16 u16Addr, UINT8 mode);
+
+    Summary:
+        This function is used to transfer Setup state bytes in Non-DMA Case. This
+        function is applicable for SPI Direct and Indirect read, write and fastread 
+        functions, since the Higher and lower byte addresses are used for transfer.
+*******************************************************************************/
+void   HandleSetupState (UINT16 u16Addr, UINT8 mode)
+{
+    UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
+    
+    if((mode == NULL_VALUE))
+    {
+        u8txData = CMD_SERIAL_READ;
+    }
+    else if(mode & IS_DIVISIBLE_TWO)
+    {
+        u8txData = CMD_SERIAL_WRITE;
+    }
+    else
+    {
+        u8txData = CMD_FAST_READ;
+    }
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    
+    u8txData = (UINT8)(u16Addr >> 8);
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[0] = u8rxData;
+    
+    u8txData = (UINT8)u16Addr;
+    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+    QSPI_Sync_Wait();
+    while(QSPI_IsBusy())
+    {
+        ;
+    }
+    gEscALEvent.Byte[1] = u8rxData;
+}
+/*******************************************************************************
+    Function:
+        void    HandleDummyState(UINT8 mode);
+
+    Summary:
+        This function is used to transfer Dummy state bytes in Non-DMA Case
+*******************************************************************************/
+void   HandleDummyState(UINT8 mode)
+{
+    UINT8 u8DummyClkCnt = 0, u8rxData = 0, u8rxLen = 1;
+        
+    if((mode == NULL_VALUE))
+    {
+        u8DummyClkCnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
+    }
+    else if(mode & IS_DIVISIBLE_TWO)
+    {
+        u8DummyClkCnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
+    }
+    else
+    {
+        u8DummyClkCnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
+    }
+    
+    while (u8DummyClkCnt--)
+	{
+		QSPI_Read(&u8rxData, u8rxLen);
+		QSPI_Sync_Wait();
+		while(QSPI_IsBusy())
+		{
+			;
+		}
+	}
+}
+/*******************************************************************************
+    Function:
+        UINT32 DmaBuffsizeCalculate (UINT8 u8IntraDwordDummy, UINT8 u8InterDwordDummy);
 
     Summary:
         This function is used to calculate the Buffer size after inclusion of dummy
         bytes
 *******************************************************************************/
-UINT32 DMA_Buffsize_Calculate (UINT8 u8Intra_Byte_Dummy, UINT8 u8Inter_Dword_Dummy, UINT32 u32Length)
+UINT32 DmaBuffsizeCalculate (UINT8 u8IntraDwordDummy, UINT8 u8InterDwordDummy, UINT32 u32Length)
 {
-    UINT32 u32Buffsize = 0, u32Total_Inter_Dword = 0; 
+    UINT32 u32Buffsize = 0, u32TotalInterDword = 0; 
     
-    /*u32Total_Inter_Dword corresponds to the total number of Inter Dword dummy bytes needed for a given Length
-      For calculating u32Total_Inter_Dword the following example has been cited where Data byte(D),
-      Intra_Byte_Dummy(I), Inter_Dword_Dummy(B). Considering I = 1 and B = 2
-      For 8 bytes the pattern formed is: D I D I D I D B B D I D I D I D (u32Total_Inter_Dword = 2)
-      For 10 bytes the pattern formed is: D I D I D I D B B D I D I D I D B B D I D (u32Total_Inter_Dword = 4)
+    /*u32TotalInterDword corresponds to the total number of Inter Dword dummy bytes 
+     *needed for a given Length. For calculating u32TotalInterDword the following 
+     *example has been cited where Data byte(D),Intra_Byte_Dummy(I), Inter_Dword_Dummy(B). 
+     *Considering I = 1 and B = 2
+      For 8 bytes the pattern formed is: D I D I D I D B B D I D I D I D (u32TotalInterDword = 2)
+      For 10 bytes the pattern formed is: D I D I D I D B B D I D I D I D B B D I D (u32TotalInterDword = 4)
       Since if u32Length is divisible by 4 inter_dword_dummy for last byte is not required.*/
-    if(u32Length & 0x03)
+    if(u32Length & IS_DIVISIBLE_FOUR)
     {
-        u32Total_Inter_Dword = (u32Length / 4);
+        u32TotalInterDword = (u32Length / DWORD_LENGTH);
     }
     else
     {
-        u32Total_Inter_Dword = (u32Length / 4) - 1;
+        u32TotalInterDword = (u32Length / DWORD_LENGTH) - 1;
     }
 
     /* From the above example u32Buffsize = u32Length + no. of (Intra_byte+ Inter_Dword) bytes needed
-     * no.of Inter_Dword bytes needed = u32Total_Inter_Dword * inter_Dword_dummy for 4 bytes
-     *no. of Intra_byte dummy neeed  = (u32Length - last byte - u32Total_Inter_Dword) * Intra_byte_dummy for each byte*/
-    u32Buffsize = u32Length + ((u32Length- u32Total_Inter_Dword - 1) * u8Intra_Byte_Dummy) + (u32Total_Inter_Dword * u8Inter_Dword_Dummy);  
+     * no.of Inter_Dword bytes needed = u32TotalInterDword * inter_Dword_dummy for 4 bytes
+     *no. of Intra_byte dummy neeed  = (u32Length - last byte - u32TotalInterDword) * Intra_byte_dummy for each byte*/
+    u32Buffsize = u32Length + \
+                ((u32Length- u32TotalInterDword - 1) * u8IntraDwordDummy) + \
+                 (u32TotalInterDword * u8InterDwordDummy);  
     
     return u32Buffsize;
 }
+
+/*******************************************************************************
+    Function:
+        void  HandleDmaData(UINT8 *pu8Data, UINT8 u8IntraDwordDummy, 
+                           UINT8 u8InterDwordDummy, UINT32 u32txSize, UINT8 mode)
+
+    Summary:
+        This function is used to handle DMA data in the buffer in case of read,
+        write or fastread
+*******************************************************************************/
+void  HandleDmaData(UINT8 *pu8Data, UINT8 *gau8DmaBuff, UINT8 u8IntraDwordDummy, UINT8 u8InterDwordDummy, UINT32 u32BuffLen, UINT8 mode)
+{
+    /*This function is used to dump the data and dummy in case of write
+      and extract the data from a buffer with dummy in case of read/fastread*/
+    
+    /* Add Intra DWORD and Inter DWORD dummy clocks, avoid for last byte */
+#ifdef INCLUDE_DUMMY
+    UINT16 u16Itr = 0,u16Dwordctr = 0;
+    /* mode = 0  for read, mode = 1 for write and mode = 2 for fastread*/
+    if(mode & IS_DIVISIBLE_TWO)
+    {
+        for(u16Itr = 0; u16Itr < u32BuffLen;)
+        {
+            u16Dwordctr += 1;
+            /* Store the data in the buff and skip the dummy byte positions*/
+            gau8DmaBuff[u16Itr] = *pu8Data;
+            pu8Data++;
+        
+            /*After every 4 bytes add Inter Dummy else Intra dummy*/
+            if((u16Dwordctr & IS_DIVISIBLE_FOUR) == 0)
+            {
+                u16Itr += u8InterDwordDummy + 1;
+                u16Dwordctr = 0;
+            }
+            else
+            {
+                u16Itr += u8IntraDwordDummy + 1;
+            }
+        
+        }
+    
+        /* DMA Write*/
+        DRV_SPITransfer(gau8DmaBuff, u32BuffLen);
+    }
+    else
+    {
+        /* When the buffer is read it contains Intra DWORD and Inter DWORD dummy clocks in addition to Data */
+        DRV_SPIReceive(gau8DmaBuff, u32BuffLen);
+    
+        /* Extract only the data bytes and skip the other dummy bytes */
+        for(u16Itr = 0; u16Itr < u32BuffLen; )
+        {
+            u16Dwordctr += 1;
+            /* Store the data in pu8Data and skip the dummy byte positions*/
+            *pu8Data++ = gau8DmaBuff[u16Itr];
+        
+            /*After every 4 bytes add Inter Dummy else Intra dummy*/
+            if((u16Dwordctr & IS_DIVISIBLE_FOUR) == 0)
+            {
+                u16Itr += u8InterDwordDummy + 1;
+                u16Dwordctr = 0;
+            }
+            else
+            {
+                u16Itr += u8IntraDwordDummy + 1;
+            }
+        } 
+    }
+
+#else
+    if(mode)
+    {
+    /* No Dummy Bytes Included*/
+    /* DMA Write*/
+    DRV_SPITransfer(pu8Data, u32BuffLen);
+    }
+    else
+    {
+    /* No Dummy Bytes Included */
+    /* DMA Read*/
+    DRV_SPIReceive(pu8Data, u32BuffLen);
+    }
+#endif
+}
+/*******************************************************************************
+    Function:
+        void   HandleDataState(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8LastByte);
+
+    Summary:
+        This function is used to handle data in case of read,write or fastread
+        for non-DMA Case
+*******************************************************************************/
+void   HandleDataState(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8LastByte)
+{
+    UINT8 u8DummyClkCnt = 0, u8DummyValue = 0;
+    UINT8 u8txData = 0, u8txLen = 1 ;
+    UINT8 u8rxData = 0, u8rxLen = 1 ;
+    /* Get the Intra DWORD dummy clock count */
+    if((mode == NULL_VALUE))
+       {
+           u8DummyValue = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+       }
+    else if(mode & IS_DIVISIBLE_TWO)
+       {
+           u8DummyValue = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+       }
+    else
+       {
+           u8DummyValue = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+       }
+            
+    if(mode & IS_DIVISIBLE_TWO)
+       {
+            do
+            {
+                u8DummyClkCnt = u8DummyValue;
+                u8txData = *pu8Data++;
+                QSPI_Write(&u8txData, u8txLen);
+                QSPI_Sync_Wait();
+                while(QSPI_IsBusy())
+                {
+                    ;
+                }
+                /* Add Intra DWORD dummy clocks, avoid for last byte */
+                if (u8LastByte != u32Length) {
+                    while (u8DummyClkCnt--)
+                    {
+                        QSPI_Read(&u8rxData, u8rxLen);
+                        QSPI_Sync_Wait();
+                        while(QSPI_IsBusy())
+                        {
+                            ;
+                        }
+                    }
+                }
+            } while (--u32Length);
+        }
+        else
+        {
+            do
+            {
+                if (u8LastByte == u32Length)
+                {
+                    u8txData = READ_TERMINATION_BYTE;
+                }
+                else
+                {
+                    u8txData = NULL_VALUE;
+                }
+                u8DummyClkCnt = u8DummyValue;
+                QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
+                QSPI_Sync_Wait();
+                while(QSPI_IsBusy())
+                {
+                    ;
+                }
+                *pu8Data++ = u8rxData;
+                /* Add Intra DWORD dummy clocks, avoid for last byte */
+                if (u8LastByte != u32Length) {
+                    while (u8DummyClkCnt--)
+                        {
+                            QSPI_Read(&u8rxData, u8rxLen);
+                            QSPI_Sync_Wait();
+                            while(QSPI_IsBusy())
+                            {
+                                ;
+                            }
+                        }      
+                    }
+            } while (--u32Length); 
+        }
+}
+
 /*******************************************************************************
     Function:
         void SPI_SetConfiguration(UINT8 *dummyArr)
@@ -488,7 +736,7 @@ void SPI_SetConfiguration(UINT8 *pu8DummyByteCnt)
     /* First byte corresponds to Global data type value followed by the 39 bytes pu8DummyByteCnt array*/
     gau8DmaBuff[0]= CMD_SQI_SETCFG;
     
-    for(u8Itr = 1;u8Itr <= 40;u8Itr += 1)
+    for(u8Itr = 1;u8Itr <= u8Len;u8Itr += 1)
     {
         gau8DmaBuff[u8Itr] = pu8DummyByteCnt[u8Itr - 1];
     }
@@ -691,82 +939,20 @@ void start_timer(void)
 
 void LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-#ifdef ESF_SPI_DMA_EN
-    LAN9252SPI_DMA_Write(u16Addr, pu8Data, u32Length);
-#else
-    UINT8 u8dummy_clk_cnt = 0;
-    UINT8 u8txData = 0, u8rxData = 0;
-    UINT8 u8txLen = 1, u8rxLen = 1;
-
     SPIChipSelectEnable();
     
     while(QSPI_IsBusy());
 	
-    u8txData = CMD_SERIAL_WRITE;
-    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-    while(QSPI_IsBusy())
-    {
-        ;
-    }
+    /* In Setup state the length and the address is sent*/
+    HandleSetupState (u16Addr, SPI_WRITE);
     
-    u8txData = (UINT8)(u16Addr >> 8);
-    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-    while(QSPI_IsBusy())
-    {
-        ;
-    }
-    gEscALEvent.Byte[0] = u8rxData;
-    
-    u8txData = (UINT8)u16Addr;
-    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-    while(QSPI_IsBusy())
-    {
-        ;
-    }
-    gEscALEvent.Byte[1] = u8rxData;
-
     /* Initial Dummy cycle added by dummy write */
-    u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
-	while (u8dummy_clk_cnt--)
-	{
-		QSPI_Read(&u8rxData, u8rxLen);
-		QSPI_Sync_Wait();
-		while(QSPI_IsBusy())
-		{
-			;
-		}
-	}
+    HandleDummyState(SPI_WRITE);
     
-	do
-	{
-        u8txData = *pu8Data++;
-        QSPI_Write(&u8txData, u8txLen);
-        QSPI_Sync_Wait();
-        while(QSPI_IsBusy())
-        {
-            ;
-        }
-        /* Get the Intra DWORD dummy clock count */
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
-        /* Add Intra DWORD dummy clocks, avoid for last byte */
-        if (1 != u32Length) {
-            while (u8dummy_clk_cnt--)
-            {
-                QSPI_Read(&u8rxData, u8rxLen);
-                QSPI_Sync_Wait();
-                while(QSPI_IsBusy())
-                {
-                    ;
-                }
-            }
-        }
-	} while (--u32Length);
+    /*In Data state the actual data to be written is sent*/
+	HandleDataState(pu8Data, u32Length, SPI_WRITE, NOT_NULL);
    
     SPIChipSelectDisable();
-#endif
 }
 
 /* 
@@ -789,20 +975,17 @@ void LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 void    LAN9252SPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-#ifdef INCLUDE_DUMMY
-    UINT8 u8Intra_Byte_Dummy = 0, u8Inter_Dword_Dummy = 0;
-    UINT16 u16Itr = 0, u16Dwordctr = 0;
-#endif
-    UINT8 u8dummy_clk_cnt = 0,u8txLen = 1;
+    UINT8 u8IntraDwordDummy = 0, u8InterDwordDummy = 0;
+    UINT8 u8DummyClkCnt = 0,u8txLen = 1;
     UINT32 u32txSize = 1;
     
     SPIChipSelectEnable();
     
-    /* Initial Dummy cycle added by dummy write is stored in u8dummy_clk_cnt */
-    u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
+    /* Initial Dummy cycle added by dummy write is stored in u8DummyClkCnt */
+    u8DummyClkCnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
     
     /* Setup phase and Dummy phase is transmitted together by DMA*/
-    u8txLen = SPI_WRITE_SETUP_BYTES + u8dummy_clk_cnt;
+    u8txLen = SPI_WRITE_SETUP_BYTES + u8DummyClkCnt;
     
     gau8DmaBuff[0] = CMD_SERIAL_WRITE;
     gau8DmaBuff[1] = (UINT8)(u16Addr >> 8);
@@ -811,42 +994,15 @@ void    LAN9252SPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     /* DMA Write*/
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
     
-#ifdef INCLUDE_DUMMY
     /* Get the Intra Byte and Inter Dword dummy clock count */     
-    u8Intra_Byte_Dummy = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
-    u8Inter_Dword_Dummy = gau8DummyCntArr[SPI_WRITE_INTER_DWORD_OFFSET];
+    u8IntraDwordDummy = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+    u8InterDwordDummy = gau8DummyCntArr[SPI_WRITE_INTER_DWORD_OFFSET];
     
-    u32txSize = DMA_Buffsize_Calculate (u8Intra_Byte_Dummy, u8Inter_Dword_Dummy, u32Length);
+    u32txSize = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length);
     
-    /* Add Intra DWORD and Inter DWORD dummy clocks, avoid for last byte */
-    for(u16Itr = 0; u16Itr < u32txSize;)
-    {
-        u16Dwordctr += 1;
-        /* Store the data in the buff and skip the dummy byte positions*/
-        gau8DmaBuff[u16Itr] = *pu8Data;
-		pu8Data++;
-        
-        /*After every 4 bytes add Inter Dummy else Intra dummy*/
-        if((u16Dwordctr && 0x03) == 0)
-        {
-            u16Itr += u8Inter_Dword_Dummy + 1;
-            u16Dwordctr = 0;
-        }
-        else
-        {
-            u16Itr += u8Intra_Byte_Dummy + 1;
-        }
-        
-    }
-    
-    /* DMA Write*/
-    DRV_SPITransfer(gau8DmaBuff, u32txSize);
-#else
-    u32txSize = u32Length;
-    /* No Dummy Bytes Included*/
-    /* DMA Write*/
-    DRV_SPITransfer(pu8Data, u32txSize);
-#endif  
+    /* In the DMA Data set the data to be written is sent in a buffer*/
+    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32txSize, SPI_WRITE);
+
     SPIChipSelectDisable(); 
 }
 /* 
@@ -867,92 +1023,21 @@ void    LAN9252SPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 */
 
 void LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
-{
-#ifdef ESF_SPI_DMA_EN
-    LAN9252SPI_DMA_Read(u16Addr, pu8Data, u32Length);
-#else
-    UINT8 u8dummy_clk_cnt = 0;
-    UINT8 u8txData = 0, u8txLen = 1;
-    UINT8 u8rxData = 0, u8rxLen = 1;
-    
+{ 
     SPIChipSelectEnable();
     
     while(QSPI_IsBusy());
 
-    u8txData = CMD_SERIAL_READ;
-    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-    while(QSPI_IsBusy())
-    {
-        ;
-    }
-    
-    u8txData = (UINT8)(u16Addr >> 8);
-    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-    while(QSPI_IsBusy())
-    {
-        ;
-    }
-    gEscALEvent.Byte[0] = u8rxData;
-    
-    u8txData = (UINT8)u16Addr;
-    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-    while(QSPI_IsBusy())
-    {
-        ;
-    }
-    gEscALEvent.Byte[1] = u8rxData;
+    /* In Setup state the length and the address is sent*/
+    HandleSetupState (u16Addr, SPI_READ);
     
     /* Initial Dummy cycle added by dummy read */
-    u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
-	while (u8dummy_clk_cnt--)
-	{
-		QSPI_Read(&u8rxData, u8rxLen);
-		QSPI_Sync_Wait();
-		while(QSPI_IsBusy())
-		{
-			;
-		}
-	}
+    HandleDummyState(SPI_READ);
     
-	do
-	{
-		if (1 == u32Length)
-		{
-			u8txData = READ_TERMINATION_BYTE;
-		}
-        else
-        {
-            u8txData = 0;
-        }
-		QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-		QSPI_Sync_Wait();
-		while(QSPI_IsBusy())
-		{
-			;
-		}
-		*pu8Data++ = u8rxData;
-        
-        /* Get the Intra DWORD dummy clock count */
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
-        /* Add Intra DWORD dummy clocks, avoid for last byte */
-        if (1 != u32Length) {
-            while (u8dummy_clk_cnt--)
-            {
-                QSPI_Read(&u8rxData, u8rxLen);
-                QSPI_Sync_Wait();
-                while(QSPI_IsBusy())
-                {
-                    ;
-                }
-            }
-        }
-	} while (--u32Length);
+    /*In Data state the data to be read is extracted byte by byte*/
+	HandleDataState(pu8Data, u32Length, SPI_READ, NOT_NULL);
     
 	SPIChipSelectDisable();
-#endif
 }
 
 /* 
@@ -975,20 +1060,17 @@ void LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 void   LAN9252SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-#ifdef INCLUDE_DUMMY
-    UINT8 u8Intra_Byte_Dummy = 0, u8Inter_Dword_Dummy = 0;
-    UINT16 u16Itr = 0, u16Dwordctr = 0;
-#endif 
-    UINT8 u8dummy_clk_cnt = 0, u8txLen = 1;
+    UINT8 u8IntraDwordDummy = 0, u8InterDwordDummy = 0;
+    UINT8 u8DummyClkCnt = 0, u8txLen = 1;
     UINT32 u32rxLen = 1;
     
     SPIChipSelectEnable();
     
-    /* Initial Dummy cycle added by dummy read is stored in u8dummy_clk_cnt */
-    u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
+    /* Initial Dummy cycle added by dummy read is stored in u8DummyClkCnt */
+    u8DummyClkCnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
     
     /* Setup phase and Dummy phase is transmitted together by DMA*/
-    u8txLen = SPI_READ_SETUP_BYTES + u8dummy_clk_cnt;
+    u8txLen = SPI_READ_SETUP_BYTES + u8DummyClkCnt;
     
     gau8DmaBuff[0] = CMD_SERIAL_READ;
     gau8DmaBuff[1] = (UINT8)(u16Addr >> 8);
@@ -997,40 +1079,15 @@ void   LAN9252SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     /* DMA Write*/
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
     
-#ifdef INCLUDE_DUMMY
     /* Get the Intra DWORD dummy clock count */
-    u8Intra_Byte_Dummy = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
-    u8Inter_Dword_Dummy = gau8DummyCntArr[SPI_READ_INTER_DWORD_OFFSET];
+    u8IntraDwordDummy = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+    u8InterDwordDummy = gau8DummyCntArr[SPI_READ_INTER_DWORD_OFFSET];
     
-    u32rxLen = DMA_Buffsize_Calculate (u8Intra_Byte_Dummy, u8Inter_Dword_Dummy, u32Length);
+    u32rxLen = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length);
     
-    /* When the buffer is read it contains Intra DWORD and Inter DWORD dummy clocks in addition to Data */
-    DRV_SPIReceive(gau8DmaBuff, u32rxLen);
-    
-    /* Extract only the data bytes and skip the other dummy bytes */
-    for(u16Itr = 0; u16Itr < u32rxLen; )
-    {
-        u16Dwordctr += 1;
-        /* Store the data in pu8Data and skip the dummy byte positions*/
-        *pu8Data++ = gau8DmaBuff[u16Itr];
-        
-        /*After every 4 bytes add Inter Dummy else Intra dummy*/
-        if((u16Dwordctr && 0x03) == 0)
-        {
-            u16Itr += u8Inter_Dword_Dummy + 1;
-            u16Dwordctr = 0;
-        }
-        else
-        {
-            u16Itr += u8Intra_Byte_Dummy + 1;
-        }
-    }
-#else
-    u32rxLen = u32Length;
-    /* No Dummy Bytes Included */
-    /* DMA Read*/
-    DRV_SPIReceive(pu8Data, u32rxLen);
-#endif
+    /* In DMA data state the data to be read is extracted from the buffer*/
+    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32rxLen, SPI_READ);
+
     SPIChipSelectDisable();	 
 }
 /* 
@@ -1050,45 +1107,17 @@ void   LAN9252SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 void LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-#ifdef ESF_SPI_DMA_EN
-    LAN9252SPI_DMA_FastRead(u16Addr, pu8Data, u32Length);
-#else
-    UINT8 u8dummy_clk_cnt = 0;
-    UINT8 u8txData = 0, u8txLen = 1;
-    UINT8 u8rxData = 0, u8rxLen = 1;
-
-	SPIChipSelectEnable();
+	UINT8 u8rxLen = 1;
+    
+    SPIChipSelectEnable();
 
 	while(QSPI_IsBusy())
 	{
 		;
 	}
-
-	u8txData = CMD_FAST_READ;
-	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-    while(QSPI_IsBusy())
-    {
-        ;
-    }
     
-    u8txData = (UINT8)(u16Addr >> 8);
-    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-    while(QSPI_IsBusy())
-    {
-        ;
-    }
-    gEscALEvent.Byte[0] = u8rxData;
-    
-    u8txData = (UINT8)u16Addr;
-    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-    while(QSPI_IsBusy())
-    {
-        ;
-    }
-    gEscALEvent.Byte[1] = u8rxData;
+    /* In Setup state the length and the address is sent*/
+	HandleSetupState (u16Addr, SPI_FAST_READ);
     
 	/* Send Transfer length */
 	QSPI_Write(&u32Length, u8rxLen);
@@ -1099,53 +1128,12 @@ void LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	}
 
     /* Initial Dummy cycle added by dummy read */
-	u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
-	while (u8dummy_clk_cnt--)
-	{
-		QSPI_Read(&u8rxData, u8rxLen);
-		QSPI_Sync_Wait();
-		while(QSPI_IsBusy())
-		{
-			;
-		}
-	}
+	HandleDummyState(SPI_FAST_READ);
 	
-	do
-	{
-		if (1 == u32Length)
-		{
-			u8txData = READ_TERMINATION_BYTE;
-		}
-        else
-        {
-            u8txData = 0;
-        }
-        QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-        QSPI_Sync_Wait();
-        while(QSPI_IsBusy())
-        {
-            ;
-        }
-		*pu8Data++ = u8rxData;
-        
-        /* Get the Intra DWORD dummy clock count */
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
-        /* Add Intra DWORD dummy clocks, avoid for last byte */
-        if (1 != u32Length) {
-            while (u8dummy_clk_cnt--)
-            {
-                QSPI_Read(&u8rxData, u8rxLen);
-                QSPI_Sync_Wait();
-                while(QSPI_IsBusy())
-                {
-                    ;
-                }
-            }
-        }
-	} while (--u32Length);
-
-	SPIChipSelectDisable();		
-#endif
+    /* In Data state the data to be read is extracted byte by byte*/
+	HandleDataState(pu8Data, u32Length, SPI_FAST_READ, NOT_NULL);
+	
+    SPIChipSelectDisable();		
 }
 
 /* 
@@ -1166,20 +1154,17 @@ void LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 void   LAN9252SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-#ifdef INCLUDE_DUMMY
-    UINT8 u8Intra_Byte_Dummy = 0, u8Inter_Dword_Dummy = 0;
-    UINT16 u16Itr = 0, u16Dwordctr = 0;
-#endif
-    UINT8 u8dummy_clk_cnt = 0,u8txLen = 1;
+    UINT8 u8IntraDwordDummy = 0, u8InterDwordDummy = 0;
+    UINT8 u8DummyClkCnt = 0,u8txLen = 1;
     UINT32 u32rxLen = 1;
 	
     SPIChipSelectEnable();
      
-    /* Initial Dummy cycle added by dummy fastread is stored in u8dummy_clk_cnt */
-	u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
+    /* Initial Dummy cycle added by dummy fastread is stored in u8DummyClkCnt */
+	u8DummyClkCnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
     
     /* Setup phase and Dummy phase is transmitted together by DMA*/
-    u8txLen = SPI_READ_SETUP_BYTES + u8dummy_clk_cnt + 1;
+    u8txLen = SPI_READ_SETUP_BYTES + u8DummyClkCnt + 1;
     
     gau8DmaBuff[0] = CMD_FAST_READ;
 	gau8DmaBuff[1] = (UINT8)(u16Addr >> 8);
@@ -1189,42 +1174,74 @@ void   LAN9252SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     /* DMA Write*/
     DRV_SPITransfer(gau8DmaBuff, u8txLen);  
     
-#ifdef INCLUDE_DUMMY
 	/* Get the Intra DWORD dummy clock count */
-    u8Intra_Byte_Dummy = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
-    u8Inter_Dword_Dummy = gau8DummyCntArr[SPI_FASTREAD_INTER_DWORD_OFFSET];
+    u8IntraDwordDummy = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+    u8InterDwordDummy = gau8DummyCntArr[SPI_FASTREAD_INTER_DWORD_OFFSET];
     
-    u32rxLen = DMA_Buffsize_Calculate (u8Intra_Byte_Dummy, u8Inter_Dword_Dummy, u32Length);
+    u32rxLen = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length);
     
-	 /* When the buffer is read it contains Intra DWORD and Inter DWORD dummy clocks in addition to Data */
-    DRV_SPIReceive(gau8DmaBuff, u32rxLen);	
-
-    /* Extract only the data bytes and skip the other dummy bytes */	
-    for(u16Itr = 0; u16Itr < u32rxLen; )
-    {
-        u16Dwordctr += 1;
-        /* Store the data in pu8Data and skip the dummy byte positions*/
-        *pu8Data++ = gau8DmaBuff[u16Itr];
-        
-        /*After every 4 bytes add Inter Dummy else Intra dummy*/
-        if((u16Dwordctr && 0x03) == 0)
-        {
-            u16Itr += u8Inter_Dword_Dummy + 1;
-            u16Dwordctr = 0;
-        }
-        else
-        {
-            u16Itr += u8Intra_Byte_Dummy + 1;
-        }
-    }
-#else
-    u32rxLen = u32Length;
-    /* No Dummy Bytes Included*/
-    /* DMA Read*/
-    DRV_SPIReceive(pu8Data,u32rxLen);
-#endif
+    /*In data state the data to be read is extracted from the buffer*/
+    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32rxLen, SPI_FAST_READ);
+    
     SPIChipSelectDisable();
 }
+
+/*******************************************************************************
+    Function:
+        void   PDRAMSetAddrLength(UINT16 u16Addr, UINT32 u32Length, UINT8 mode)
+
+    Summary:
+        This function is used align the length for Core CSR and process RAM. It 
+ *      is specific to PDRAM Accessing functions
+*******************************************************************************/
+
+void   PDRAMSetAddrLength(UINT16 u16Addr, UINT32 u32Length, UINT8 *u8StartAlignSize, UINT8 *u8EndAlignSize, UINT8 mode)
+{
+    UINT32_VAL u32Val;
+    /* Address and length */
+	u32Val.w[0] = u16Addr;
+	u32Val.w[1] = u32Length;
+    
+    if((mode == NULL_VALUE))
+    {
+        MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_RD_ADDR_LENGTH_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+
+        /* Read command */
+        u32Val.Val = 0x80000000;
+        MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_RD_CMD_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+
+        *u8StartAlignSize = (u16Addr & 0x3);
+        *u8EndAlignSize = (u32Length + *u8StartAlignSize) & 0x3;
+    }
+    else if(mode & IS_DIVISIBLE_TWO)
+    {
+        MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_WR_ADDR_LENGTH_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+
+        /* write command */
+        u32Val.Val = 0x80000000;
+        MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_WR_CMD_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+	
+        *u8StartAlignSize = (u16Addr & 0x3);
+        //	u8EndAlignSize = (u16Len & 3) + u8StartAlignSize;
+        // Changed for a bug identified with HBI - Demux BSP
+        *u8EndAlignSize = (u32Length + *u8StartAlignSize) & 0x3;
+    }
+    else
+    {
+        MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_RD_ADDR_LENGTH_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+
+        /* Read command */
+        u32Val.Val = 0x80000000;
+        MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_RD_CMD_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+        *u8StartAlignSize = (u16Addr & 0x3);
+        *u8EndAlignSize = (u32Length & 0x3) + *u8StartAlignSize;
+    }
+    if (*u8EndAlignSize & IS_DIVISIBLE_FOUR)
+    {
+		*u8EndAlignSize = (((*u8EndAlignSize + 4) & 0xC) - *u8EndAlignSize);
+	}
+}
+
 /* 
     Function: LAN9252SPI_ReadPDRAM
 
@@ -1242,31 +1259,12 @@ void   LAN9252SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 {
-   UINT32_VAL u32Val;
-   UINT8 u8StartAlignSize = 0, u8EndAlignSize = 0;
-    /* Address and length */
-	u32Val.w[0] = u16Addr;
-	u32Val.w[1] = u32Length;
-	MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_RD_ADDR_LENGTH_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
-
-	/* Read command */
-	u32Val.Val = 0x80000000;
-	MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_RD_CMD_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
-
-	u8StartAlignSize = (u16Addr & 0x3);
-	u8EndAlignSize = (u32Length + u8StartAlignSize) & 0x3;
-	if (u8EndAlignSize & 0x3){
-		u8EndAlignSize = (((u8EndAlignSize + 4) & 0xC) - u8EndAlignSize);
-	}
-    
-#ifdef ESF_SPI_DMA_EN
-    LAN9252SPI_DMA_ReadPDRAM(pu8Data, u16Addr, u8StartAlignSize, u8EndAlignSize, u32Length);
-#else
-	UINT8 u8dummy_clk_cnt = 0;
+    UINT8 u8StartAlignSize = 0, u8EndAlignSize = 0;
+	UINT8 u8DummyClkCnt = 0;
     UINT8 u8txData = 0, u8txLen = 1;
     UINT8 u8rxData = 0, u8rxLen = 1;
     
-	
+    PDRAMSetAddrLength(u16Addr, u32Length, &u8StartAlignSize, &u8EndAlignSize, SPI_READ);
 	/* Read SPI FIFO */
 	SPIChipSelectEnable();
  
@@ -1280,7 +1278,7 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
         ;
     }
     
-    u8txData = (UINT8)0x0;
+    u8txData = (UINT8)NULL_VALUE;
     QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
     QSPI_Sync_Wait();
     while(QSPI_IsBusy())
@@ -1289,7 +1287,7 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     }
     gEscALEvent.Byte[0] = u8rxData;
     
-    u8txData = (UINT8)0x04;
+    u8txData = (UINT8)PDRAM_READ_ADDRESS;
     QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
     QSPI_Sync_Wait();
     while(QSPI_IsBusy())
@@ -1299,16 +1297,7 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     gEscALEvent.Byte[1] = u8rxData;
     
     /* Initial Dummy cycle added by dummy read */
-	u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
-	while (u8dummy_clk_cnt--)
-	{
-		QSPI_Read(&u8rxData, u8rxLen);
-		QSPI_Sync_Wait();
-		while(QSPI_IsBusy())
-		{
-			;
-		}
-	}
+	HandleDummyState(SPI_READ);
 
 	while (u8StartAlignSize--)
 	{
@@ -1321,10 +1310,10 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
         }
         
         /* Get the Intra DWORD dummy clock count */
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+        u8DummyClkCnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
         /* Add Intra DWORD dummy clocks, avoid for last byte */
         if (0 != u8StartAlignSize) {
-            while (u8dummy_clk_cnt--)
+            while (u8DummyClkCnt--)
             {
                 QSPI_Read(&u8rxData, u8rxLen);
                 QSPI_Sync_Wait();
@@ -1335,39 +1324,9 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
             }
         }
 	}
-    
-
-    
-	while (u32Length--)
-	{
-		if (0 == u32Length)
-		{
-			u8txData = READ_TERMINATION_BYTE;
-		}
-        else
-        {
-            u8txData = 0;
-        }
-		QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-        QSPI_Sync_Wait();
-        while(QSPI_IsBusy());
-        *pu8Data++ = u8rxData;
         
-        /* Get the Intra DWORD dummy clock count */
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
-        /* Add Intra DWORD dummy clocks, avoid for last byte */
-        if (0 != u32Length) {
-            while (u8dummy_clk_cnt--)
-            {
-                QSPI_Read(&u8rxData, u8rxLen);
-                QSPI_Sync_Wait();
-                while(QSPI_IsBusy())
-                {
-                    ;
-                }
-            }
-        }
-	}
+    /*In Handle Data stae the data to be read is extracted byte by byte*/
+	HandleDataState(pu8Data, u32Length, SPI_READ, NULL_VALUE);
 
 	while (u8EndAlignSize--)
 	{
@@ -1380,10 +1339,10 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
         }
         
         /* Get the Intra DWORD dummy clock count */
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+        u8DummyClkCnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
         /* Add Intra DWORD dummy clocks, avoid for last byte */
         if (0 != u8EndAlignSize) {
-            while (u8dummy_clk_cnt--)
+            while (u8DummyClkCnt--)
             {
                 QSPI_Read(&u8rxData, u8rxLen);
                 QSPI_Sync_Wait();
@@ -1396,7 +1355,6 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 	}
     
 	SPIChipSelectDisable();
-#endif
 }
 
 /* 
@@ -1415,69 +1373,43 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 
 */
 
-void   LAN9252SPI_DMA_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT8 u8StartAlignSize, UINT8 u8EndAlignSize, UINT32 u32Length)
+void   LAN9252SPI_DMA_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 {
-#ifdef INCLUDE_DUMMY
-    UINT8 u8Inter_Dword_Dummy = 0;
-    UINT16 u16Itr = 0, u16Dwordctr = 0; 
-#endif
-    UINT8 u8dummy_clk_cnt = 0, u8Intra_Byte_Dummy = 0, u8txLen = 1;
+    UINT8 u8InterDwordDummy = 0, u8IntraDwordDummy = 0, u8StartAlignSize = 0, u8EndAlignSize = 0;
+    UINT8 u8DummyClkCnt = 0, u8txLen = 1;
     UINT32 u32rxLen = 1;
+    
+    PDRAMSetAddrLength(u16Addr, u32Length, &u8StartAlignSize, &u8EndAlignSize, SPI_READ);
     
 	/* Read SPI FIFO */
 	SPIChipSelectEnable();
  
-    /* Initial Dummy cycle added by dummy read is stored in u8dummy_clk_cnt */
-	u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
-    u8Intra_Byte_Dummy = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+    /* Initial Dummy cycle added by dummy read is stored in u8DummyClkCnt */
+	u8DummyClkCnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
+    u8IntraDwordDummy = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
     
     /* Setup phase and Dummy phase is transmitted together by DMA*/
-    u8txLen = SPI_READ_SETUP_BYTES + u8dummy_clk_cnt + u8StartAlignSize + (u8StartAlignSize * u8Intra_Byte_Dummy);  
+    u8txLen = SPI_READ_SETUP_BYTES + u8DummyClkCnt + u8StartAlignSize + (u8StartAlignSize * u8IntraDwordDummy);  
 
     gau8DmaBuff[0] = CMD_SERIAL_READ;
-    gau8DmaBuff[1] = (UINT8)0x0;
-    gau8DmaBuff[2] = (UINT8)0x04;
+    gau8DmaBuff[1] = (UINT8)NULL_VALUE;
+    gau8DmaBuff[2] = (UINT8)PDRAM_READ_ADDRESS;
     
     /* DMA Write*/
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
     
-#ifdef INCLUDE_DUMMY
  /* Get the Intra DWORD dummy clock count */
-    u8Intra_Byte_Dummy = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
-    u8Inter_Dword_Dummy = gau8DummyCntArr[SPI_READ_INTER_DWORD_OFFSET];
+    u8IntraDwordDummy = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+    u8InterDwordDummy = gau8DummyCntArr[SPI_READ_INTER_DWORD_OFFSET];
     
-    u32rxLen = DMA_Buffsize_Calculate (u8Intra_Byte_Dummy, u8Inter_Dword_Dummy, u32Length);
+    u32rxLen = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length);
 	
-    /* When the buffer is read it contains Intra DWORD and Inter DWORD dummy clocks in addition to Data */
-    DRV_SPIReceive(gau8DmaBuff, u32rxLen);
-    
-    for(u16Itr = 0; u16Itr < u32rxLen;)
-    {
-        u16Dwordctr += 1;
-        /* Store the data in pu8Data and skip the dummy byte positions*/
-        *pu8Data++ = gau8DmaBuff[u16Itr];
-        
-        /*After every 4 bytes add Inter Dummy else Intra dummy*/
-        if((u16Dwordctr && 0x03) == 0)
-        {
-            u16Itr += u8Inter_Dword_Dummy + 1;
-            u16Dwordctr = 0;
-        }
-        else
-        {
-            u16Itr += u8Intra_Byte_Dummy + 1;
-        }
-    }
-#else 
-    u32rxLen = u32Length;
-    /* No Dummy Bytes Included */
-    /* DMA Read*/
-    DRV_SPIReceive(pu8Data,u32rxLen);
-#endif
+    /*In Handle DMA Data state the data to be read is extracted from the buffer*/
+    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32rxLen, SPI_READ);
     
 	/* Get the Intra DWORD dummy clock count */
-    u8Intra_Byte_Dummy = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
-    u8txLen = u8EndAlignSize + (u8EndAlignSize * u8Intra_Byte_Dummy);
+    u8IntraDwordDummy = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+    u8txLen = u8EndAlignSize + (u8EndAlignSize * u8IntraDwordDummy);
 	
     /* Add Intra DWORD dummy clocks, avoid for last byte */
     /* DMA Write*/
@@ -1501,16 +1433,13 @@ void   LAN9252SPI_DMA_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT8 u8StartAli
 
 void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 {
-    UINT32_VAL u32Val;
-    UINT8 u8StartAlignSize = 0, u8EndAlignSize = 0;
+    UINT8 u8StartAlignSize = 0, u8EndAlignSize = 0, u8DummyClkCnt = 0;
+    UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
     UINT16 u16XfrLen = 0, u16TotalLen = 0;
+   
+	PDRAMSetAddrLength(u16Addr, u32Length, &u8StartAlignSize, &u8EndAlignSize, SPI_FAST_READ);
     
-    u8StartAlignSize = (u16Addr & 0x3);
-	u8EndAlignSize = (u32Length & 0x3) + u8StartAlignSize;
-	if (u8EndAlignSize & 0x3){
-		u8EndAlignSize = (((u8EndAlignSize + 4) & 0xC) - u8EndAlignSize);
-	}
-	
 	u16TotalLen = u32Length + u8StartAlignSize + u8EndAlignSize;
 	
 	/* From DOS, "For the one byte transfer length format,	bit 7 is low and bits 6-0 specify the 
@@ -1527,22 +1456,6 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 		u16XfrLen |= ((u16TotalLen & 0x3F80) << 1);
 	}
 	
-	/* Address and length */
-	u32Val.w[0] = u16Addr;
-	u32Val.w[1] = u32Length;
-	MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_RD_ADDR_LENGTH_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
-
-	/* Read command */
-	u32Val.Val = 0x80000000;
-	MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_RD_CMD_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
-
-#ifdef ESF_SPI_DMA_EN
-    LAN9252SPI_DMA_FastReadPDRAM(pu8Data, u16XfrLen, u8StartAlignSize, u8EndAlignSize, u32Length);
-#else
-	UINT8 u8dummy_clk_cnt = 0;
-    UINT8 u8txData = 0, u8txLen = 1;
-    UINT8 u8rxData = 0, u8rxLen = 1;
-
 	/* Read SPI FIFO */
 	SPIChipSelectEnable();
 
@@ -1559,7 +1472,7 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
         ;
     }
     
-    u8txData = (UINT8)0x0;
+    u8txData = (UINT8)NULL_VALUE;
     QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
     QSPI_Sync_Wait();
     while(QSPI_IsBusy())
@@ -1568,7 +1481,7 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     }
     gEscALEvent.Byte[0] = u8rxData;
     
-    u8txData = (UINT8)0x04;
+    u8txData = (UINT8)PDRAM_READ_ADDRESS;
     QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
 	QSPI_Sync_Wait();
 	while(QSPI_IsBusy())
@@ -1599,16 +1512,7 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 	}
 	
 	/* Initial Dummy cycle added by dummy read */
-	u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
-	while (u8dummy_clk_cnt--)
-	{
-		QSPI_Read(&u8rxData, u8rxLen);
-		QSPI_Sync_Wait();
-		while(QSPI_IsBusy())
-		{
-			;
-		}
-	}
+	HandleDummyState(SPI_FAST_READ);
     
 	while (u8StartAlignSize--)
 	{
@@ -1620,10 +1524,10 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
             ;
         }
         /* Get the Intra DWORD dummy clock count */
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+        u8DummyClkCnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
         /* Add Intra DWORD dummy clocks, avoid for last byte */
         if (0 != u8StartAlignSize) {
-            while (u8dummy_clk_cnt--)
+            while (u8DummyClkCnt--)
             {
                 QSPI_Read(&u8rxData, u8rxLen);
                 QSPI_Sync_Wait();
@@ -1635,38 +1539,8 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
         }
 	}
 
-
-	while (u32Length--)
-	{
-		if (0 == u32Length)
-		{
-			u8txData = READ_TERMINATION_BYTE;
-		}
-        else
-        {
-            u8txData = 0;
-        }
-        QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-        QSPI_Sync_Wait();
-        while(QSPI_IsBusy());
-        *pu8Data++ = u8rxData;
-        
-        /* Get the Intra DWORD dummy clock count */
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
-        /* Add Intra DWORD dummy clocks, avoid for last byte */
-        if (0 != u32Length) {
-            while (u8dummy_clk_cnt--)
-            {
-                QSPI_Read(&u8rxData, u8rxLen);
-                QSPI_Sync_Wait();
-                while(QSPI_IsBusy())
-                {
-                    ;
-                }
-            }
-        }
-	}
-
+    /* In handle data state the data to be extracted is read byte by byte*/
+	HandleDataState(pu8Data, u32Length, SPI_FAST_READ, NULL_VALUE);
 	while (u8EndAlignSize--)
 	{
         /* End align size Byte */
@@ -1675,10 +1549,10 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
         while(QSPI_IsBusy());
         
         /* Get the Intra DWORD dummy clock count */
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+        u8DummyClkCnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
         /* Add Intra DWORD dummy clocks, avoid for last byte */
         if (0 != u8EndAlignSize) {
-            while (u8dummy_clk_cnt--)
+            while (u8DummyClkCnt--)
             {
                 QSPI_Read(&u8rxData, u8rxLen);
                 QSPI_Sync_Wait();
@@ -1691,7 +1565,6 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 	}
 
 	SPIChipSelectDisable();
-#endif
 }
 
 /* 
@@ -1709,28 +1582,39 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     Output : None
 */
 
-void    LAN9252SPI_DMA_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16XfrLen, UINT8 u8StartAlignSize, UINT8 u8EndAlignSize, UINT32 u32Length)
+void    LAN9252SPI_DMA_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 {
-   #ifdef INCLUDE_DUMMY
-    UINT8 u8Inter_Dword_Dummy = 0;
-    UINT16 u16Itr = 0, u16Dwordctr = 0;
-#endif
-    UINT8 u8dummy_clk_cnt = 0, u8Intra_Byte_Dummy = 0, u8txLen = 1;
+    UINT8 u8InterDwordDummy = 0, u8IntraDwordDummy = 0, u8StartAlignSize = 0, u8EndAlignSize = 0;
+    UINT8 u8DummyClkCnt = 0, u8txLen = 1;
+    UINT16 u16TotalLen = 0, u16XfrLen = 0;
     UINT32 u32rxLen = 1;
     
+    PDRAMSetAddrLength(u16Addr, u32Length, &u8StartAlignSize, &u8EndAlignSize, SPI_FAST_READ);
+    
+	u16TotalLen = u32Length + u8StartAlignSize + u8EndAlignSize;
+    
+    if (u16TotalLen <= ONE_BYTE_MAX_XFR_LEN)
+	{
+		u16XfrLen = u16TotalLen; 
+	}
+	else  
+	{
+		u16XfrLen = (u16TotalLen & 0x7F) | 0x80;
+		u16XfrLen |= ((u16TotalLen & 0x3F80) << 1);
+	}
 	/* Read SPI FIFO */
 	SPIChipSelectEnable();
     
-    /* Initial Dummy cycle added by dummy fastread is stored in u8dummy_clk_cnt */
-    u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
-    u8Intra_Byte_Dummy = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+    /* Initial Dummy cycle added by dummy fastread is stored in u8DummyClkCnt */
+    u8DummyClkCnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
+    u8IntraDwordDummy = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
     
     /* Setup phase and Dummy phase is transmitted together by DMA*/
-    u8txLen = SPI_FASTREAD_SETUP_BYTES + u8dummy_clk_cnt + u8StartAlignSize + (u8StartAlignSize * u8Intra_Byte_Dummy);
+    u8txLen = SPI_FASTREAD_SETUP_BYTES + u8DummyClkCnt + u8StartAlignSize + (u8StartAlignSize * u8IntraDwordDummy);
 	
     gau8DmaBuff[0] = CMD_FAST_READ;
-	gau8DmaBuff[1] = (UINT8)0x0;
-    gau8DmaBuff[2] = (UINT8)0x04;
+	gau8DmaBuff[1] = (UINT8)NULL_VALUE;
+    gau8DmaBuff[2] = (UINT8)PDRAM_READ_ADDRESS;
 	/* Send Transfer length */
     gau8DmaBuff[3] = LOBYTE(u16XfrLen);
 	
@@ -1747,43 +1631,18 @@ void    LAN9252SPI_DMA_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16XfrLen, UINT8 u8S
         DRV_SPITransfer(gau8DmaBuff, (u8txLen - 1));
     }
     
-#ifdef INCLUDE_DUMMY
     /* Get the Intra DWORD dummy clock count */
-    u8Intra_Byte_Dummy = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
-    u8Inter_Dword_Dummy = gau8DummyCntArr[SPI_FASTREAD_INTER_DWORD_OFFSET];
+    u8IntraDwordDummy = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+    u8InterDwordDummy = gau8DummyCntArr[SPI_FASTREAD_INTER_DWORD_OFFSET];
     
-    u32rxLen = DMA_Buffsize_Calculate (u8Intra_Byte_Dummy, u8Inter_Dword_Dummy, u32Length); 
+    u32rxLen = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length); 
 	
-    /* When the buffer is read it contains Intra DWORD and Inter DWORD dummy clocks in addition to Data */
-    DRV_SPIReceive(gau8DmaBuff, u32rxLen);
+    /*In Handle DMA data the data to be read is extracted from the buffer*/
+    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32rxLen, SPI_FAST_READ);
     
-    /* Extract only the data bytes and skip the other dummy bytes */
-    for(u16Itr = 0; u16Itr < u32rxLen;)
-    {
-        u16Dwordctr += 1;
-        /* Store the data in pu8Data and skip the dummy byte positions*/
-        *pu8Data++ = gau8DmaBuff[u16Itr];
-        
-        /*After every 4 bytes add Inter Dummy else Intra dummy*/
-        if(u16Dwordctr && 0x03 == 0)
-        {
-            u16Itr += u8Inter_Dword_Dummy + 1;
-            u16Dwordctr = 0;
-        }
-        else
-        {
-            u16Itr += u8Intra_Byte_Dummy + 1;
-        }
-    }
-#else
-    u32rxLen = u32Length;
-    /* No Dummy Bytes Included*/
-    /* DMA Read*/
-    DRV_SPIReceive(pu8Data,u32rxLen);
-#endif
     /* Get the Intra DWORD dummy clock count */
-    u8Intra_Byte_Dummy = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
-    u8txLen = u8EndAlignSize + (u8EndAlignSize * u8Intra_Byte_Dummy);
+    u8IntraDwordDummy = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+    u8txLen = u8EndAlignSize + (u8EndAlignSize * u8IntraDwordDummy);
 	
     /* Add Intra DWORD dummy clocks, avoid for last byte */
     /* DMA Write*/
@@ -1808,30 +1667,11 @@ void    LAN9252SPI_DMA_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16XfrLen, UINT8 u8S
 
 void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 {
-    UINT32_VAL u32Val;
     UINT8 u8StartAlignSize = 0, u8EndAlignSize = 0;
     
-    /* Address and length */
-	u32Val.w[0] = u16Addr;
-	u32Val.w[1] = u32Length;
-	MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_WR_ADDR_LENGTH_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
-
-	/* write command */
-	u32Val.Val = 0x80000000;
-	MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_WR_CMD_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
+    PDRAMSetAddrLength(u16Addr, u32Length, &u8StartAlignSize, &u8EndAlignSize, SPI_WRITE);
 	
-	u8StartAlignSize = (u16Addr & 0x3);
-//	u8EndAlignSize = (u16Len & 3) + u8StartAlignSize;
-	// Changed for a bug identified with HBI - Demux BSP
-	u8EndAlignSize = (u32Length + u8StartAlignSize) & 0x3;
-	if (u8EndAlignSize & 0x3){
-		u8EndAlignSize = (((u8EndAlignSize + 4) & 0xC) - u8EndAlignSize);
-	}
-	
-#ifdef ESF_SPI_DMA_EN
-	LAN9252SPI_DMA_WritePDRAM(pu8Data, u16Addr, u8StartAlignSize, u8EndAlignSize, u32Length);
-#else
-	UINT8 u8dummy_clk_cnt = 0; 
+	UINT8 u8DummyClkCnt = 0; 
     UINT8 u8txData = 0, u8txLen = 1;
     UINT8 u8rxData = 0, u8rxLen = 1;
 
@@ -1851,7 +1691,7 @@ void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 		;
 	}
     
-	u8txData = (UINT8)0x0;
+	u8txData = (UINT8)NULL_VALUE;
 	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
     QSPI_Sync_Wait();
 	while(QSPI_IsBusy())
@@ -1860,7 +1700,7 @@ void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 	}
 	gEscALEvent.Byte[0] = u8rxData;
     
-    u8txData = (UINT8)0x20;
+    u8txData = (UINT8)PDRAM_FASTREAD_ADDRESS;
     QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
     QSPI_Sync_Wait();
     while(QSPI_IsBusy())
@@ -1870,16 +1710,7 @@ void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     gEscALEvent.Byte[1] = u8rxData;
 	
 	/* Initial Dummy cycle added by dummy write */
-	u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
-	while (u8dummy_clk_cnt--)
-	{
-		QSPI_Read(&u8rxData, u8rxLen);
-		QSPI_Sync_Wait();
-		while(QSPI_IsBusy())
-		{
-			;
-		}
-	}
+	HandleDummyState(SPI_WRITE);
     
 	while (u8StartAlignSize--)
 	{
@@ -1891,10 +1722,10 @@ void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
         }
         
         /* Get the Intra DWORD dummy clock count */
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+        u8DummyClkCnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
         /* Add Intra DWORD dummy clocks, avoid for last byte */
         if (0 != u8StartAlignSize) {
-            while (u8dummy_clk_cnt--)
+            while (u8DummyClkCnt--)
             {
                 QSPI_Read(&u8rxData, u8rxLen);
                 QSPI_Sync_Wait();
@@ -1906,42 +1737,21 @@ void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
         }
 	}
     
-	while (u32Length--)
-	{
-        u8txData = *pu8Data;
-		QSPI_Write(&u8txData, u8txLen);
-        QSPI_Sync_Wait();
-        while(QSPI_IsBusy());
-        pu8Data++;
-        
-        /* Get the Intra DWORD dummy clock count */
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
-        /* Add Intra DWORD dummy clocks, avoid for last byte */
-        if (0 != u32Length) {
-            while (u8dummy_clk_cnt--)
-            {
-                QSPI_Read(&u8rxData, u8rxLen);
-                QSPI_Sync_Wait();
-                while(QSPI_IsBusy())
-                {
-                    ;
-                }
-            }
-        }
-	}
-
+    /*In Handle data state the data is sent to the buffer byte by byte*/
+	HandleDataState(pu8Data, u32Length, SPI_WRITE, NULL_VALUE);
+    
 	while (u8EndAlignSize--)
 	{        
-        u8txData = 0x0;
+        u8txData = NULL_VALUE;
 		QSPI_Write(&u8txData, u8txLen);
         QSPI_Sync_Wait();
         while(QSPI_IsBusy());
         
         /* Get the Intra DWORD dummy clock count */
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+        u8DummyClkCnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
         /* Add Intra DWORD dummy clocks, avoid for last byte */
         if (0 != u8EndAlignSize) {
-            while (u8dummy_clk_cnt--)
+            while (u8DummyClkCnt--)
             {
                 QSPI_Read(&u8rxData, u8rxLen);
                 QSPI_Sync_Wait();
@@ -1954,7 +1764,6 @@ void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 	}
 	
 	SPIChipSelectDisable();	
-#endif
 }
 
 /* 
@@ -1972,70 +1781,41 @@ void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 
 */
 
-void   LAN9252SPI_DMA_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT8 u8StartAlignSize, UINT8 u8EndAlignSize, UINT32 u32Length)
+void   LAN9252SPI_DMA_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 {
-#ifdef INCLUDE_DUMMY
-    UINT8 u8Inter_Dword_Dummy = 0;
-    UINT16 u16Itr = 0, u16Dwordctr = 0;
-#endif
-    UINT8 u8dummy_clk_cnt = 0, u8Intra_Byte_Dummy = 0, u8txLen = 1;
+    UINT8 u8InterDwordDummy = 0, u8IntraDwordDummy = 0, u8StartAlignSize = 0, u8EndAlignSize = 0;
+    UINT8 u8DummyClkCnt = 0, u8txLen = 1;
     UINT32 u32txSize = 1;
-
+    
+    PDRAMSetAddrLength(u16Addr, u32Length, &u8StartAlignSize, &u8EndAlignSize, SPI_WRITE);
 	/* Writing to FIFO */
 	SPIChipSelectEnable();
 
-    /* Initial Dummy cycle added by dummy write is stored in u8dummy_clk_cnt */
-    u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
-    u8Intra_Byte_Dummy = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+    /* Initial Dummy cycle added by dummy write is stored in u8DummyClkCnt */
+    u8DummyClkCnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
+    u8IntraDwordDummy = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
     
     /* Setup phase and Dummy phase is transmitted together by DMA*/
-    u8txLen = SPI_WRITE_SETUP_BYTES + u8dummy_clk_cnt + u8StartAlignSize + (u8StartAlignSize * u8Intra_Byte_Dummy);
+    u8txLen = SPI_WRITE_SETUP_BYTES + u8DummyClkCnt + u8StartAlignSize + (u8StartAlignSize * u8IntraDwordDummy);
     
     gau8DmaBuff[0] = CMD_SERIAL_WRITE;
-    gau8DmaBuff[1] = (UINT8)0x0;
-	gau8DmaBuff[2] = (UINT8)0x20;
+    gau8DmaBuff[1] = (UINT8)NULL_VALUE;
+	gau8DmaBuff[2] = (UINT8)PDRAM_FASTREAD_ADDRESS;
     
     /* DMA Write*/
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
     
-#ifdef INCLUDE_DUMMY	
 /* Get the Intra DWORD dummy clock count */     
-u8Intra_Byte_Dummy = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
-u8Inter_Dword_Dummy = gau8DummyCntArr[SPI_WRITE_INTER_DWORD_OFFSET];
+    u8IntraDwordDummy = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+    u8InterDwordDummy = gau8DummyCntArr[SPI_WRITE_INTER_DWORD_OFFSET];
     
-u32txSize = DMA_Buffsize_Calculate (u8Intra_Byte_Dummy, u8Inter_Dword_Dummy, u32Length);
+    u32txSize = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length);
 
-/* Add Intra DWORD and Inter DWORD dummy clocks, avoid for last byte */
- for(u16Itr = 0; u16Itr < u32txSize;)
-    {
-        u16Dwordctr += 1;
-        /* Store the data in the buff and skip the dummy byte positions*/
-        gau8DmaBuff[u16Itr] = *pu8Data;
-		pu8Data++;
-        
-        /*After every 4 bytes add Inter Dummy else Intra dummy*/
-        if(u16Dwordctr && 0x03 == 0)
-        {
-            u16Itr += u8Inter_Dword_Dummy + 1;
-            u16Dwordctr = 0;
-        }
-        else
-        {
-            u16Itr += (u8Intra_Byte_Dummy + 1);
-        
-        }
-    }
+    /* In Handle DMA data the data to be sent to the buffer*/
+    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32txSize, SPI_WRITE);
 
-    /* DMA Write*/
-	DRV_SPITransfer(gau8DmaBuff, u32txSize);
-#else
-    u32txSize = u32Length;
-    /* No Dummy Bytes Included*/
-    /* DMA Write*/
-	DRV_SPITransfer(pu8Data, u32txSize);
-#endif
-    u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
-    u8txLen = u8EndAlignSize + (u8EndAlignSize * u8Intra_Byte_Dummy);
+    u8DummyClkCnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+    u8txLen = u8EndAlignSize + (u8EndAlignSize * u8IntraDwordDummy);
 	/* Add Intra DWORD dummy clocks, avoid for last byte */
     /* DMA Write*/
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
@@ -2046,6 +1826,72 @@ u32txSize = DMA_Buffsize_Calculate (u8Intra_Byte_Dummy, u8Inter_Dword_Dummy, u32
 
 #if _IS_SPI_DIRECT_MODE_ACCESS
 /* LAN9253 */
+/*******************************************************************************
+    Function:
+        void    CSRLengthAlignment(UINT16 u16Addr, UINT32 u32Length, UINT8 mode)
+
+    Summary:
+        This function is used to align length for Core CSR and Process RAM for 
+        SPI Direct mode.
+*******************************************************************************/
+void    CSRLengthAlignment(UINT16 *u16Addr, UINT32 *u32Length, UINT8 mode)
+{
+    UINT32 u32ModLen = 0;
+    
+	if (*u16Addr < 0x3000)
+    {
+        if(mode & IS_DIVISIBLE_TWO)
+        {
+            /* DWORD Buffering - Applicable for Write only */
+            if (*u32Length > 1)
+            {
+                *u16Addr |= 0xC000; 	/* addr[15:14]=11 */
+            }
+            else
+            {
+                /* Do Nothing */
+            }
+        }
+        else if((mode == NULL_VALUE))
+        {
+            if (*u32Length > 1)
+            {
+                /* Use Auto-increment if number of bytes to read is more than 1 */
+                *u16Addr |= 0x4000;			
+            }
+            
+        }
+        else if((mode == 2))
+        {
+            if (*u16Addr < 0x3000)
+            {
+                /* Use Auto-increment for incrementing byte address*/
+                *u16Addr |= 0x4000;			
+            }
+        }
+    }
+    else
+    {
+        /* Non Core CSR length will be adjusted if it is not DWORD aligned */
+		u32ModLen = *u32Length % DWORD_LENGTH;
+		if (1 == u32ModLen)
+		{
+			*u32Length = *u32Length + 3;
+		}
+		else if (2 == u32ModLen)
+		{
+			*u32Length = *u32Length + 2;
+		}
+		else if (3 == u32ModLen)
+		{
+			*u32Length = *u32Length + 1;
+		}
+		else
+		{
+			/* Do nothing if length is 0 since it is DWORD access */
+		}
+    }
+}
 /* 
     Function: LAN9253SPI_Write
 
@@ -2066,112 +1912,21 @@ u32txSize = DMA_Buffsize_Calculate (u8Intra_Byte_Dummy, u8Inter_Dword_Dummy, u32
 
 void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-    UINT32 u32ModLen = 0;
+    CSRLengthAlignment(&u16Addr, &u32Length, SPI_WRITE);
     
-    /* Core CSR and Process RAM accesses can have any alignment and length */
-	if (u16Addr < 0x3000)
-	{
-		/* DWORD Buffering - Applicable for Write only */
-		if (u32Length > 1)
-		{
-			u16Addr |= 0xC000; 	/* addr[15:14]=11 */
-		}
-		else
-		{
-			/* Do Nothing */
-		}
-	}
-	else
-	{
-		/* Non Core CSR length will be adjusted if it is not DWORD aligned */
-		u32ModLen = u32Length % 4;
-		if (1 == u32ModLen)
-		{
-			u32Length = u32Length + 3;
-		}
-		else if (2 == u32ModLen)
-		{
-			u32Length = u32Length + 2;
-		}
-		else if (3 == u32ModLen)
-		{
-			u32Length = u32Length + 1;
-		}
-		else
-		{
-			/* Do nothing if length is 0 since it is DWORD access */
-		}
-	}
-    
-#ifdef ESF_SPI_DMA_EN
-    LAN9253SPI_DMA_Write(u16Addr, pu8Data, u32Length);
-#else
-#ifdef IS_SUPPORT_DUMMY_CYCLE
-    UINT32 u8dummy_clk_cnt = 0;
-#endif
-    UINT8 u8txData = 0, u8txLen = 1;
-    UINT8 u8rxData = 0, u8rxLen = 1;
-
 	SPIChipSelectEnable();
-
-	MCHP_ESF_GPIO_SET(GPIO_T_MEA);	
-	u8txData = CMD_SERIAL_WRITE;
-	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-	
     
-	u8txData = (UINT8)(u16Addr >> 8);
-	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-	
-	gEscALEvent.Byte[0] = u8rxData;
-    
-    u8txData = (UINT8)u16Addr;
-    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-	
-	gEscALEvent.Byte[1] = u8rxData;
-    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
-#ifdef IS_SUPPORT_DUMMY_CYCLE    
+    /*In Handle setup state the length and address are sent*/
+	HandleSetupState (u16Addr, SPI_WRITE);
+     
+#ifdef IS_SUPPORT_DUMMY_CYCLE 
 	/* Initial Dummy cycle added by dummy read */
-	u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
-	MCHP_ESF_GPIO_SET(GPIO_T_MEA);
-    while (u8dummy_clk_cnt--)
-	{
-		QSPI_Read(&u8rxData, u8rxLen);
-		QSPI_Sync_Wait();
-		
-	} 
-    #endif
-    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
-     	do
-	{
-        u8txData = *pu8Data++;
-        QSPI_Write(&u8txData, u8txLen);
-        QSPI_Sync_Wait();
-    
-#ifdef IS_SUPPORT_DUMMY_CYCLE        
-        /* Get the Intra DWORD dummy clock count */
-        MCHP_ESF_GPIO_SET(GPIO_T_MEA);
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
-        /* Add Intra DWORD dummy clocks, avoid for last byte */
-        if (1 != u32Length) {
-            while (u8dummy_clk_cnt--)
-            {
-                QSPI_Read(&u8rxData, u8rxLen);
-                QSPI_Sync_Wait();
-                
-            }
-        }
-        MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+	HandleDummyState(SPI_WRITE);
 #endif
-	} while (--u32Length);
-    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
-    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
-
+    /*In Handle Data state the data to be written is sent byte by byte */
+    HandleDataState(pu8Data, u32Length, SPI_WRITE, NOT_NULL);
+  
 	SPIChipSelectDisable();
-#endif
-
 }
 /* 
     Function: LAN9253SPI_DMA_Write
@@ -2194,21 +1949,20 @@ void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
  void   LAN9253SPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
  {
- #ifdef INCLUDE_DUMMY
-    UINT8 u8Intra_Byte_Dummy = 0, u8Inter_Dword_Dummy = 0;
-    UINT16 u16Itr = 0, u16Dwordctr = 0;
-#endif
-    UINT8 u8dummy_clk_cnt = 0,u8txLen = 1;
+    UINT8 u8IntraDwordDummy = 0, u8InterDwordDummy = 0;
+    UINT8 u8DummyClkCnt = 0,u8txLen = 1;
     UINT32 u32txSize = 1;
 
-	SPIChipSelectEnable();
+	CSRLengthAlignment(&u16Addr, &u32Length, SPI_WRITE);
+    
+    SPIChipSelectEnable();
 
 #ifdef IS_SUPPORT_DUMMY_CYCLE   
-    /* Initial Dummy cycle added by dummy write is stored in u8dummy_clk_cnt */
-    u8dummy_clk_cnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
+    /* Initial Dummy cycle added by dummy write is stored in u8DummyClkCnt */
+    u8DummyClkCnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
     
     /* Setup phase and Dummy phase is transmitted together by DMA*/
-    u8txLen = SPI_WRITE_SETUP_BYTES + u8dummy_clk_cnt;
+    u8txLen = SPI_WRITE_SETUP_BYTES + u8DummyClkCnt;
     
     gau8DmaBuff[0] = CMD_SERIAL_WRITE;
     gau8DmaBuff[1] = (UINT8)(u16Addr >> 8);
@@ -2216,45 +1970,15 @@ void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     
     /* DMA Write*/
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
-    
-#ifdef INCLUDE_DUMMY
-/* Get the Intra DWORD dummy clock count */     
-u8Intra_Byte_Dummy = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
-u8Inter_Dword_Dummy = gau8DummyCntArr[SPI_WRITE_INTER_DWORD_OFFSET];
-
-u32txSize = DMA_Buffsize_Calculate (u8Intra_Byte_Dummy, u8Inter_Dword_Dummy, u32Length);   
-
-/* Add Intra DWORD and Inter DWORD dummy clocks, avoid for last byte */
- for(u16Itr = 0; u16Itr < u32txSize;)
-    {
-        u16Dwordctr += 1;
-        /* Store the data in the buff and skip the dummy byte positions*/
-        gau8DmaBuff[u16Itr] = *pu8Data;
-		pu8Data++;
-        
-        /*After every 4 bytes add Inter Dummy else Intra dummy*/
-        if((u16Dwordctr & 0x03) == 0)
-        {
-            u16Itr += u8Inter_Dword_Dummy + 1;
-            u16Dwordctr = 0;
-        }
-        else
-        {
-            u16Itr += u8Intra_Byte_Dummy + 1;
-        }
-    }
-
-    /* DMA Write*/
-	DRV_SPITransfer(gau8DmaBuff, u32txSize);
-    
-#endif 
-#else
-    u32txSize = u32Length;
-/* No Dummy Bytes Included*/
-    /* DMA Write*/
-	DRV_SPITransfer(pu8Data, u32txSize);
-    
 #endif
+    /* Get the Intra DWORD dummy clock count */     
+    u8IntraDwordDummy = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+    u8InterDwordDummy = gau8DummyCntArr[SPI_WRITE_INTER_DWORD_OFFSET];
+
+    u32txSize = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length);   
+
+    /* In Handle DMA data state the data is sent to the buffer*/
+    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32txSize, SPI_WRITE);
   
 	SPIChipSelectDisable();
  }
@@ -2275,111 +1999,23 @@ u32txSize = DMA_Buffsize_Calculate (u8Intra_Byte_Dummy, u8Inter_Dword_Dummy, u32
 
 void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 {
-    UINT32 u32ModLen = 0;
-    
-    /* Core CSR and Process RAM accesses can have any alignment and length */
-	if (u16Addr < 0x3000)
-	{
-		if (u32Length>1)
-		{
-			/* Use Auto-increment if number of bytes to read is more than 1 */
-			u16Addr |= 0x4000;			
-		}
-
-	}
-	else
-	{
-		/* Non Core CSR length will be adjusted if it is not DWORD aligned */
-		u32ModLen = u32Length % 4; 
-		if (1 == u32ModLen)
-		{
-			u32Length = u32Length + 3; 
-		}
-		else if (2 == u32ModLen)
-		{
-			u32Length = u32Length + 2; 
-		}
-		else if (3 == u32ModLen)
-		{
-			u32Length = u32Length + 1; 
-		}
-		else 
-		{
-			/* Do nothing if length is 0 since it is DWORD access */
-		}
-	}
-    
-#ifdef ESF_SPI_DMA_EN
-    LAN9253SPI_DMA_Read(u16Addr, pu8data, u32Length);
-#else
-#ifdef IS_SUPPORT_DUMMY_CYCLE	
-	UINT8 u8dummy_clk_cnt = 0;
-#endif
-    UINT8 u8txData = 0, u8txLen = 1;
-    UINT8 u8rxData = 0, u8rxLen = 1;
+    CSRLengthAlignment(&u16Addr, &u32Length, SPI_READ);
 	
 	SPIChipSelectEnable();
 
-    u8txData = CMD_SERIAL_READ;
-    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-    
-    
-    u8txData = (UINT8)(u16Addr >> 8);
-    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-    
-    gEscALEvent.Byte[0] = u8rxData;
-    
-    u8txData = (UINT8)u16Addr;
-    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-    
-    gEscALEvent.Byte[1] = u8rxData;
+    /*In Handle setup state the length and address are sent*/
+    HandleSetupState (u16Addr, SPI_READ);
 #ifdef IS_SUPPORT_DUMMY_CYCLE    
-	/* Initial Dummy cycle added by dummy read */
-	u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
-	while (u8dummy_clk_cnt--)
-	{
-		QSPI_Read(&u8rxData, u8rxLen);
-		QSPI_Sync_Wait();
-		
-	}
+	HandleDummyState(SPI_READ);
 #else
+    UINT8 u8rxData = 0, u8rxLen = 1;
     QSPI_Read(&u8rxData, u8rxLen);
 	QSPI_Sync_Wait();
 #endif    
-	do
-	{
-		if (1 == u32Length)
-		{
-            u8txData = READ_TERMINATION_BYTE;
-		}
-        else
-        {
-            u8txData = 0;
-        }
-        QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-        QSPI_Sync_Wait();
-        
-		*pu8data++ = u8rxData;
-#ifdef IS_SUPPORT_DUMMY_CYCLE        
-        /* Get the Intra DWORD dummy clock count */
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
-        /* Add Intra DWORD dummy clocks, avoid for last byte */
-        if (1 != u32Length) {
-            while (u8dummy_clk_cnt--)
-            {
-                QSPI_Read(&u8rxData, u8rxLen);
-                QSPI_Sync_Wait();
-                
-            }
-        }
-#endif
-	} while (--u32Length);
+    /*In Handle setup state the data to be read is extracted byte by byte*/
+	HandleDataState(pu8data, u32Length, SPI_READ, NOT_NULL);
 
 	SPIChipSelectDisable();	
-#endif
 }
 
 /* 
@@ -2400,21 +2036,20 @@ void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 
 void   LAN9253SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 {
-#ifdef INCLUDE_DUMMY	
-	UINT8 u8Intra_Byte_Dummy = 0, u8Inter_Dword_Dummy = 0;
-    UINT16 u16Itr = 0, u16Dwordctr = 0;
-#endif
-    UINT8 u8dummy_clk_cnt = 0,u8txLen = 1;
+	UINT8 u8IntraDwordDummy = 0, u8InterDwordDummy = 0;
+    UINT8 u8DummyClkCnt = 0,u8txLen = 1;
     UINT32 u32rxLen = 1;
 
-	SPIChipSelectEnable();
+	CSRLengthAlignment(&u16Addr, &u32Length, SPI_READ);
+    
+    SPIChipSelectEnable();
 
 #ifdef IS_SUPPORT_DUMMY_CYCLE 
-     /* Initial Dummy cycle added by dummy read is stored in u8dummy_clk_cnt */
-    u8dummy_clk_cnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
+     /* Initial Dummy cycle added by dummy read is stored in u8DummyClkCnt */
+    u8DummyClkCnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
     
     /* Setup phase and Dummy phase is transmitted together by DMA*/
-    u8txLen = SPI_READ_SETUP_BYTES + u8dummy_clk_cnt;
+    u8txLen = SPI_READ_SETUP_BYTES + u8DummyClkCnt;
     
     gau8DmaBuff[0] = CMD_SERIAL_READ;
     gau8DmaBuff[1] = (UINT8)(u16Addr >> 8);
@@ -2430,42 +2065,15 @@ void   LAN9253SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 	
 #endif    
     
-#ifdef INCLUDE_DUMMY
  /* Get the Intra DWORD dummy clock count */
-    u8Intra_Byte_Dummy = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
-    u8Inter_Dword_Dummy = gau8DummyCntArr[SPI_READ_INTER_DWORD_OFFSET];
+    u8IntraDwordDummy = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+    u8InterDwordDummy = gau8DummyCntArr[SPI_READ_INTER_DWORD_OFFSET];
     
-    u32rxLen = DMA_Buffsize_Calculate (u8Intra_Byte_Dummy, u8Inter_Dword_Dummy, u32Length); 
+    u32rxLen = DmaBuffsizeCalculate(u8IntraDwordDummy, u8InterDwordDummy, u32Length); 
 	
-    /* When the buffer is read it contains Intra DWORD and Inter DWORD dummy clocks in addition to Data */
-    DRV_SPIReceive(gau8DmaBuff, u32rxLen);
-   
-	/* Extract only the data bytes and skip the other dummy bytes */
-    for(u16Itr = 0; u16Itr < u32rxLen;)
-    {
-        u16Dwordctr += 1;
-        /* Store the data in pu8Data and skip the dummy byte positions*/
-        *pu8data++ = gau8DmaBuff[u16Itr];
-        
-        /*After every 4 bytes add Inter Dummy else Intra dummy*/
-        if((u16Dwordctr & 0x03) == 0)
-        {
-            u16Itr += u8Inter_Dword_Dummy + 1;
-            u16Dwordctr = 0;
-        }
-        else
-        {
-            u16Itr += u8Intra_Byte_Dummy + 1;
-        }
-    }
+    /*In Handle DMA Data the data to be read is extracted from the buffer*/
+    HandleDmaData(pu8data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32rxLen, SPI_READ);
 
-#else 
-    u32rxLen = u32Length ;
-    /* No Dummy Bytes Included */
-    /* DMA Read*/
-    DRV_SPIReceive(pu8data, u32rxLen);
-   
-#endif
 	SPIChipSelectDisable();
 }
 /* 
@@ -2483,41 +2091,19 @@ void   LAN9253SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 
 void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-    UINT8 u8StartAlignSize = 0;
+    UINT8 u8StartAlignSize = 0, u8Itr = 0;
     UINT16 u16XfrLen = 0;
-	UINT32 u32ModLen = 0;
-    
-    /* Core CSR and Process RAM accesses can have any alignment and length */
-	if (u16Addr < 0x3000)
-	{
-		/* Use Auto-increment for incrementing byte address*/
-		u16Addr |= 0x4000;			
+#ifdef IS_SUPPORT_DUMMY_CYCLE
+    UINT8 u8DummyClkCnt = 0;
+#endif
+	UINT8 u8txData = 0, u8txLen = 1;
+    UINT8 u8rxData = 0, u8rxLen = 1;
+	
+	CSRLengthAlignment(&u16Addr, &u32Length, SPI_FAST_READ);	
 		
-		/* To calculate initial number of dummy bytes which is based on starting address */
-		u8StartAlignSize = (u16Addr & 0x3); 
-	}
-	else 
-	{  	/* System CSRs are DWORD aligned and are a DWORD in length. Non- DWORD aligned / non-DWORD length access 
-	is not supported. */
-		u32ModLen = u32Length % 4;
-		if (1 == u32ModLen)
-		{
-			u32Length = u32Length + 3;
-		}
-		else if (2 == u32ModLen)
-		{
-			u32Length = u32Length + 2;
-		}
-		else if (3 == u32ModLen)
-		{
-			u32Length = u32Length + 1;
-		}
-		else
-		{
-			/* Do nothing is length is 0 */
-		}		
-	}
-
+    /* To calculate initial number of dummy bytes which is based on starting address */
+	u8StartAlignSize = (u16Addr & IS_DIVISIBLE_FOUR); 
+	
 	/* From DOS, "For the one byte transfer length format,	bit 7 is low and bits 6-0 specify the 
 	length up to 127 bytes. For the two byte transfer length format, bit 7 of the first byte
 	is high and bits 6-0 specify the lower 7 bits of the length. Bits 6-0 of the of the second byte 
@@ -2531,36 +2117,12 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 		u16XfrLen = (u32Length & 0x7F) | 0x80;
 		u16XfrLen |= ((u32Length & 0x3F80) << 1);
 	}
-#ifdef ESF_SPI_DMA_EN
-    LAN9253SPI_DMA_FastRead(u16Addr, pu8Data, u8StartAlignSize, u16XfrLen, u32Length);
-#else
-    UINT8 u8Itr = 0;
-#ifdef IS_SUPPORT_DUMMY_CYCLE
-    UINT8 u8dummy_clk_cnt = 0;
-#endif
-	UINT8 u8txData = 0, u8txLen = 1;
-    UINT8 u8rxData = 0, u8rxLen = 1;
-	
+   
 	SPIChipSelectEnable();
     
-	MCHP_ESF_GPIO_SET(GPIO_T_MEA);
-    u8txData = CMD_FAST_READ;
-    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-	
+    /*In Handle setup state the length and address are sent*/
+	HandleSetupState (u16Addr, SPI_FAST_READ);
     
-	u8txData = (UINT8)(u16Addr >> 8);
-	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-	
-	gEscALEvent.Byte[0] = u8rxData;
-    
-    u8txData = (UINT8)u16Addr;
-    QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-    QSPI_Sync_Wait();
-    
-    gEscALEvent.Byte[1] = u8rxData;
-	
     /* Send Transfer length */
     u8txData = (UINT8)(LOBYTE(u16XfrLen));
     QSPI_Write(&u8txData, u8txLen);
@@ -2577,15 +2139,7 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 #ifdef IS_SUPPORT_DUMMY_CYCLE	
     /* Initial Dummy cycle added by dummy read */
-	u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
-    
-    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
-	while (u8dummy_clk_cnt--)
-	{
-		QSPI_Read(&u8rxData, u8rxLen);
-		QSPI_Sync_Wait();
-		
-	}
+	HandleDummyState(SPI_FAST_READ);
     MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 #else
     QSPI_Read(&u8rxData, u8rxLen);
@@ -2605,8 +2159,8 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 #ifdef IS_SUPPORT_DUMMY_CYCLE    
         MCHP_ESF_GPIO_SET(GPIO_T_MEA);
         /* Get the Intra DWORD dummy clock count */
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
-        while (u8dummy_clk_cnt--)
+        u8DummyClkCnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+        while (u8DummyClkCnt--)
         {
             QSPI_Read(&u8rxData, u8rxLen);
             QSPI_Sync_Wait();               
@@ -2615,35 +2169,10 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 #endif
 	}
     
+    /*In handle data state the data to be read is extracted byte by byte*/
+	HandleDataState(pu8Data, u32Length, SPI_FAST_READ, NOT_NULL);
 	
-	do
-	{
-        
-        QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-        QSPI_Sync_Wait();
-        
-		*pu8Data++ = u8rxData;
-#ifdef IS_SUPPORT_DUMMY_CYCLE		
-        MCHP_ESF_GPIO_SET(GPIO_T_MEA);
-        /* Get the Intra DWORD dummy clock count */
-        u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
-        /* Add Intra DWORD dummy clocks, avoid for last byte */
-        if (1 != u32Length) {
-            while (u8dummy_clk_cnt--)
-            {
-                QSPI_Read(&u8rxData, u8rxLen);
-                QSPI_Sync_Wait();
-                
-            }
-        }
-        MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
-        
-#endif
-	} while (--u32Length);
-	MCHP_ESF_GPIO_SET(GPIO_T_MEA);
-    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 	SPIChipSelectDisable();
-#endif
 }
 
 /* 
@@ -2660,15 +2189,28 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 */
 
-void   LAN9253SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT8 u8StartAlignSize, UINT16 u16XfrLen, UINT32 u32Length)
+void   LAN9253SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-#ifdef INCLUDE_DUMMY
-    UINT8 u8Inter_Dword_Dummy = 0;
-    UINT16 u16Itr = 0, u16Dwordctr = 0;
-#endif
-	UINT8 u8dummy_clk_cnt = 0, u8Intra_Byte_Dummy = 0, u8txLen = 1;
+    UINT8 u8InterDwordDummy = 0, u8IntraDwordDummy = 0, u8StartAlignSize = 0;
+	UINT8 u8DummyClkCnt = 0, u8txLen = 1;
+    UINT16 u16XfrLen = 0;
 	UINT32 u32rxLen = 1;
 	
+    CSRLengthAlignment(&u16Addr, &u32Length, SPI_FAST_READ);	
+		
+    /* To calculate initial number of dummy bytes which is based on starting address */
+	u8StartAlignSize = (u16Addr & IS_DIVISIBLE_FOUR); 
+    
+    if (u32Length <= ONE_BYTE_MAX_XFR_LEN)
+	{
+		u16XfrLen = u32Length; 
+	}
+	else  
+	{
+		u16XfrLen = (u32Length & 0x7F) | 0x80;
+		u16XfrLen |= ((u32Length & 0x3F80) << 1);
+	}
+    
     SPIChipSelectEnable();
     
 /* 1 default dummy + extra dummies based on address that needs to be accessed. 
@@ -2677,12 +2219,12 @@ void   LAN9253SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT8 u8StartAlig
 	   So to read 2001 you will get a dummy byte and then data in address 2001. 
 	   Sw needs to handle dummy data in case of non DWORD address reads" */	
 #ifdef IS_SUPPORT_DUMMY_CYCLE 
-    /* Initial Dummy cycle added by dummy fastread is stored in u8dummy_clk_cnt */
-    u8dummy_clk_cnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
-    u8Intra_Byte_Dummy = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+    /* Initial Dummy cycle added by dummy fastread is stored in u8DummyClkCnt */
+    u8DummyClkCnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
+    u8IntraDwordDummy = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
     
     /* Setup phase and Dummy phase is transmitted together by DMA*/
-    u8txLen = SPI_FASTREAD_SETUP_BYTES + u8dummy_clk_cnt + u8StartAlignSize + (u8StartAlignSize * u8Intra_Byte_Dummy);
+    u8txLen = SPI_FASTREAD_SETUP_BYTES + u8DummyClkCnt + u8StartAlignSize + (u8StartAlignSize * u8IntraDwordDummy);
     
     gau8DmaBuff[0] = CMD_FAST_READ;
 	gau8DmaBuff[1] = (UINT8)(u16Addr >> 8);
@@ -2711,46 +2253,36 @@ void   LAN9253SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT8 u8StartAlig
     DRV_SPIReceive(&gau8DmaBuff, u8txLen);
 #endif
 	
-#ifdef INCLUDE_DUMMY
     /* Get the Intra DWORD dummy clock count */
-    u8Intra_Byte_Dummy = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
-    u8Inter_Dword_Dummy = gau8DummyCntArr[SPI_FASTREAD_INTER_DWORD_OFFSET];
+    u8IntraDwordDummy = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+    u8InterDwordDummy = gau8DummyCntArr[SPI_FASTREAD_INTER_DWORD_OFFSET];
     
-    u32rxLen = DMA_Buffsize_Calculate (u8Intra_Byte_Dummy, u8Inter_Dword_Dummy, u32Length);
-	
-    /* When the buffer is read it contains Intra DWORD and Inter DWORD dummy clocks in addition to Data */
-    DRV_SPIReceive(gau8DmaBuff, u32rxLen);
+    u32rxLen = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length);
     
-    /* Extract only the data bytes and skip the other dummy bytes */
-    for(u16Itr = 0; u16Itr < u32rxLen;)
-    {
-        u16Dwordctr += 1;
-        /* Store the data in pu8Data and skip the dummy byte positions*/
-        *pu8Data++ = gau8DmaBuff[u16Itr];
-        
-        /*After every 4 bytes add Inter Dummy else Intra dummy*/
-        if(u16Dwordctr && 0x03 == 0)
-        {
-            u16Itr += u8Inter_Dword_Dummy + 1;
-            u16Dwordctr = 0;
-        }
-        else
-        {
-            u16Itr += u8Intra_Byte_Dummy + 1;
-        }
-    }
-
-#else 
-    u32rxLen = u32Length ;
-    /* No Dummy Bytes Included */
-    /* DMA Read*/
-    DRV_SPIReceive(pu8Data,u32rxLen);
-#endif
+    /*In Handle DMA data state the data to be read is extracted from the buffer*/
+    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32rxLen, SPI_FAST_READ);
+    
 	SPIChipSelectDisable();
 }
 #endif
 
 #ifdef _IS_SPI_BECKHOFF_MODE_ACCESS
+/*******************************************************************************
+    Function:
+        void   CSRLengthAlignment(UINT16 u16Addr, UINT32 *u32Length)
+
+    Summary:
+        This function is used to align length for Core CSR and Process RAM for 
+        SPI Beckhoff mode.
+*******************************************************************************/
+void   CSRLengthAlignment(UINT16 u16Addr, UINT32 *u32Length)
+{
+    /* Non Ether CAT Core CSRs are always DWORD aligned and should be accessed by DWORD length */
+	if (u16Addr >= 0x3000)
+	{
+		u32Length = 4; 
+	}
+}
 /* 
     Function: BeckhoffSPI_Write
 
@@ -2767,18 +2299,12 @@ void   LAN9253SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT8 u8StartAlig
 	
 void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-    /* Non Ether CAT Core CSRs are always DWORD aligned and should be accessed by DWORD length */
-	if (u16Addr >= 0x3000)
-	{
-		u32Length = 4; 
-	}
-#ifdef ESF_SPI_DMA_EN
-    BeckhoffSPI_DMA_Write(u16Addr, pu8Data, u32Length);
-#else
     UINT8 u8BeckhoffCmd = ESC_WR;
     UINT8 u8txData = 0, u8txLen = 1;
     UINT8 u8rxData = 0, u8rxLen = 1;
-	
+    
+    CSRLengthAlignment(u16Addr, &u32Length);
+
 	SPIChipSelectEnable();
 	
 	while(QSPI_IsBusy())
@@ -2787,9 +2313,7 @@ void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	}
 	
 	u8txData = (u16Addr & 0x1FE0) >> 5;
-    
-    
-    
+   
     QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
     QSPI_Sync_Wait();
     while(QSPI_IsBusy())
@@ -2827,7 +2351,6 @@ void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	} while (--u32Length);
 	
 	SPIChipSelectDisable();
-#endif
 }
 
 /* 
@@ -2849,12 +2372,12 @@ void   BeckhoffSPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
     UINT8 u8BeckhoffCmd = ESC_WR, u8txLen = 0;
     UINT16 u16Itr = 0;
-    UINT32 u32txSize = 0;
+    UINT32 u32txSize = u32Length;
 	
-	SPIChipSelectEnable();
+    CSRLengthAlignment(u16Addr, &u32Length);
 	
-    u32txSize = u32Length;
-    
+    SPIChipSelectEnable();
+	
     /* Setup phase is transmitted together by DMA, No dummy phase in Beckhoff mode*/
     u8txLen = SPI_WRITE_SETUP_BYTES;  
 	
@@ -2876,6 +2399,7 @@ void   BeckhoffSPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     
 	SPIChipSelectDisable();
 }
+
 /* 
     Function: BeckhoffSPI_Read
 
@@ -2892,17 +2416,11 @@ void   BeckhoffSPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-    /* Non Ether CAT Core CSRs are always DWORD aligned and should be accessed by DWORD length */
-	if (u16Addr >= 0x3000)
-	{
-		u32Length = 4;
-	}
-#ifdef ESF_SPI_DMA_EN
-    BeckhoffSPI_DMA_Read(u16Addr, pu8Data, u32Length);
-#else
     UINT8 u8BeckhoffCmd = ESC_RD_WAIT_STATE;
     UINT8 u8txData = 0, u8txLen = 1;
     UINT8 u8rxData = 0, u8rxLen = 1;
+    
+    CSRLengthAlignment(u16Addr, &u32Length);
 		
 	SPIChipSelectEnable();
 
@@ -2965,7 +2483,6 @@ void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	} while (--u32Length);
 	
 	SPIChipSelectDisable();
-#endif
 }
 
 /* 
@@ -2986,31 +2503,33 @@ void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 void   BeckhoffSPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-    UINT8 u8BeckhoffCmd = ESC_RD_WAIT_STATE;
+    UINT8 u8BeckhoffCmd = ESC_RD_WAIT_STATE, u8ByteCtr = 0;
     	
-	SPIChipSelectEnable();
+	CSRLengthAlignment(u16Addr, &u32Length);
+    
+    SPIChipSelectEnable();
     
 	/* AL Event register bits will be outputted on SPI line - 0x220, 0x221 and 0x222 */
-	gau8DmaBuff[0] = (u16Addr & 0x1FE0) >> 5;
-	gau8DmaBuff[1] = ((u16Addr & 0x001F) << 3) | 0x06; 
-    gau8DmaBuff[2] = (HIBYTE(u16Addr) & 0xE0) | (u8BeckhoffCmd << 2);
+	gau8DmaBuff[u8ByteCtr] = (u16Addr & 0x1FE0) >> 5; u8ByteCtr++;
+	gau8DmaBuff[u8ByteCtr] = ((u16Addr & 0x001F) << 3) | 0x06; u8ByteCtr++;
+    gau8DmaBuff[u8ByteCtr] = (HIBYTE(u16Addr) & 0xE0) | (u8BeckhoffCmd << 2); u8ByteCtr++;
     
     /* Master can either wait for 240ns time or use Wait state byte
      * after last byte of addr/cmd or 
      * before initiating the clock for data phase. */
     
-    gau8DmaBuff[3] = WAIT_STATE_BYTE;
-    gau8DmaBuff[3+u32Length] = READ_TERMINATION_BYTE;
-    
-    memset(&gau8DmaBuff[4],0, u32Length);
+    gau8DmaBuff[u8ByteCtr] = WAIT_STATE_BYTE;
+    gau8DmaBuff[u8ByteCtr+u32Length] = READ_TERMINATION_BYTE;
+    u8ByteCtr++;
+    memset(&gau8DmaBuff[u8ByteCtr],0, u32Length);
     
     /* DMA Write*/
 	DRV_SPITransfer(gau8DmaBuff, SPI_FASTREAD_SETUP_BYTES - 1);
     
     /* DMA Read*/
-    DRV_SPIReceive(&gau8DmaBuff[4], u32Length);
+    DRV_SPIReceive(&gau8DmaBuff[u8ByteCtr], u32Length);
     
-    memcpy(pu8Data, &gau8DmaBuff[4],u32Length);
+    memcpy(pu8Data, &gau8DmaBuff[u8ByteCtr],u32Length);
 
 	SPIChipSelectDisable();
 }
