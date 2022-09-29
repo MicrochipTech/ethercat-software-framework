@@ -122,6 +122,7 @@ extern "C" {
     void    HandleDmaData (UINT8 *pu8Data, UINT8 *gau8DmaBuff, UINT8 u8IntraDwordDummy, UINT8 u8InterDwordDummy, UINT32 u32BuffLen, UINT8 mode);
     void    HandleDummyState(UINT8 mode);
     void    HandleDataState(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8LastByte);
+    void    HandleDataAlignment(UINT8 u8Length, UINT8 mode, UINT8 u8LastByte);
 #endif
 	UINT16	PDI_GetTimer();
 	void	PDI_ClearTimer(void);
