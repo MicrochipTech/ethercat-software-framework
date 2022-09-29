@@ -57,7 +57,7 @@
 /* Dummy Bytes can be included when support is enabled*/
 #define INCLUDE_DUMMY 1
 /* DMA Enable by default */
-//#define ESF_SPI_DMA_EN 1
+#define ESF_SPI_DMA_EN 1
 
 /*
  * LAN925x REV C board uses clock from LAN9253,

@@ -40,8 +40,9 @@
 #include "ecatslv.h"
 #include "ESC_Utils.h"
 
-/*gau8DmaBuff size should be set after considering the byte length, Inter DWord and Intra byte dummy bytes
- * Maximum DMA_BUFF_SIZE of the array can be set by taking byte_length to be SPI_DMA_MAX_RX_SIZE & SPI_DMA_MAX_TX_SIZE*/ 
+/*gau8DmaBuff size should be set after considering the byte length, Inter DWord 
+ * and Intra byte dummy bytes
+ * Maximum DMA_BUFF_SIZE of the array can be set by taking byte_length to be 2048*/ 
 UINT8 gau8DmaBuff[DMA_BUFF_SIZE];
 
 #if (ESF_PDI == SPI)
@@ -564,7 +565,7 @@ void  HandleDmaData(UINT8 *pu8Data, UINT8 *gau8DmaBuff, UINT8 u8IntraDwordDummy,
     /* mode = 0  for read, mode = 1 for write and mode = 2 for fastread*/
     if(mode & IS_DIVISIBLE_TWO)
     {
-        for(u16Itr = 0; u16Itr < u32BuffLen;)
+        do
         {
             u16Dwordctr += 1;
             /* Store the data in the buff and skip the dummy byte positions*/
@@ -572,7 +573,7 @@ void  HandleDmaData(UINT8 *pu8Data, UINT8 *gau8DmaBuff, UINT8 u8IntraDwordDummy,
             pu8Data++;
         
             /*After every 4 bytes add Inter Dummy else Intra dummy*/
-            if((u16Dwordctr & IS_DIVISIBLE_FOUR) == 0)
+            if((u16Dwordctr & IS_DIVISIBLE_FOUR) == NULL_VALUE)
             {
                 u16Itr += u8InterDwordDummy + 1;
                 u16Dwordctr = 0;
@@ -582,7 +583,7 @@ void  HandleDmaData(UINT8 *pu8Data, UINT8 *gau8DmaBuff, UINT8 u8IntraDwordDummy,
                 u16Itr += u8IntraDwordDummy + 1;
             }
         
-        }
+        }while(u16Itr < u32BuffLen);
     
         /* DMA Write*/
         DRV_SPITransfer(gau8DmaBuff, u32BuffLen);
@@ -593,14 +594,14 @@ void  HandleDmaData(UINT8 *pu8Data, UINT8 *gau8DmaBuff, UINT8 u8IntraDwordDummy,
         DRV_SPIReceive(gau8DmaBuff, u32BuffLen);
     
         /* Extract only the data bytes and skip the other dummy bytes */
-        for(u16Itr = 0; u16Itr < u32BuffLen; )
+        do
         {
             u16Dwordctr += 1;
             /* Store the data in pu8Data and skip the dummy byte positions*/
             *pu8Data++ = gau8DmaBuff[u16Itr];
         
             /*After every 4 bytes add Inter Dummy else Intra dummy*/
-            if((u16Dwordctr & IS_DIVISIBLE_FOUR) == 0)
+            if((u16Dwordctr & IS_DIVISIBLE_FOUR) == NULL_VALUE)
             {
                 u16Itr += u8InterDwordDummy + 1;
                 u16Dwordctr = 0;
@@ -609,7 +610,7 @@ void  HandleDmaData(UINT8 *pu8Data, UINT8 *gau8DmaBuff, UINT8 u8IntraDwordDummy,
             {
                 u16Itr += u8IntraDwordDummy + 1;
             }
-        } 
+        }while(u16Itr < u32BuffLen);
     }
 
 #else
@@ -640,6 +641,7 @@ void   HandleDataState(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8Las
     UINT8 u8DummyClkCnt = 0, u8DummyValue = 0;
     UINT8 u8txData = 0, u8txLen = 1 ;
     UINT8 u8rxData = 0, u8rxLen = 1 ;
+#if !defined(_IS_SPI_BECKHOFF_MODE_ACCESS)
     /* Get the Intra DWORD dummy clock count */
     if((mode == NULL_VALUE))
        {
@@ -653,7 +655,7 @@ void   HandleDataState(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8Las
        {
            u8DummyValue = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
        }
-            
+#endif
     if(mode & IS_DIVISIBLE_TWO)
        {
             do
@@ -959,9 +961,9 @@ void LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     Function: LAN9252SPI_DMA_Write
 
     This function does Write Access to Non-Ether CAT and Ether CAT Core CSR 
-	using 'Serial Write(0x02)' command supported by LAN9252 Compatible SPI. This function shall be used
-	only when PDI is selected as LAN9252 Compatible SPI (0x80). The write is executed by DMA.
-    The maximum configurable frequency is 80 MHz.
+	using 'Serial Write(0x02)' command supported by LAN9252 Compatible SPI. 
+    This function shall be used only when PDI is selected as LAN9252 Compatible SPI (0x80). 
+    The write is executed by DMA. The maximum configurable frequency is 80 MHz.
      
     Input : u16Adddr    -> Address of the register to be written
             *pu8Data    -> Pointer to the data that is to be written
@@ -969,8 +971,8 @@ void LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
     Output : None
 	
-	Note   : In LAN9252 Compatible SPI, all registers are DWORD aligned. Length will be fixed to 4. Hence,
-			 there is no separate length argument.
+	Note   : In LAN9252 Compatible SPI, all registers are DWORD aligned. Length 
+             will be fixed to 4. Hence,there is no separate length argument.
 */
 
 void    LAN9252SPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
@@ -1001,7 +1003,8 @@ void    LAN9252SPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     u32txSize = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length);
     
     /* In the DMA Data set the data to be written is sent in a buffer*/
-    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32txSize, SPI_WRITE);
+    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, 
+                  u32txSize, SPI_WRITE);
 
     SPIChipSelectDisable(); 
 }
@@ -1009,8 +1012,8 @@ void    LAN9252SPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     Function: LAN9252SPI_Read
 
     This function does Read Access to Non-Ether CAT and Ether CAT Core CSR 
-	using 'Serial Read(0x03)' command supported by LAN9252 Compatible SPI. This function shall be used
-	only when PDI is selected as LAN9252 Compatible SPI (0x80)
+	using 'Serial Read(0x03)' command supported by LAN9252 Compatible SPI. 
+    This function shall be used only when PDI is selected as LAN9252 Compatible SPI (0x80)
      
     Input : u16Addr     -> Address of the register to be read
             *pu8Data    -> Pointer to the data that is to be read
@@ -1018,8 +1021,8 @@ void    LAN9252SPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
     Output : None
 	
-	Note   : In LAN9252 Compatible SPI, all registers are DWORD aligned. Length will be fixed to 4. Hence,
-			 there is no separate length argument.
+	Note   : In LAN9252 Compatible SPI, all registers are DWORD aligned. Length 
+             will be fixed to 4. Hence,there is no separate length argument.
 */
 
 void LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
@@ -1044,9 +1047,10 @@ void LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     Function: LAN9252SPI_DMA_Read
 
     This function does Read Access to Non-Ether CAT and Ether CAT Core CSR 
-	using 'Serial Read(0x03)' command supported by LAN9252 Compatible SPI. This function shall be used
-	only when PDI is selected as LAN9252 Compatible SPI (0x80). The read is executed by DMA. The
- *  maximum configurable frequency for read is 30 MHz. Higher frequencies are to be done by fastread.
+	using 'Serial Read(0x03)' command supported by LAN9252 Compatible SPI. 
+    This function shall be used only when PDI is selected as LAN9252 Compatible SPI (0x80). 
+    The read is executed by DMA. The maximum configurable frequency for read is 30 MHz. 
+    Higher frequencies are to be done by fastread.
      
     Input : u16Addr     -> Address of the register to be read
             *pu8Data    -> Pointer to the data that is to be read
@@ -1054,8 +1058,8 @@ void LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
     Output : None
 	
-	Note   : In LAN9252 Compatible SPI, all registers are DWORD aligned. Length will be fixed to 4. Hence,
-			 there is no separate length argument.
+	Note   : In LAN9252 Compatible SPI, all registers are DWORD aligned. Length 
+             will be fixed to 4. Hence,there is no separate length argument.
 */
 
 void   LAN9252SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
@@ -1094,8 +1098,8 @@ void   LAN9252SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     Function: LAN9252SPI_FastRead
 
     This function does Read Access to Non-Ether CAT and Ether CAT Core CSR 
-	using 'Fast Read(0x0B)' command supported by LAN9252 Compatible SPI. This function shall be used
-	only when PDI is selected as LAN9252 Compatible SPI (0x80)
+	using 'Fast Read(0x0B)' command supported by LAN9252 Compatible SPI. This 
+    function shall be used only when PDI is selected as LAN9252 Compatible SPI (0x80)
      
     Input : u16Addr     -> Address of the register to be read
             *pu8Data    -> Pointer to the data that is to be read
@@ -1140,9 +1144,9 @@ void LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     Function: LAN9252SPI_DMA_FastRead
 
     This function does Read Access to Non-Ether CAT and Ether CAT Core CSR 
-	using 'Fast Read(0x0B)' command supported by LAN9252 Compatible SPI. This function shall be used
-	only when PDI is selected as LAN9252 Compatible SPI (0x80). The fastread is executed by DMA. The 
- *  maximum configurable frequency of 80 MHz.
+	using 'Fast Read(0x0B)' command supported by LAN9252 Compatible SPI. This 
+    function shall be used only when PDI is selected as LAN9252 Compatible SPI (0x80). 
+    The fastread is executed by DMA. The maximum configurable frequency of 80 MHz.
      
     Input : u16Addr     -> Address of the register to be read
             *pu8Data    -> Pointer to the data that is to be read
@@ -1181,7 +1185,8 @@ void   LAN9252SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     u32rxLen = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length);
     
     /*In data state the data to be read is extracted from the buffer*/
-    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32rxLen, SPI_FAST_READ);
+    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, 
+                  u32rxLen, SPI_FAST_READ);
     
     SPIChipSelectDisable();
 }
@@ -1245,9 +1250,9 @@ void   PDRAMSetAddrLength(UINT16 u16Addr, UINT32 u32Length, UINT8 *u8StartAlignS
 /* 
     Function: LAN9252SPI_ReadPDRAM
 
-    This function does Read Access to Ether CAT Core Process RAM  using 'Serial Read(0x03)' command 
-	supported by LAN9252 Compatible SPI. This function shall be used only when PDI is selected as
-	LAN9252 Compatible SPI (0x80)
+    This function does Read Access to Ether CAT Core Process RAM  using 'Serial Read(0x03)' 
+    command supported by LAN9252 Compatible SPI. This function shall be used only when PDI 
+    is selected as LAN9252 Compatible SPI (0x80)
      
     Input : u16Addr    -> Address of the RAM location to be read
             *pu8Data -> Pointer to the data that is to be read
@@ -1360,10 +1365,10 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 /* 
     Function: LAN9252SPI_DMA_ReadPDRAM
 
-    This function does Read Access to Ether CAT Core Process RAM  using 'Serial Read(0x03)' command 
-	supported by LAN9252 Compatible SPI. This function shall be used only when PDI is selected as
-	LAN9252 Compatible SPI (0x80). The read is executed by DMA. The maximum configurable frequency 
-    for read is 30 MHz. Higher frequencies are to be done by fastread.
+    This function does Read Access to Ether CAT Core Process RAM  using 'Serial Read(0x03)' 
+    command supported by LAN9252 Compatible SPI. This function shall be used only when PDI 
+    is selected as LAN9252 Compatible SPI (0x80). The read is executed by DMA. The maximum 
+    configurable frequency for read is 30 MHz. Higher frequencies are to be done by fastread.
      
     Input : u16Addr    -> Address of the RAM location to be read
             *pu8Data -> Pointer to the data that is to be read
@@ -1375,8 +1380,8 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 
 void   LAN9252SPI_DMA_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 {
-    UINT8 u8InterDwordDummy = 0, u8IntraDwordDummy = 0, u8StartAlignSize = 0, u8EndAlignSize = 0;
-    UINT8 u8DummyClkCnt = 0, u8txLen = 1;
+    UINT8 u8InterDwordDummy = 0, u8IntraDwordDummy = 0, u8StartAlignSize = 0;
+    UINT8 u8DummyClkCnt = 0, u8txLen = 1, u8EndAlignSize = 0;
     UINT32 u32rxLen = 1;
     
     PDRAMSetAddrLength(u16Addr, u32Length, &u8StartAlignSize, &u8EndAlignSize, SPI_READ);
@@ -1420,9 +1425,9 @@ void   LAN9252SPI_DMA_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length
 /* 
     Function: LAN9252SPI_FastReadPDRAM
 
-    This function does Read Access to Ether CAT Core Process RAM  using 'Fast Read(0x0B)' command 
-	supported by LAN9252 Compatible SPI. This function shall be used only when PDI is selected as
-	LAN9252 Compatible SPI (0x80)
+    This function does Read Access to Ether CAT Core Process RAM  using 'Fast Read(0x0B)' 
+    command supported by LAN9252 Compatible SPI. This function shall be used only when PDI 
+    is selected as LAN9252 Compatible SPI (0x80)
      
     Input : u16Addr    -> Address of the RAM location to be read
             *pu8Data -> Pointer to the data that is to be read
@@ -1570,10 +1575,10 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 /* 
     Function: LAN9252SPI_DMA_FastReadPDRAM
 
-    This function does Read Access to Ether CAT Core Process RAM  using 'Fast Read(0x0B)' command 
-	supported by LAN9252 Compatible SPI. This function shall be used only when PDI is selected as
-	LAN9252 Compatible SPI (0x80). The fastread is executed by DMA. The maximum configurable frequency 
-    of 80 MHz.
+    This function does Read Access to Ether CAT Core Process RAM  using 'Fast Read(0x0B)' 
+    command supported by LAN9252 Compatible SPI. This function shall be used only when PDI 
+    is selected as LAN9252 Compatible SPI (0x80). The fastread is executed by DMA. 
+    The maximum configurable frequency of 80 MHz.
      
     Input : u16Addr    -> Address of the RAM location to be read
             *pu8Data -> Pointer to the data that is to be read
@@ -1638,7 +1643,8 @@ void    LAN9252SPI_DMA_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32L
     u32rxLen = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length); 
 	
     /*In Handle DMA data the data to be read is extracted from the buffer*/
-    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32rxLen, SPI_FAST_READ);
+    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, 
+                  u32rxLen, SPI_FAST_READ);
     
     /* Get the Intra DWORD dummy clock count */
     u8IntraDwordDummy = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
@@ -1653,9 +1659,9 @@ void    LAN9252SPI_DMA_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32L
 /* 
     Function: LAN9252SPI_WritePDRAM
 
-    This function does Write Access to Ether CAT Core Process RAM  using 'Serial Write(0x02)' command 
-	supported by LAN9252 Compatible SPI. This function shall be used only when PDI is selected as
-	LAN9252 Compatible SPI (0x80)
+    This function does Write Access to Ether CAT Core Process RAM  using 'Serial Write(0x02)' 
+    command supported by LAN9252 Compatible SPI. This function shall be used only when PDI is 
+    selected as LAN9252 Compatible SPI (0x80)
      
     Input : u16Addr    -> Address of the RAM location to be written
             *pu8Data -> Pointer to the data that is to be written
@@ -1769,9 +1775,10 @@ void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 /* 
     Function: LAN9252SPI_DMA_WritePDRAM
 
-    This function does Write Access to Ether CAT Core Process RAM  using 'Serial Write(0x02)' command 
-	supported by LAN9252 Compatible SPI. This function shall be used only when PDI is selected as
-	LAN9252 Compatible SPI (0x80). The write is executed by DMA. The maximum configurable frequency is 80 MHz.
+    This function does Write Access to Ether CAT Core Process RAM  using 'Serial Write(0x02)' 
+    command supported by LAN9252 Compatible SPI. This function shall be used only when PDI is 
+    selected as LAN9252 Compatible SPI (0x80). The write is executed by DMA. 
+    The maximum configurable frequency is 80 MHz.
      
     Input : u16Addr    -> Address of the RAM location to be written
             *pu8Data -> Pointer to the data that is to be written
@@ -1812,7 +1819,8 @@ void   LAN9252SPI_DMA_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Lengt
     u32txSize = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length);
 
     /* In Handle DMA data the data to be sent to the buffer*/
-    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32txSize, SPI_WRITE);
+    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, 
+                  u32txSize, SPI_WRITE);
 
     u8DummyClkCnt = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
     u8txLen = u8EndAlignSize + (u8EndAlignSize * u8IntraDwordDummy);
@@ -1905,8 +1913,9 @@ void    CSRLengthAlignment(UINT16 *u16Addr, UINT32 *u32Length, UINT8 mode)
 
     Output : None
 	
-	Note   : Since now SPI is running at 5MHz, Serial Write is successful without any dummy bytes or wait
-			 signal. But, as the SPI clock speed increases, we have to follow either of these. 
+	Note   : Since now SPI is running at 5MHz, Serial Write is successful without any 
+             dummy bytes or wait signal. But, as the SPI clock speed increases, 
+             we have to follow either of these. 
 
 */
 
@@ -1931,10 +1940,10 @@ void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 /* 
     Function: LAN9253SPI_DMA_Write
 
-    This function does Write Access to Non-Ether CAT core CSR, Ether CAT Core CSR and Process RAM
-	using 'Serial Write(0x02)' command supported by LAN9253 Compatible SPI. This function shall be used
-	only when PDI is selected as LAN9253 Compatible SPI (0x82). The write is executed by DMA. The maximum
-    configurable frequency is 80 MHz.
+    This function does Write Access to Non-Ether CAT core CSR, Ether CAT Core CSR and 
+    Process RAM using 'Serial Write(0x02)' command supported by LAN9253 Compatible SPI. 
+    This function shall be used only when PDI is selected as LAN9253 Compatible SPI (0x82). 
+    The write is executed by DMA. The maximum configurable frequency is 80 MHz.
      
     Input : u16Adddr    -> Address of the register to be written
             *pu8Data  -> Pointer to the data that is to be written
@@ -1942,8 +1951,9 @@ void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
     Output : None
 	
-	Note   : Since now SPI is running at 5MHz, Serial Write is successful without any dummy bytes or wait
-			 signal. But, as the SPI clock speed increases, we have to follow either of these. 
+	Note   : Since now SPI is running at 5MHz, Serial Write is successful without any 
+             dummy bytes or wait signal. But, as the SPI clock speed increases, 
+             we have to follow either of these. 
 
 */
 
@@ -1985,9 +1995,9 @@ void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 /* 
     Function: LAN9253SPI_Read
 
-    This function does Read Access to Non-Ether CAT core CSR, Ether CAT Core CSR and Process RAM
-	using 'Serial Read(0x03)' command supported by LAN9253 Compatible SPI. This function shall be used
-	only when PDI is selected as LAN9253 Compatible SPI (0x82)
+    This function does Read Access to Non-Ether CAT core CSR, Ether CAT Core CSR 
+    and Process RAM using 'Serial Read(0x03)' command supported by LAN9253 Compatible SPI. 
+    This function shall be used only when PDI is selected as LAN9253 Compatible SPI (0x82)
      
     Input : u16Addr     -> Address of the register to be read
             *pu8Data    -> Pointer to the data that is to be read
@@ -2021,10 +2031,11 @@ void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 /* 
     Function: LAN9253SPI_DMA_Read
 
-    This function does Read Access to Non-Ether CAT core CSR, Ether CAT Core CSR and Process RAM
-	using 'Serial Read(0x03)' command supported by LAN9253 Compatible SPI. This function shall be used
-	only when PDI is selected as LAN9253 Compatible SPI (0x82). The read is executed by DMA. And the
- *  maximum configurable frequency for read is 30 MHz. Higher frequencies are to be done by fastread.
+    This function does Read Access to Non-Ether CAT core CSR, Ether CAT Core CSR and 
+    Process RAM using 'Serial Read(0x03)' command supported by LAN9253 Compatible SPI. 
+    This function shall be used only when PDI is selected as LAN9253 Compatible SPI (0x82). 
+    The read is executed by DMA. And the maximum configurable frequency for read is 30 MHz. 
+    Higher frequencies are to be done by fastread.
      
     Input : u16Addr     -> Address of the register to be read
             *pu8Data    -> Pointer to the data that is to be read
@@ -2079,9 +2090,9 @@ void   LAN9253SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 /* 
     Function: LAN9253SPI_FastRead
 
-    This function does Read Access to Non-Ether CAT core CSR, Ether CAT Core CSR and Process RAM
-	using 'Fast Read(0x0B)' command supported by LAN9253 Compatible SPI. This function shall be used
-	only when PDI is selected as LAN9253 Compatible SPI (0x82)
+    This function does Read Access to Non-Ether CAT core CSR, Ether CAT Core CSR and 
+    Process RAM using 'Fast Read(0x0B)' command supported by LAN9253 Compatible SPI. 
+    This function shall be used only when PDI is selected as LAN9253 Compatible SPI (0x82)
      
     Input : u16Addr    -> Address of the register to be read
             *pu8Data -> Pointer to the data that is to be read
@@ -2178,10 +2189,10 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 /* 
     Function: LAN9253SPI_DMA_FastRead
 
-    This function does Read Access to Non-Ether CAT core CSR, Ether CAT Core CSR and Process RAM
-	using 'Fast Read(0x0B)' command supported by LAN9253 Compatible SPI. This function shall be used
-	only when PDI is selected as LAN9253 Compatible SPI (0x82). The fastread is executed by DMA. The 
- *  maximum configurable frequency of 80 MHz.
+    This function does Read Access to Non-Ether CAT core CSR, Ether CAT Core CSR and 
+    Process RAM using 'Fast Read(0x0B)' command supported by LAN9253 Compatible SPI. 
+    This function shall be used only when PDI is selected as LAN9253 Compatible SPI (0x82). 
+    The fastread is executed by DMA. The maximum configurable frequency of 80 MHz.
      
     Input : u16Addr    -> Address of the register to be read
             *pu8Data -> Pointer to the data that is to be read
@@ -2260,7 +2271,8 @@ void   LAN9253SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     u32rxLen = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length);
     
     /*In Handle DMA data state the data to be read is extracted from the buffer*/
-    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32rxLen, SPI_FAST_READ);
+    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, 
+                  u32rxLen, SPI_FAST_READ);
     
 	SPIChipSelectDisable();
 }
@@ -2280,7 +2292,7 @@ void   CSRLengthAlignment(UINT16 u16Addr, UINT32 *u32Length)
     /* Non Ether CAT Core CSRs are always DWORD aligned and should be accessed by DWORD length */
 	if (u16Addr >= 0x3000)
 	{
-		u32Length = 4; 
+		*u32Length = DWORD_LENGTH; 
 	}
 }
 /* 
@@ -2339,16 +2351,7 @@ void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
         ;
     }
     	
-	do
-	{
-        u8txData = *pu8Data++;
-        QSPI_Write(&u8txData, u8txLen);
-        QSPI_Sync_Wait();
-        while(QSPI_IsBusy())
-        {
-            ;
-        }
-	} while (--u32Length);
+	HandleDataState(pu8Data, u32Length, SPI_WRITE, NOT_NULL);
 	
 	SPIChipSelectDisable();
 }
@@ -2466,21 +2469,8 @@ void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	{
 		;
 	}
-	u8txData = 0;
-	do
-	{
-		if (1 == u32Length)
-		{
-			u8txData = READ_TERMINATION_BYTE;
-		}
-		QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
-        QSPI_Sync_Wait();
-        while(QSPI_IsBusy())
-        {
-            ;
-        }
-		*pu8Data++ = u8rxData;
-	} while (--u32Length);
+	
+    HandleDataState(pu8Data, u32Length, SPI_READ, NOT_NULL);
 	
 	SPIChipSelectDisable();
 }
