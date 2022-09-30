@@ -12,7 +12,7 @@
 *******************************************************************************/
 
 /*******************************************************************************
-* Copyright (C) 2020 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -52,13 +52,17 @@
  */
 #define ESF_PDI_FREQUENCY 20    
 
-/* Dummy Cycle Support is Enabled by Default*/
-#define IS_SUPPORT_DUMMY_CYCLE 1
-/* Dummy Bytes can be included when support is enabled*/
-#define INCLUDE_DUMMY 1
-/* DMA Enable by default */
-#define ESF_SPI_DMA_EN 1
+/* Dummy Cycle Support is Enabled by Default, comment to disable*/
+#define IS_SUPPORT_DUMMY_CYCLE 
 
+/* DMA Enable by default, comment to disable*/
+#define ESF_SPI_DMA_EN 
+
+#ifdef ESF_SPI_DMA_EN
+/* Dummy Bytes can be included when IS_SUPPORT_DUMMY_CYCLE is enabled, comment to disable*/
+/* This is used to disable intra and inter dummy bytes in DMA Data phase*/
+//#define INCLUDE_DUMMY
+#endif
 /*
  * LAN925x REV C board uses clock from LAN9253,
  * There is no Crystal component circuit, whereas gets clock from LAN9253

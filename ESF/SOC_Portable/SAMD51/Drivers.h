@@ -13,7 +13,7 @@
 *******************************************************************************/
 
 /*******************************************************************************
-* Copyright (C) 2020 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -59,11 +59,24 @@
 #define INTRA_DUMMY 1
 #define INTER_DUMMY 2
 #define IS_DIVISIBLE_TWO 0x01
-#define IS_DIVISIBLE_FOUR 0x03
+#define ALIGN_DWORD(u32Length)        (u32Length & 0x03)
+#define IS_NOT_DIV_FOUR(u32Length)    (u32Length & 0x03)
 #define NULL_VALUE 0
 #define NOT_NULL 1
-#define PDRAM_FASTREAD_ADDRESS 0x20
-#define PDRAM_READ_ADDRESS 0x04
+#define PDRAM_HIGHER_BYTE_WRITE_ADDRESS 0x20
+#define PDRAM_HIGHER_BYTE_READ_ADDRESS 0x04
+#define PDRAM_LOWER_BYTE_ADDRESS 0x0
+
+/* TOTAL_INTRA_DUMMY_BYTES is used to specify the total bytes of intra dummy needed
+   Intra dummy is between each bytes, and inter dummy is between 4 bytes, so intra dummy
+   is present between each bytes except the one in positions where inter dummy is present,
+   and the last byte. Total number of occurences of inter dummy is u32TotalInterDword,
+   u8IntraDwordDummy is the number intra dummy bytes between each byte. */
+#define TOTAL_INTRA_DUMMY_BYTES(u32Length, u32TotalInterDword, u8IntraDwordDummy) ((u32Length- u32TotalInterDword - 1) * u8IntraDwordDummy) 
+/* TOTAL_INTER_DUMMY_BYTES is used to specify the total bytes of inter dummy needed,
+   It is calculated by multiplying number of occurecences of inter dummy(u32TotalInterDword),
+   and the number of inter dummy between every 4 bytes(u8InterDwordDummy)*/
+#define TOTAL_INTER_DUMMY_BYTES(u32TotalInterDword, u8InterDwordDummy) u32TotalInterDword * u8InterDwordDummy
 /* Configured PA20, PA21, PA22 pins 
  * These are available as pinouts for J13 header from LAN9253_SAMD51_SVB
  * PA20 --> Pin 1 from J13 header
@@ -118,11 +131,11 @@ extern "C" {
     void    EtherCAT_TransmissionFlagClear(void);
     void    ECAT_SPI_Callback (uintptr_t context);
     UINT32  DmaBuffsizeCalculate (UINT8 u8IntraDwordDummy, UINT8 u8InterDwordDummy, UINT32 u32Length);
-    void    HandleSetupState (UINT16 u16Addr, UINT8 mode);
+    void    HandleSetupPhase (UINT16 u16Addr, UINT8 mode);
     void    HandleDmaData (UINT8 *pu8Data, UINT8 *gau8DmaBuff, UINT8 u8IntraDwordDummy, UINT8 u8InterDwordDummy, UINT32 u32BuffLen, UINT8 mode);
-    void    HandleDummyState(UINT8 mode);
-    void    HandleDataState(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8LastByte);
-    void    HandleDataAlignment(UINT8 u8Length, UINT8 mode, UINT8 u8LastByte);
+    void    HandleDummyPhase(UINT8 mode);
+    void    HandleDataPhase (UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8TerminationByte);
+    void    HandleDataAlignment (UINT8 u8Length, UINT8 mode, UINT8 u8TerminationByte);
 #endif
 	UINT16	PDI_GetTimer();
 	void	PDI_ClearTimer(void);

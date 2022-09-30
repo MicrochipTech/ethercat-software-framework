@@ -14,7 +14,7 @@
 *******************************************************************************/
 
 /*******************************************************************************
-* Copyright (C) 2020 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -40,9 +40,9 @@
 #include "ecatslv.h"
 #include "ESC_Utils.h"
 
-/*gau8DmaBuff size should be set after considering the byte length, Inter DWord 
+/* gau8DmaBuff size should be set after considering the byte length, Inter DWord 
  * and Intra byte dummy bytes
- * Maximum DMA_BUFF_SIZE of the array can be set by taking byte_length to be 2048*/ 
+ * Maximum DMA_BUFF_SIZE of array can be set by taking byte_length to be 2048*/ 
 UINT8 gau8DmaBuff[DMA_BUFF_SIZE];
 
 #if (ESF_PDI == SPI)
@@ -52,15 +52,15 @@ volatile CHAR gchEtherCATQSPITransmission = false;
 /* Function declarations */
 static void SPIChipSelectDisable(void);
 static void SPIChipSelectEnable(void);
+static void PDI_Init_SYSTick_Interrupt();
 void EtherCAT_TransmissionFlagClear(void);
 void EtherCAT_QSPI_CallbackRegistration(void);
+void ECAT_SysTick_Handler(uintptr_t context);
 static UINT8   EtherCAT_QSPITransmissionBusy(void);
+
 #elif (ESF_PDI == SQI)
 static UINT8 gau8rx_data[32] = {0};
 #endif
-
-static void PDI_Init_SYSTick_Interrupt();
-void ECAT_SysTick_Handler(uintptr_t context);
 
 void CRITICAL_SECTION_ENTER(void)
 {
@@ -131,19 +131,22 @@ void EtherCAT_QSPI_CallbackRegistration(void)
         void ESC_BYTE_TEST_Register_Read(UINT8 *data)
 
     Summary:
-        Number of dummy bytes that the S/W uses is set dynamically using SETCFG. Design will decode the SETCFG
-        instruction and respond to the SPI Read/Write commands from the master accordingly. If we use SPIRead() API
-        which uses dummy bytes (initial/Per Byte/Per Dword) to poll for Byte Order register, the design would not be
-        aware of dummy byte count at this point and reading byte order register will fail(Since, issuing of SETCFG
-        from the S/W itself is possible only after polling for byte order register) Hence, a separate API is
-        maintained.
+        Number of dummy bytes that the S/W uses is set dynamically using SETCFG. 
+        Design will decode the SETCFG instruction and respond to the SPI Read/Write 
+        commands from the master accordingly. If we use SPIRead() API which uses 
+        dummy bytes (initial/Per Byte/Per Dword) to poll for Byte Order register, 
+        the design would not be aware of dummy byte count at this point and reading 
+        byte order register will fail(Since, issuing of SETCFG from the S/W itself 
+        is possible only after polling for byte order register) Hence, a separate 
+        API is maintained.
 *******************************************************************************/
 
 void ESC_BYTE_TEST_Register_Read (UINT8 *pu8Data)
 {
-	/* Before device initialization, the SPI/SQI interface will not return valid data. To determine when the SPI/SQI interface is
-	functional, the Byte Order Test Register (BYTE_TEST) should be polled. Once the correct pattern is read, the interface
-	can be considered functional */
+	/* Before device initialization,SPI/SQI interface will not return valid data. 
+       To determine when the SPI/SQI interface is functional, Byte Order Test Register 
+      (BYTE_TEST) should be polled. Once the correct pattern is read, the interface
+	   can be considered functional */
 #if (ESF_PDI == SPI) 
 #ifdef ESF_SPI_DMA_EN
     UINT8 u8Len = 4;
@@ -303,8 +306,8 @@ void ReBuild_SQI_SetCfg_data ()
         void SQI_SetConfiguration(UINT8 *dummyArr)
 
     Summary:
-        This function configures the number of initial, per byte and per DWORD dummy
-		bytes needed. 
+        This function configures the number of initial, per byte and per DWORD 
+        dummy bytes needed. 
 *******************************************************************************/
 
 void SQI_SetConfiguration(UINT8 *pu8DummyByteCnt)
@@ -412,7 +415,7 @@ void ReBuild_SPI_SetCfg_data ()
    
     //https://jira.microchip.com/browse/UNG_JUTLAND2-334
     //Fix is added by making the Intra and Inter Dummy Bytes to 0
-#ifndef INCLUDE_DUMMY
+#ifndef INCLUDE_DUMMY 
     gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET] = 0;
     gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET] = 0;
     gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET] = 0;
@@ -424,30 +427,19 @@ void ReBuild_SPI_SetCfg_data ()
 }
 /*******************************************************************************
     Function:
-         void   HandleSetupState (UINT16 u16Addr, UINT8 mode);
+         void   HandleSetupPhase (UINT16 u16Addr, UINT8 u8Cmd);
 
     Summary:
         This function is used to transfer Setup state bytes in Non-DMA Case. This
         function is applicable for SPI Direct and Indirect read, write and fastread 
         functions, since the Higher and lower byte addresses are used for transfer.
 *******************************************************************************/
-void   HandleSetupState (UINT16 u16Addr, UINT8 mode)
+void   HandleSetupPhase (UINT16 u16Addr, UINT8 u8Cmd)
 {
     UINT8 u8txData = 0, u8txLen = 1;
     UINT8 u8rxData = 0, u8rxLen = 1;
     
-    if((mode == NULL_VALUE))
-    {
-        u8txData = CMD_SERIAL_READ;
-    }
-    else if(mode & IS_DIVISIBLE_TWO)
-    {
-        u8txData = CMD_SERIAL_WRITE;
-    }
-    else
-    {
-        u8txData = CMD_FAST_READ;
-    }
+    u8txData = u8Cmd;
     QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
     QSPI_Sync_Wait();
     while(QSPI_IsBusy())
@@ -475,20 +467,20 @@ void   HandleSetupState (UINT16 u16Addr, UINT8 mode)
 }
 /*******************************************************************************
     Function:
-        void    HandleDummyState(UINT8 mode);
+        void    HandleDummyPhase(UINT8 mode);
 
     Summary:
         This function is used to transfer Dummy state bytes in Non-DMA Case
 *******************************************************************************/
-void   HandleDummyState(UINT8 mode)
+void   HandleDummyPhase(UINT8 mode)
 {
     UINT8 u8DummyClkCnt = 0, u8rxData = 0, u8rxLen = 1;
         
-    if((mode == NULL_VALUE))
+    if(mode == SPI_READ)
     {
         u8DummyClkCnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
     }
-    else if(mode & IS_DIVISIBLE_TWO)
+    else if(mode == SPI_WRITE)
     {
         u8DummyClkCnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
     }
@@ -526,7 +518,7 @@ UINT32 DmaBuffsizeCalculate (UINT8 u8IntraDwordDummy, UINT8 u8InterDwordDummy, U
       For 8 bytes the pattern formed is: D I D I D I D B B D I D I D I D (u32TotalInterDword = 2)
       For 10 bytes the pattern formed is: D I D I D I D B B D I D I D I D B B D I D (u32TotalInterDword = 4)
       Since if u32Length is divisible by 4 inter_dword_dummy for last byte is not required.*/
-    if(u32Length & IS_DIVISIBLE_FOUR)
+    if(IS_NOT_DIV_FOUR(u32Length))
     {
         u32TotalInterDword = (u32Length / DWORD_LENGTH);
     }
@@ -534,13 +526,10 @@ UINT32 DmaBuffsizeCalculate (UINT8 u8IntraDwordDummy, UINT8 u8InterDwordDummy, U
     {
         u32TotalInterDword = (u32Length / DWORD_LENGTH) - 1;
     }
-
-    /* From the above example u32Buffsize = u32Length + no. of (Intra_byte+ Inter_Dword) bytes needed
-     * no.of Inter_Dword bytes needed = u32TotalInterDword * inter_Dword_dummy for 4 bytes
-     *no. of Intra_byte dummy neeed  = (u32Length - last byte - u32TotalInterDword) * Intra_byte_dummy for each byte*/
-    u32Buffsize = u32Length + \
-                ((u32Length- u32TotalInterDword - 1) * u8IntraDwordDummy) + \
-                 (u32TotalInterDword * u8InterDwordDummy);  
+    
+    u32Buffsize = u32Length + 
+                  TOTAL_INTRA_DUMMY_BYTES(u32Length, u32TotalInterDword, u8IntraDwordDummy) + \
+                  TOTAL_INTER_DUMMY_BYTES(u32TotalInterDword, u8InterDwordDummy);  
     
     return u32Buffsize;
 }
@@ -562,8 +551,8 @@ void  HandleDmaData(UINT8 *pu8Data, UINT8 *gau8DmaBuff, UINT8 u8IntraDwordDummy,
     /* Add Intra DWORD and Inter DWORD dummy clocks, avoid for last byte */
 #ifdef INCLUDE_DUMMY
     UINT16 u16Itr = 0,u16Dwordctr = 0;
-    /* mode = 0  for read, mode = 1 for write and mode = 2 for fastread*/
-    if(mode & IS_DIVISIBLE_TWO)
+
+    if(mode == SPI_WRITE)
     {
         do
         {
@@ -573,7 +562,7 @@ void  HandleDmaData(UINT8 *pu8Data, UINT8 *gau8DmaBuff, UINT8 u8IntraDwordDummy,
             pu8Data++;
         
             /*After every 4 bytes add Inter Dummy else Intra dummy*/
-            if((u16Dwordctr & IS_DIVISIBLE_FOUR) == NULL_VALUE)
+            if((IS_NOT_DIV_FOUR(u16Dwordctr)) == 0)
             {
                 u16Itr += u8InterDwordDummy + 1;
                 u16Dwordctr = 0;
@@ -583,14 +572,15 @@ void  HandleDmaData(UINT8 *pu8Data, UINT8 *gau8DmaBuff, UINT8 u8IntraDwordDummy,
                 u16Itr += u8IntraDwordDummy + 1;
             }
         
-        }while(u16Itr < u32BuffLen);
+        } while(u16Itr < u32BuffLen);
     
         /* DMA Write*/
         DRV_SPITransfer(gau8DmaBuff, u32BuffLen);
     }
     else
     {
-        /* When the buffer is read it contains Intra DWORD and Inter DWORD dummy clocks in addition to Data */
+        /* When the buffer is read it contains Intra DWORD and Inter DWORD dummy 
+           clocks in addition to Data */
         DRV_SPIReceive(gau8DmaBuff, u32BuffLen);
     
         /* Extract only the data bytes and skip the other dummy bytes */
@@ -601,7 +591,7 @@ void  HandleDmaData(UINT8 *pu8Data, UINT8 *gau8DmaBuff, UINT8 u8IntraDwordDummy,
             *pu8Data++ = gau8DmaBuff[u16Itr];
         
             /*After every 4 bytes add Inter Dummy else Intra dummy*/
-            if((u16Dwordctr & IS_DIVISIBLE_FOUR) == NULL_VALUE)
+            if(IS_NOT_DIV_FOUR(u16Dwordctr) == 0)
             {
                 u16Itr += u8InterDwordDummy + 1;
                 u16Dwordctr = 0;
@@ -610,59 +600,64 @@ void  HandleDmaData(UINT8 *pu8Data, UINT8 *gau8DmaBuff, UINT8 u8IntraDwordDummy,
             {
                 u16Itr += u8IntraDwordDummy + 1;
             }
-        }while(u16Itr < u32BuffLen);
+        } while(u16Itr < u32BuffLen);
     }
 
 #else
-    if(mode)
+    if(mode == SPI_WRITE)
     {
-    /* No Dummy Bytes Included*/
-    /* DMA Write*/
-    DRV_SPITransfer(pu8Data, u32BuffLen);
+        /* No Dummy Bytes Included*/
+        /* DMA Write*/
+        memcpy(gau8DmaBuff, pu8Data, u32BuffLen);
+        DRV_SPITransfer(gau8DmaBuff, u32BuffLen);
     }
     else
     {
-    /* No Dummy Bytes Included */
-    /* DMA Read*/
-    DRV_SPIReceive(pu8Data, u32BuffLen);
+        /* No Dummy Bytes Included */
+        /* DMA Read*/
+        DRV_SPIReceive(pu8Data, u32BuffLen);
     }
 #endif
 }
 /*******************************************************************************
     Function:
-        void   HandleDataState(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8LastByte);
+        void   HandleDataPhase(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, 
+                               UINT8 u8TerminationByte);
 
     Summary:
         This function is used to handle data in case of read,write or fastread
         for non-DMA Case
 *******************************************************************************/
-void   HandleDataState(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8LastByte)
+void   HandleDataPhase(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8TerminationByte)
 {
     UINT8 u8DummyClkCnt = 0, u8DummyValue = 0;
     UINT8 u8txData = 0, u8txLen = 1 ;
     UINT8 u8rxData = 0, u8rxLen = 1 ;
+    
+    /*Beckhoff mode does not require dummy for data handling*/
 #if !defined(_IS_SPI_BECKHOFF_MODE_ACCESS)
     /* Get the Intra DWORD dummy clock count */
-    if(mode == NULL_VALUE)
-       {
-           u8DummyValue = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
-       }
-    else if(mode & IS_DIVISIBLE_TWO)
-       {
-           u8DummyValue = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
-       }
+    if(mode == SPI_READ)
+    {
+        u8DummyValue = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+    }
+    else if(mode == SPI_WRITE)
+    {
+        u8DummyValue = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+    }
     else
-       {
-           u8DummyValue = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
-       }
+    {
+        u8DummyValue = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+    }
 #endif
-    if(mode & IS_DIVISIBLE_TWO)
+    if(mode == SPI_WRITE)
        {
             do
             {
                 u8txData = *pu8Data++;
                 QSPI_Write(&u8txData, u8txLen);
                 QSPI_Sync_Wait();
+                MCHP_ESF_GPIO_SET(GPIO_T_MEA);
                 while(QSPI_IsBusy())
                 {
                     ;
@@ -670,7 +665,7 @@ void   HandleDataState(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8Las
 #ifdef IS_SUPPORT_DUMMY_CYCLE
                 /* Add Intra DWORD dummy clocks, avoid for last byte */
                 u8DummyClkCnt = u8DummyValue;
-                if (u8LastByte != u32Length) {
+                if (u8TerminationByte != u32Length) {
                     while (u8DummyClkCnt--)
                     {
                         QSPI_Read(&u8rxData, u8rxLen);
@@ -681,6 +676,7 @@ void   HandleDataState(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8Las
                         }
                     }
                 }
+                MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 #endif
             } while (--u32Length);
         }
@@ -688,13 +684,10 @@ void   HandleDataState(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8Las
         {
             do
             {
-                if (u8LastByte == u32Length)
+                u8txData = 0;
+                if (u8TerminationByte == u32Length)
                 {
                     u8txData = READ_TERMINATION_BYTE;
-                }
-                else
-                {
-                    u8txData = NULL_VALUE;
                 }
                 
                 QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
@@ -704,10 +697,11 @@ void   HandleDataState(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8Las
                     ;
                 }
                 *pu8Data++ = u8rxData;
+                MCHP_ESF_GPIO_SET(GPIO_T_MEA);
 #ifdef IS_SUPPORT_DUMMY_CYCLE
                 /* Add Intra DWORD dummy clocks, avoid for last byte */
                 u8DummyClkCnt = u8DummyValue;
-                if (u8LastByte != u32Length) {
+                if (u8TerminationByte != u32Length) {
                     while (u8DummyClkCnt--)
                         {
                             QSPI_Read(&u8rxData, u8rxLen);
@@ -718,6 +712,7 @@ void   HandleDataState(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8Las
                             }
                         }      
                     }
+                MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 #endif
             } while (--u32Length); 
         }
@@ -725,23 +720,23 @@ void   HandleDataState(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8Las
 
 /*******************************************************************************
     Function:
-        void   HandleDataAlignment(UINT8 u8Length, UINT8 mode, UINT8 u8LastByte);
+        void   HandleDataAlignment(UINT8 u8Length, UINT8 mode, UINT8 u8TerminationByte);
 
     Summary:
-        This function is used to align the Non DWORD aligned addresses by sending
- dummy bytes before or after the sending of actual data.
+        This function is used to align the Non DWORD aligned addresses by 
+        sending dummy bytes before or after the sending actual data.
 *******************************************************************************/
-void   HandleDataAlignment(UINT8 u8Length, UINT8 mode, UINT8 u8LastByte)
+void   HandleDataAlignment(UINT8 u8Length, UINT8 mode, UINT8 u8TerminationByte)
 {
     UINT8 u8DummyValue = 0, u8DummyClkCnt = 0;
     UINT8 u8rxData = 0, u8rxLen = 1;
     UINT8 u8txData = 0, u8txLen = 1;
     /* Get the Intra DWORD dummy clock count */
-    if(mode == NULL_VALUE)
+    if(mode == SPI_READ)
        {
            u8DummyValue = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
        }
-    else if(mode & IS_DIVISIBLE_TWO)
+    else if(mode == SPI_WRITE)
        {
            u8DummyValue = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
        }
@@ -751,7 +746,7 @@ void   HandleDataAlignment(UINT8 u8Length, UINT8 mode, UINT8 u8LastByte)
        }
     while (u8Length--)
 	{
-        if(mode & IS_DIVISIBLE_TWO)
+        if(mode == SPI_WRITE)
         {
             /* Start align Byte */
             QSPI_Write(&u8txData, u8txLen);
@@ -769,7 +764,7 @@ void   HandleDataAlignment(UINT8 u8Length, UINT8 mode, UINT8 u8LastByte)
         /* Get the Intra DWORD dummy clock count */
         u8DummyClkCnt = u8DummyValue;
         /* Add Intra DWORD dummy clocks, avoid for last byte */
-        if (u8LastByte != u8Length) {
+        if (u8TerminationByte != u8Length) {
             while (u8DummyClkCnt--)
             {
                 QSPI_Read(&u8rxData, u8rxLen);
@@ -800,7 +795,8 @@ void SPI_SetConfiguration(UINT8 *pu8DummyByteCnt)
     u8Len = SETCFG_MAX_DATA_BYTES;
     u8Len += 1;
     
-    /* First byte corresponds to Global data type value followed by the 39 bytes pu8DummyByteCnt array*/
+    /* First byte corresponds to Global data type value followed by the 39 bytes 
+       pu8DummyByteCnt array*/
     gau8DmaBuff[0]= CMD_SQI_SETCFG;
     
     for(u8Itr = 1;u8Itr <= u8Len;u8Itr += 1)
@@ -935,7 +931,7 @@ void PDI_Timer_Interrupt(void)
     Summary:
         SysTick ISR Handler
     Description:
-        This routine load the SysTick LOAD register and perform EtherCAT check opration.
+        This routine loads SysTick LOAD register,perform EtherCAT check operation.
 *******************************************************************************/
 
 void ECAT_SysTick_Handler(uintptr_t context)
@@ -991,17 +987,17 @@ void start_timer(void)
     Function: LAN9252SPI_Write
 
     This function does Write Access to Non-Ether CAT and Ether CAT Core CSR 
-	using 'Serial Write(0x02)' command supported by LAN9252 Compatible SPI. This function shall be used
-	only when PDI is selected as LAN9252 Compatible SPI (0x80)
+	using 'Serial Write(0x02)' command supported by LAN9252 Compatible SPI. 
+    This function shall be used only when PDI is selected as LAN9252 Compatible SPI (0x80)
      
     Input : u16Adddr    -> Address of the register to be written
             *pu8Data    -> Pointer to the data that is to be written
-            u32Length       -> Length of the data
+            u32Length   -> Length of the data
 
     Output : None
 	
-	Note   : In LAN9252 Compatible SPI, all registers are DWORD aligned. Length will be fixed to 4. Hence,
-			 there is no separate length argument.
+	Note   : In LAN9252 Compatible SPI, all registers are DWORD aligned. Length 
+             will be fixed to 4. Hence, there is no separate length argument.
 */
 
 void LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
@@ -1011,13 +1007,13 @@ void LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     while(QSPI_IsBusy());
 	
     /* In Setup state the length and the address is sent*/
-    HandleSetupState (u16Addr, SPI_WRITE);
+    HandleSetupPhase (u16Addr, CMD_SERIAL_WRITE);
     
     /* Initial Dummy cycle added by dummy write */
-    HandleDummyState(SPI_WRITE);
+    HandleDummyPhase(SPI_WRITE);
     
     /*In Data state the actual data to be written is sent*/
-	HandleDataState(pu8Data, u32Length, SPI_WRITE, NOT_NULL);
+	HandleDataPhase(pu8Data, u32Length, SPI_WRITE, NOT_NULL);
    
     SPIChipSelectDisable();
 }
@@ -1032,7 +1028,7 @@ void LAN9252SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
      
     Input : u16Adddr    -> Address of the register to be written
             *pu8Data    -> Pointer to the data that is to be written
-            u32Length       -> Length of the data
+            u32Length   -> Length of the data
 
     Output : None
 	
@@ -1068,8 +1064,7 @@ void    LAN9252SPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     u32txSize = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length);
     
     /* In the DMA Data set the data to be written is sent in a buffer*/
-    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, 
-                  u32txSize, SPI_WRITE);
+    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32txSize, SPI_WRITE);
 
     SPIChipSelectDisable(); 
 }
@@ -1082,7 +1077,7 @@ void    LAN9252SPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
      
     Input : u16Addr     -> Address of the register to be read
             *pu8Data    -> Pointer to the data that is to be read
-            u32Length       -> Length of the data
+            u32Length   -> Length of the data
 
     Output : None
 	
@@ -1097,13 +1092,13 @@ void LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     while(QSPI_IsBusy());
 
     /* In Setup state the length and the address is sent*/
-    HandleSetupState (u16Addr, SPI_READ);
+    HandleSetupPhase (u16Addr, CMD_SERIAL_READ);
     
     /* Initial Dummy cycle added by dummy read */
-    HandleDummyState(SPI_READ);
+    HandleDummyPhase(SPI_READ);
     
     /*In Data state the data to be read is extracted byte by byte*/
-	HandleDataState(pu8Data, u32Length, SPI_READ, NOT_NULL);
+	HandleDataPhase(pu8Data, u32Length, SPI_READ, NOT_NULL);
     
 	SPIChipSelectDisable();
 }
@@ -1119,7 +1114,7 @@ void LAN9252SPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
      
     Input : u16Addr     -> Address of the register to be read
             *pu8Data    -> Pointer to the data that is to be read
-            u32Length       -> Length of the data
+            u32Length   -> Length of the data
 
     Output : None
 	
@@ -1154,6 +1149,10 @@ void   LAN9252SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     
     u32rxLen = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length);
     
+    memset(gau8DmaBuff,0, u32rxLen);
+    /*Include termination byte at the last byte to confirm SPI read is finished*/
+    gau8DmaBuff[u32rxLen - 1] = READ_TERMINATION_BYTE;
+    
     /* In DMA data state the data to be read is extracted from the buffer*/
     HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32rxLen, SPI_READ);
 
@@ -1168,7 +1167,7 @@ void   LAN9252SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
      
     Input : u16Addr     -> Address of the register to be read
             *pu8Data    -> Pointer to the data that is to be read
-            u32Length       -> Length of the data
+            u32Length   -> Length of the data
 
     Output : None
 
@@ -1186,7 +1185,7 @@ void LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	}
     
     /* In Setup state the length and the address is sent*/
-	HandleSetupState (u16Addr, SPI_FAST_READ);
+	HandleSetupPhase (u16Addr, CMD_FAST_READ);
     
 	/* Send Transfer length */
 	QSPI_Write(&u32Length, u8rxLen);
@@ -1197,10 +1196,10 @@ void LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	}
 
     /* Initial Dummy cycle added by dummy read */
-	HandleDummyState(SPI_FAST_READ);
+	HandleDummyPhase(SPI_FAST_READ);
 	
     /* In Data state the data to be read is extracted byte by byte*/
-	HandleDataState(pu8Data, u32Length, SPI_FAST_READ, NOT_NULL);
+	HandleDataPhase(pu8Data, u32Length, SPI_FAST_READ, NOT_NULL);
 	
     SPIChipSelectDisable();		
 }
@@ -1215,7 +1214,7 @@ void LAN9252SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
      
     Input : u16Addr     -> Address of the register to be read
             *pu8Data    -> Pointer to the data that is to be read
-            u32Length       -> Length of the data
+            u32Length   -> Length of the data
 
     Output : None
 
@@ -1249,9 +1248,12 @@ void   LAN9252SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     
     u32rxLen = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length);
     
+    memset(gau8DmaBuff,0, u32rxLen);
+    /*Include termination byte at the last byte to confirm SPI read is finished*/
+    gau8DmaBuff[u32rxLen - 1] = READ_TERMINATION_BYTE;
+    
     /*In data state the data to be read is extracted from the buffer*/
-    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, 
-                  u32rxLen, SPI_FAST_READ);
+    HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32rxLen, SPI_FAST_READ);
     
     SPIChipSelectDisable();
 }
@@ -1272,7 +1274,7 @@ void   PDRAMSetAddrLength(UINT16 u16Addr, UINT32 u32Length, UINT8 *u8StartAlignS
 	u32Val.w[0] = u16Addr;
 	u32Val.w[1] = u32Length;
     
-    if((mode == NULL_VALUE))
+    if((mode == SPI_READ))
     {
         MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_RD_ADDR_LENGTH_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
 
@@ -1283,7 +1285,7 @@ void   PDRAMSetAddrLength(UINT16 u16Addr, UINT32 u32Length, UINT8 *u8StartAlignS
         *u8StartAlignSize = (u16Addr & 0x3);
         *u8EndAlignSize = (u32Length + *u8StartAlignSize) & 0x3;
     }
-    else if(mode & IS_DIVISIBLE_TWO)
+    else if(mode == SPI_WRITE)
     {
         MCHP_ESF_PDI_WRITE(LAN925x_ECAT_PRAM_WR_ADDR_LENGTH_REG, (UINT8*)&u32Val.Val, DWORD_LENGTH);
 
@@ -1306,7 +1308,7 @@ void   PDRAMSetAddrLength(UINT16 u16Addr, UINT32 u32Length, UINT8 *u8StartAlignS
         *u8StartAlignSize = (u16Addr & 0x3);
         *u8EndAlignSize = (u32Length & 0x3) + *u8StartAlignSize;
     }
-    if (*u8EndAlignSize & IS_DIVISIBLE_FOUR)
+    if (IS_NOT_DIV_FOUR(*u8EndAlignSize))
     {
 		*u8EndAlignSize = (((*u8EndAlignSize + 4) & 0xC) - *u8EndAlignSize);
 	}
@@ -1315,13 +1317,13 @@ void   PDRAMSetAddrLength(UINT16 u16Addr, UINT32 u32Length, UINT8 *u8StartAlignS
 /* 
     Function: LAN9252SPI_ReadPDRAM
 
-    This function does Read Access to Ether CAT Core Process RAM  using 'Serial Read(0x03)' 
-    command supported by LAN9252 Compatible SPI. This function shall be used only when PDI 
-    is selected as LAN9252 Compatible SPI (0x80)
+    This function does Read Access to Ether CAT Core Process RAM  using 
+    'Serial Read(0x03)' command supported by LAN9252 Compatible SPI. This function 
+    shall be used only when PDI is selected as LAN9252 Compatible SPI (0x80)
      
-    Input : u16Addr    -> Address of the RAM location to be read
-            *pu8Data -> Pointer to the data that is to be read
-			u32Length	 -> Number of bytes to be read from PDRAM location
+    Input : u16Addr   -> Address of the RAM location to be read
+            *pu8Data  -> Pointer to the data that is to be read
+			u32Length -> Number of bytes to be read from PDRAM location
 
     Output : None
 
@@ -1347,7 +1349,7 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
         ;
     }
     
-    u8txData = (UINT8)NULL_VALUE;
+    u8txData = (UINT8)PDRAM_LOWER_BYTE_ADDRESS;
     QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
     QSPI_Sync_Wait();
     while(QSPI_IsBusy())
@@ -1356,7 +1358,7 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     }
     gEscALEvent.Byte[0] = u8rxData;
     
-    u8txData = (UINT8)PDRAM_READ_ADDRESS;
+    u8txData = (UINT8)PDRAM_HIGHER_BYTE_READ_ADDRESS;
     QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
     QSPI_Sync_Wait();
     while(QSPI_IsBusy())
@@ -1366,12 +1368,12 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     gEscALEvent.Byte[1] = u8rxData;
     
     /* Initial Dummy cycle added by dummy read */
-	HandleDummyState(SPI_READ);
+	HandleDummyPhase(SPI_READ);
 
 	HandleDataAlignment(u8StartAlignSize, SPI_READ, NULL_VALUE);
         
     /*In Handle Data stae the data to be read is extracted byte by byte*/
-	HandleDataState(pu8Data, u32Length, SPI_READ, NULL_VALUE);
+	HandleDataPhase(pu8Data, u32Length, SPI_READ, NULL_VALUE);
 
 	HandleDataAlignment(u8EndAlignSize, SPI_READ, NULL_VALUE);
     
@@ -1381,14 +1383,15 @@ void LAN9252SPI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 /* 
     Function: LAN9252SPI_DMA_ReadPDRAM
 
-    This function does Read Access to Ether CAT Core Process RAM  using 'Serial Read(0x03)' 
-    command supported by LAN9252 Compatible SPI. This function shall be used only when PDI 
-    is selected as LAN9252 Compatible SPI (0x80). The read is executed by DMA. The maximum 
-    configurable frequency for read is 30 MHz. Higher frequencies are to be done by fastread.
+    This function does Read Access to Ether CAT Core Process RAM  using 
+    'Serial Read(0x03)' command supported by LAN9252 Compatible SPI. This function 
+    shall be used only when PDI is selected as LAN9252 Compatible SPI (0x80). 
+    The read is executed by DMA. The maximum configurable frequency for read is 30 MHz. 
+    Higher frequencies are to be done by fastread.
      
-    Input : u16Addr    -> Address of the RAM location to be read
-            *pu8Data -> Pointer to the data that is to be read
-			u32Length	 -> Number of bytes to be read from PDRAM location
+    Input : u16Addr   -> Address of the RAM location to be read
+            *pu8Data  -> Pointer to the data that is to be read
+			u32Length -> Number of bytes to be read from PDRAM location
 
     Output : None
 
@@ -1410,11 +1413,11 @@ void   LAN9252SPI_DMA_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length
     u8IntraDwordDummy = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
     
     /* Setup phase and Dummy phase is transmitted together by DMA*/
-    u8txLen = SPI_READ_SETUP_BYTES + u8DummyClkCnt + u8StartAlignSize + (u8StartAlignSize * u8IntraDwordDummy);  
+    u8txLen = SPI_READ_SETUP_BYTES + u8DummyClkCnt + u8StartAlignSize +(u8StartAlignSize * u8IntraDwordDummy);  
 
     gau8DmaBuff[0] = CMD_SERIAL_READ;
-    gau8DmaBuff[1] = (UINT8)NULL_VALUE;
-    gau8DmaBuff[2] = (UINT8)PDRAM_READ_ADDRESS;
+    gau8DmaBuff[1] = (UINT8)PDRAM_LOWER_BYTE_ADDRESS;
+    gau8DmaBuff[2] = (UINT8)PDRAM_HIGHER_BYTE_READ_ADDRESS;
     
     /* DMA Write*/
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
@@ -1425,6 +1428,10 @@ void   LAN9252SPI_DMA_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length
     
     u32rxLen = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length);
 	
+    memset(gau8DmaBuff,0, u32rxLen);
+    /*Include termination byte at the last byte to confirm SPI read is finished*/
+    gau8DmaBuff[u32rxLen] = READ_TERMINATION_BYTE;
+    
     /*In Handle DMA Data state the data to be read is extracted from the buffer*/
     HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32rxLen, SPI_READ);
     
@@ -1445,9 +1452,9 @@ void   LAN9252SPI_DMA_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length
     command supported by LAN9252 Compatible SPI. This function shall be used only when PDI 
     is selected as LAN9252 Compatible SPI (0x80)
      
-    Input : u16Addr    -> Address of the RAM location to be read
-            *pu8Data -> Pointer to the data that is to be read
-			u32Length	 -> Number of bytes to be read from PDRAM location
+    Input : u16Addr   -> Address of the RAM location to be read
+            *pu8Data  -> Pointer to the data that is to be read
+			u32Length -> Number of bytes to be read from PDRAM location
 
     Output : None
 */
@@ -1463,10 +1470,11 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     
 	u16TotalLen = u32Length + u8StartAlignSize + u8EndAlignSize;
 	
-	/* From DOS, "For the one byte transfer length format,	bit 7 is low and bits 6-0 specify the 
-	length up to 127 bytes. For the two byte transfer length format, bit 7 of the first byte
-	is high and bits 6-0 specify the lower 7 bits of the length. Bits 6-0 of the of the second byte 
-	field specify the upper 7 bits of the length with a maximum transfer length of 16,383 bytes (16K-1)" */ 
+	/* From DOS, "For the one byte transfer length format,	bit 7 is low and bits 
+       6-0 specify the length up to 127 bytes. For the two byte transfer length format, 
+       bit 7 of the first byte is high and bits 6-0 specify the lower 7 bits of the length. 
+       Bits 6-0 of the of the second byte field specify the upper 7 bits of the length with 
+       a maximum transfer length of 16,383 bytes (16K-1)" */ 
 	if (u16TotalLen <= ONE_BYTE_MAX_XFR_LEN)
 	{
 		u16XfrLen = u16TotalLen; 
@@ -1493,7 +1501,7 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
         ;
     }
     
-    u8txData = (UINT8)NULL_VALUE;
+    u8txData = (UINT8)PDRAM_LOWER_BYTE_ADDRESS;
     QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
     QSPI_Sync_Wait();
     while(QSPI_IsBusy())
@@ -1502,7 +1510,7 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     }
     gEscALEvent.Byte[0] = u8rxData;
     
-    u8txData = (UINT8)PDRAM_READ_ADDRESS;
+    u8txData = (UINT8)PDRAM_HIGHER_BYTE_READ_ADDRESS;
     QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
 	QSPI_Sync_Wait();
 	while(QSPI_IsBusy())
@@ -1533,12 +1541,12 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 	}
 	
 	/* Initial Dummy cycle added by dummy read */
-	HandleDummyState(SPI_FAST_READ);
+	HandleDummyPhase(SPI_FAST_READ);
     
 	HandleDataAlignment(u8StartAlignSize, SPI_FAST_READ, NULL_VALUE);
 
     /* In handle data state the data to be extracted is read byte by byte*/
-	HandleDataState(pu8Data, u32Length, SPI_FAST_READ, NULL_VALUE);
+	HandleDataPhase(pu8Data, u32Length, SPI_FAST_READ, NULL_VALUE);
     
 	HandleDataAlignment(u8EndAlignSize, SPI_FAST_READ, NULL_VALUE);
     
@@ -1553,9 +1561,9 @@ void LAN9252SPI_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     is selected as LAN9252 Compatible SPI (0x80). The fastread is executed by DMA. 
     The maximum configurable frequency of 80 MHz.
      
-    Input : u16Addr    -> Address of the RAM location to be read
-            *pu8Data -> Pointer to the data that is to be read
-			u32Length	 -> Number of bytes to be read from PDRAM location
+    Input : u16Addr   -> Address of the RAM location to be read
+            *pu8Data  -> Pointer to the data that is to be read
+			u32Length -> Number of bytes to be read from PDRAM location
 
     Output : None
 */
@@ -1591,8 +1599,8 @@ void    LAN9252SPI_DMA_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32L
     u8txLen = SPI_FASTREAD_SETUP_BYTES + u8DummyClkCnt + u8StartAlignSize + (u8StartAlignSize * u8IntraDwordDummy);
 	
     gau8DmaBuff[0] = CMD_FAST_READ;
-	gau8DmaBuff[1] = (UINT8)NULL_VALUE;
-    gau8DmaBuff[2] = (UINT8)PDRAM_READ_ADDRESS;
+	gau8DmaBuff[1] = (UINT8)PDRAM_LOWER_BYTE_ADDRESS;
+    gau8DmaBuff[2] = (UINT8)PDRAM_HIGHER_BYTE_READ_ADDRESS;
 	/* Send Transfer length */
     gau8DmaBuff[3] = LOBYTE(u16XfrLen);
 	
@@ -1615,6 +1623,10 @@ void    LAN9252SPI_DMA_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32L
     
     u32rxLen = DmaBuffsizeCalculate (u8IntraDwordDummy, u8InterDwordDummy, u32Length); 
 	
+    memset(gau8DmaBuff,0, u32rxLen);
+    /*Include termination byte at the last byte to confirm SPI read is finished*/
+    gau8DmaBuff[u32rxLen] = READ_TERMINATION_BYTE;
+    
     /*In Handle DMA data the data to be read is extracted from the buffer*/
     HandleDmaData(pu8Data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, 
                   u32rxLen, SPI_FAST_READ);
@@ -1636,9 +1648,9 @@ void    LAN9252SPI_DMA_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32L
     command supported by LAN9252 Compatible SPI. This function shall be used only when PDI is 
     selected as LAN9252 Compatible SPI (0x80)
      
-    Input : u16Addr    -> Address of the RAM location to be written
-            *pu8Data -> Pointer to the data that is to be written
-			u32Length	 -> Number of bytes to be written to PDRAM location
+    Input : u16Addr   -> Address of the RAM location to be written
+            *pu8Data  -> Pointer to the data that is to be written
+			u32Length -> Number of bytes to be written to PDRAM location
 
     Output : None
 
@@ -1668,7 +1680,7 @@ void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 		;
 	}
     
-	u8txData = (UINT8)NULL_VALUE;
+	u8txData = (UINT8)PDRAM_LOWER_BYTE_ADDRESS;
 	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
     QSPI_Sync_Wait();
 	while(QSPI_IsBusy())
@@ -1677,7 +1689,7 @@ void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 	}
 	gEscALEvent.Byte[0] = u8rxData;
     
-    u8txData = (UINT8)PDRAM_FASTREAD_ADDRESS;
+    u8txData = (UINT8)PDRAM_HIGHER_BYTE_WRITE_ADDRESS;
     QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
     QSPI_Sync_Wait();
     while(QSPI_IsBusy())
@@ -1687,12 +1699,12 @@ void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
     gEscALEvent.Byte[1] = u8rxData;
 	
 	/* Initial Dummy cycle added by dummy write */
-	HandleDummyState(SPI_WRITE);
+	HandleDummyPhase(SPI_WRITE);
     
 	HandleDataAlignment(u8StartAlignSize, SPI_WRITE, NULL_VALUE);
     
     /*In Handle data state the data is sent to the buffer byte by byte*/
-	HandleDataState(pu8Data, u32Length, SPI_WRITE, NULL_VALUE);
+	HandleDataPhase(pu8Data, u32Length, SPI_WRITE, NULL_VALUE);
     
 	HandleDataAlignment(u8EndAlignSize, SPI_WRITE, NULL_VALUE);
 	
@@ -1704,12 +1716,12 @@ void LAN9252SPI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length)
 
     This function does Write Access to Ether CAT Core Process RAM  using 'Serial Write(0x02)' 
     command supported by LAN9252 Compatible SPI. This function shall be used only when PDI is 
-    selected as LAN9252 Compatible SPI (0x80). The write is executed by DMA. 
+    selected as LAN9252 Compatible SPI (0x80). The write is executed through DMA. 
     The maximum configurable frequency is 80 MHz.
      
     Input : u16Addr    -> Address of the RAM location to be written
-            *pu8Data -> Pointer to the data that is to be written
-			u32Length	 -> Number of bytes to be written to PDRAM location
+            *pu8Data   -> Pointer to the data that is to be written
+			u32Length  -> Number of bytes to be written to PDRAM location
 
     Output : None
 
@@ -1733,8 +1745,8 @@ void   LAN9252SPI_DMA_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Lengt
     u8txLen = SPI_WRITE_SETUP_BYTES + u8DummyClkCnt + u8StartAlignSize + (u8StartAlignSize * u8IntraDwordDummy);
     
     gau8DmaBuff[0] = CMD_SERIAL_WRITE;
-    gau8DmaBuff[1] = (UINT8)NULL_VALUE;
-	gau8DmaBuff[2] = (UINT8)PDRAM_FASTREAD_ADDRESS;
+    gau8DmaBuff[1] = (UINT8)PDRAM_LOWER_BYTE_ADDRESS;
+	gau8DmaBuff[2] = (UINT8)PDRAM_HIGHER_BYTE_WRITE_ADDRESS;
     
     /* DMA Write*/
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
@@ -1775,7 +1787,7 @@ void    CSRLengthAlignment(UINT16 *u16Addr, UINT32 *u32Length, UINT8 mode)
     
 	if (*u16Addr < 0x3000)
     {
-        if(mode & IS_DIVISIBLE_TWO)
+        if(mode == SPI_WRITE)
         {
             /* DWORD Buffering - Applicable for Write only */
             if (*u32Length > 1)
@@ -1787,7 +1799,7 @@ void    CSRLengthAlignment(UINT16 *u16Addr, UINT32 *u32Length, UINT8 mode)
                 /* Do Nothing */
             }
         }
-        else if((mode == NULL_VALUE))
+        else if((mode == SPI_READ))
         {
             if (*u32Length > 1)
             {
@@ -1796,7 +1808,7 @@ void    CSRLengthAlignment(UINT16 *u16Addr, UINT32 *u32Length, UINT8 mode)
             }
             
         }
-        else if((mode == 2))
+        else
         {
             if (*u16Addr < 0x3000)
             {
@@ -1809,34 +1821,27 @@ void    CSRLengthAlignment(UINT16 *u16Addr, UINT32 *u32Length, UINT8 mode)
     {
         /* Non Core CSR length will be adjusted if it is not DWORD aligned */
 		u32ModLen = *u32Length % DWORD_LENGTH;
-		if (1 == u32ModLen)
+		
+        if (0 == u32ModLen)
 		{
-			*u32Length = *u32Length + 3;
-		}
-		else if (2 == u32ModLen)
-		{
-			*u32Length = *u32Length + 2;
-		}
-		else if (3 == u32ModLen)
-		{
-			*u32Length = *u32Length + 1;
+			/* Do nothing if length is 0 since it is DWORD access */
 		}
 		else
 		{
-			/* Do nothing if length is 0 since it is DWORD access */
+			*u32Length = DWORD_LENGTH - u32ModLen;
 		}
     }
 }
 /* 
     Function: LAN9253SPI_Write
 
-    This function does Write Access to Non-Ether CAT core CSR, Ether CAT Core CSR and Process RAM
-	using 'Serial Write(0x02)' command supported by LAN9253 Compatible SPI. This function shall be used
-	only when PDI is selected as LAN9253 Compatible SPI (0x82)
+    This function does Write Access to Non-Ether CAT core CSR, Ether CAT Core CSR and 
+    Process RAM using 'Serial Write(0x02)' command supported by LAN9253 Compatible SPI. 
+    This function shall be used only when PDI is selected as LAN9253 Compatible SPI (0x82)
      
-    Input : u16Adddr    -> Address of the register to be written
+    Input : u16Adddr  -> Address of the register to be written
             *pu8Data  -> Pointer to the data that is to be written
-			u32Length  -> Number of bytes to be written 
+			u32Length -> Number of bytes to be written 
 
     Output : None
 	
@@ -1853,14 +1858,14 @@ void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	SPIChipSelectEnable();
     
     /*In Handle setup state the length and address are sent*/
-	HandleSetupState (u16Addr, SPI_WRITE);
+	HandleSetupPhase (u16Addr, CMD_SERIAL_WRITE);
      
 #ifdef IS_SUPPORT_DUMMY_CYCLE 
 	/* Initial Dummy cycle added by dummy read */
-	HandleDummyState(SPI_WRITE);
+	HandleDummyPhase(SPI_WRITE);
 #endif
     /*In Handle Data state the data to be written is sent byte by byte */
-    HandleDataState(pu8Data, u32Length, SPI_WRITE, NOT_NULL);
+    HandleDataPhase(pu8Data, u32Length, SPI_WRITE, NOT_NULL);
   
 	SPIChipSelectDisable();
 }
@@ -1894,7 +1899,6 @@ void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     
     SPIChipSelectEnable();
 
-#ifdef IS_SUPPORT_DUMMY_CYCLE   
     /* Initial Dummy cycle added by dummy write is stored in u8DummyClkCnt */
     u8DummyClkCnt = gau8DummyCntArr[SPI_WRITE_INITIAL_OFFSET];
     
@@ -1907,7 +1911,7 @@ void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     
     /* DMA Write*/
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
-#endif
+
     /* Get the Intra DWORD dummy clock count */     
     u8IntraDwordDummy = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
     u8InterDwordDummy = gau8DummyCntArr[SPI_WRITE_INTER_DWORD_OFFSET];
@@ -1941,16 +1945,16 @@ void LAN9253SPI_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
 	SPIChipSelectEnable();
 
     /*In Handle setup state the length and address are sent*/
-    HandleSetupState (u16Addr, SPI_READ);
+    HandleSetupPhase (u16Addr, CMD_SERIAL_READ);
 #ifdef IS_SUPPORT_DUMMY_CYCLE    
-	HandleDummyState(SPI_READ);
+	HandleDummyPhase(SPI_READ);
 #else
     UINT8 u8rxData = 0, u8rxLen = 1;
     QSPI_Read(&u8rxData, u8rxLen);
 	QSPI_Sync_Wait();
 #endif    
     /*In Handle setup state the data to be read is extracted byte by byte*/
-	HandleDataState(pu8data, u32Length, SPI_READ, NOT_NULL);
+	HandleDataPhase(pu8data, u32Length, SPI_READ, NOT_NULL);
 
 	SPIChipSelectDisable();	
 }
@@ -1982,8 +1986,7 @@ void   LAN9253SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
     
     SPIChipSelectEnable();
 
-#ifdef IS_SUPPORT_DUMMY_CYCLE 
-     /* Initial Dummy cycle added by dummy read is stored in u8DummyClkCnt */
+    /* Initial Dummy cycle added by dummy read is stored in u8DummyClkCnt */
     u8DummyClkCnt = gau8DummyCntArr[SPI_READ_INITIAL_OFFSET];
     
     /* Setup phase and Dummy phase is transmitted together by DMA*/
@@ -1996,7 +1999,7 @@ void   LAN9253SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
     /* DMA Write*/
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
 
-#else
+#ifndef IS_SUPPORT_DUMMY_CYCLE
     u8txLen = 1;
     /* DMA Read*/
     DRV_SPIReceive(&gau8DmaBuff, u8txLen);
@@ -2009,6 +2012,9 @@ void   LAN9253SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
     
     u32rxLen = DmaBuffsizeCalculate(u8IntraDwordDummy, u8InterDwordDummy, u32Length); 
 	
+    memset(gau8DmaBuff,0, u32rxLen);
+    /*Include termination byte at the last byte to confirm SPI read is finished*/
+    gau8DmaBuff[u32rxLen - 1] = READ_TERMINATION_BYTE;
     /*In Handle DMA Data the data to be read is extracted from the buffer*/
     HandleDmaData(pu8data, gau8DmaBuff, u8IntraDwordDummy, u8InterDwordDummy, u32rxLen, SPI_READ);
 
@@ -2021,8 +2027,8 @@ void   LAN9253SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
     Process RAM using 'Fast Read(0x0B)' command supported by LAN9253 Compatible SPI. 
     This function shall be used only when PDI is selected as LAN9253 Compatible SPI (0x82)
      
-    Input : u16Addr    -> Address of the register to be read
-            *pu8Data -> Pointer to the data that is to be read
+    Input : u16Addr   -> Address of the register to be read
+            *pu8Data  -> Pointer to the data that is to be read
 			u32Length -> Number of bytes to be read 
 
 */
@@ -2035,12 +2041,13 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	CSRLengthAlignment(&u16Addr, &u32Length, SPI_FAST_READ);	
 		
     /* To calculate initial number of dummy bytes which is based on starting address */
-	u8StartAlignSize = (u16Addr & IS_DIVISIBLE_FOUR); 
+	u8StartAlignSize = (ALIGN_DWORD(u16Addr)); 
 	
-	/* From DOS, "For the one byte transfer length format,	bit 7 is low and bits 6-0 specify the 
-	length up to 127 bytes. For the two byte transfer length format, bit 7 of the first byte
-	is high and bits 6-0 specify the lower 7 bits of the length. Bits 6-0 of the of the second byte 
-	field specify the upper 7 bits of the length with a maximum transfer length of 16,383 bytes (16K-1)" */ 
+	/* From DOS, "For the one byte transfer length format,	bit 7 is low and bits 6-0 specify 
+       the length up to 127 bytes. For the two byte transfer length format, bit 7 of the 
+       first byte is high and bits 6-0 specify the lower 7 bits of the length. Bits 6-0 
+       of the of the second byte field specify the upper 7 bits of the length with a maximum 
+       transfer length of 16,383 bytes (16K-1)" */ 
 	if (u32Length <= ONE_BYTE_MAX_XFR_LEN)
 	{
 		u16XfrLen = u32Length; 
@@ -2054,7 +2061,7 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	SPIChipSelectEnable();
     
     /*In Handle setup state the length and address are sent*/
-	HandleSetupState (u16Addr, SPI_FAST_READ);
+	HandleSetupPhase (u16Addr, CMD_FAST_READ);
     
     /* Send Transfer length */
     u8txData = (UINT8)(LOBYTE(u16XfrLen));
@@ -2072,7 +2079,7 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 #ifdef IS_SUPPORT_DUMMY_CYCLE	
     /* Initial Dummy cycle added by dummy read */
-	HandleDummyState(SPI_FAST_READ);
+	HandleDummyPhase(SPI_FAST_READ);
     MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 #else
     QSPI_Read(&u8rxData, u8rxLen);
@@ -2086,7 +2093,7 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	HandleDataAlignment(u8StartAlignSize, SPI_FAST_READ, NULL_VALUE);
     
     /*In handle data state the data to be read is extracted byte by byte*/
-	HandleDataState(pu8Data, u32Length, SPI_FAST_READ, NOT_NULL);
+	HandleDataPhase(pu8Data, u32Length, SPI_FAST_READ, NOT_NULL);
 	
 	SPIChipSelectDisable();
 }
@@ -2099,8 +2106,8 @@ void LAN9253SPI_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     This function shall be used only when PDI is selected as LAN9253 Compatible SPI (0x82). 
     The fastread is executed by DMA. The maximum configurable frequency of 80 MHz.
      
-    Input : u16Addr    -> Address of the register to be read
-            *pu8Data -> Pointer to the data that is to be read
+    Input : u16Addr   -> Address of the register to be read
+            *pu8Data  -> Pointer to the data that is to be read
 			u32Length -> Number of bytes to be read 
 
 */
@@ -2115,7 +2122,7 @@ void   LAN9253SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     CSRLengthAlignment(&u16Addr, &u32Length, SPI_FAST_READ);	
 		
     /* To calculate initial number of dummy bytes which is based on starting address */
-	u8StartAlignSize = (u16Addr & IS_DIVISIBLE_FOUR); 
+	u8StartAlignSize = (ALIGN_DWORD(u16Addr)); 
     
     if (u32Length <= ONE_BYTE_MAX_XFR_LEN)
 	{
@@ -2134,7 +2141,7 @@ void   LAN9253SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	   Dummy data will be sent before the actual data. 
 	   So to read 2001 you will get a dummy byte and then data in address 2001. 
 	   Sw needs to handle dummy data in case of non DWORD address reads" */	
-#ifdef IS_SUPPORT_DUMMY_CYCLE 
+    
     /* Initial Dummy cycle added by dummy fastread is stored in u8DummyClkCnt */
     u8DummyClkCnt = gau8DummyCntArr[SPI_FASTREAD_INITIAL_OFFSET];
     u8IntraDwordDummy = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
@@ -2163,7 +2170,7 @@ void   LAN9253SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
         /* DMA Write*/
         DRV_SPITransfer(gau8DmaBuff, (u8txLen - 1));
     }
-#else
+#ifndef IS_SUPPORT_DUMMY_CYCLE 
     u8txLen = 1;
     /* DMA Read*/
     DRV_SPIReceive(&gau8DmaBuff, u8txLen);
@@ -2194,7 +2201,8 @@ void   LAN9253SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 *******************************************************************************/
 void   CSRLengthAlignment(UINT16 u16Addr, UINT32 *u32Length)
 {
-    /* Non Ether CAT Core CSRs are always DWORD aligned and should be accessed by DWORD length */
+    /* Non Ether CAT Core CSRs are always DWORD aligned and should be accessed by 
+       DWORD length */
 	if (u16Addr >= 0x3000)
 	{
 		*u32Length = DWORD_LENGTH; 
@@ -2207,8 +2215,8 @@ void   CSRLengthAlignment(UINT16 u16Addr, UINT32 *u32Length)
 	Process RAM using Write(0x04) command supported by Beckhoff SPI. This function shall be used
 	only when PDI is selected as Beckhoff SPI (0x05)
      
-    Input : u16Addr    -> Address of the register/RAM location to be written
-            *pu8Data -> Pointer to the data that is to be written
+    Input : u16Addr   -> Address of the register/RAM location to be written
+            *pu8Data  -> Pointer to the data that is to be written
 			u32Length -> Number of bytes to be written 
 
     Output : None
@@ -2229,8 +2237,8 @@ void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 		;
 	}
 	
-	u8txData = (u16Addr & 0x1FE0) >> 5;
-   
+	MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+    u8txData = (u16Addr & 0x1FE0) >> 5;
     QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
     QSPI_Sync_Wait();
     while(QSPI_IsBusy())
@@ -2255,8 +2263,8 @@ void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     {
         ;
     }
-    	
-	HandleDataState(pu8Data, u32Length, SPI_WRITE, NOT_NULL);
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+	HandleDataPhase(pu8Data, u32Length, SPI_WRITE, NOT_NULL);
 	
 	SPIChipSelectDisable();
 }
@@ -2269,8 +2277,8 @@ void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	only when PDI is selected as Beckhoff SPI (0x05). The write is executed by DMA. The maximum
     configurable frequency in beckhoff write is limited to 40 MHz.
      
-    Input : u16Addr    -> Address of the register/RAM location to be written
-            *pu8Data -> Pointer to the data that is to be written
+    Input : u16Addr   -> Address of the register/RAM location to be written
+            *pu8Data  -> Pointer to the data that is to be written
 			u32Length -> Number of bytes to be written 
 
     Output : None
@@ -2279,7 +2287,6 @@ void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 void   BeckhoffSPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
     UINT8 u8BeckhoffCmd = ESC_WR, u8txLen = 0;
-    UINT16 u16Itr = 0;
     UINT32 u32txSize = u32Length;
 	
     CSRLengthAlignment(u16Addr, &u32Length);
@@ -2288,23 +2295,19 @@ void   BeckhoffSPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	
     /* Setup phase is transmitted together by DMA, No dummy phase in Beckhoff mode*/
     u8txLen = SPI_WRITE_SETUP_BYTES;  
-	
+	MCHP_ESF_GPIO_SET(GPIO_T_MEA);	
 	gau8DmaBuff[0] = (u16Addr & 0x1FE0) >> 5;
     gau8DmaBuff[1] = ((u16Addr & 0x001F) << 3) | 0x06;
     gau8DmaBuff[2] = (HIBYTE(u16Addr) & 0xE0) | (u8BeckhoffCmd << 2);
     
     /* DMA Write*/
     DRV_SPITransfer(gau8DmaBuff, u8txLen);
-    
-    for(u16Itr =0 ; u16Itr < u32Length; u16Itr += 1)
-    {
-        gau8DmaBuff[u16Itr] = *pu8Data;
-		pu8Data++;
-    }
-    
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+    memcpy(gau8DmaBuff, pu8Data, u32txSize);
+    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
     /* DMA Write*/
     DRV_SPITransfer(gau8DmaBuff, u32txSize);
-    
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 	SPIChipSelectDisable();
 }
 
@@ -2315,8 +2318,8 @@ void   BeckhoffSPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	Process RAM using 'Read(0x02)' command supported by Beckhoff SPI.
 	This function shall be used only when PDI is selected as Beckhoff SPI (0x05)
      
-    Input : u16Addr    -> Address of the register/RAM location to be written
-            *pu8Data -> Pointer to the data that is to be written
+    Input : u16Addr   -> Address of the register/RAM location to be written
+            *pu8Data  -> Pointer to the data that is to be written
 			u32Length -> Number of bytes to be written 
 
     Output : None
@@ -2337,7 +2340,7 @@ void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	{
 		;
 	}
-
+    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
 	u8txData = (u16Addr & 0x1FE0) >> 5;
 	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
 	QSPI_Sync_Wait();
@@ -2374,9 +2377,10 @@ void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	{
 		;
 	}
-	
-    HandleDataState(pu8Data, u32Length, SPI_READ, NOT_NULL);
-	
+	MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+    HandleDataPhase(pu8Data, u32Length, SPI_READ, NOT_NULL);
+	MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 	SPIChipSelectDisable();
 }
 
@@ -2389,8 +2393,8 @@ void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     The read is implemented by DMA. The maximum configurable frequency for read is limited
     to 40 MHz for Beckhoff read.
      
-    Input : u16Addr    -> Address of the register/RAM location to be written
-            *pu8Data -> Pointer to the data that is to be written
+    Input : u16Addr   -> Address of the register/RAM location to be written
+            *pu8Data  -> Pointer to the data that is to be written
 			u32Length -> Number of bytes to be written 
 
     Output : None
@@ -2398,33 +2402,35 @@ void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 
 void   BeckhoffSPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 {
-    UINT8 u8BeckhoffCmd = ESC_RD_WAIT_STATE, u8ByteCtr = 0;
+    UINT8 u8BeckhoffCmd = ESC_RD_WAIT_STATE;
     	
 	CSRLengthAlignment(u16Addr, &u32Length);
     
     SPIChipSelectEnable();
-    
+    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
 	/* AL Event register bits will be outputted on SPI line - 0x220, 0x221 and 0x222 */
-	gau8DmaBuff[u8ByteCtr] = (u16Addr & 0x1FE0) >> 5; u8ByteCtr++;
-	gau8DmaBuff[u8ByteCtr] = ((u16Addr & 0x001F) << 3) | 0x06; u8ByteCtr++;
-    gau8DmaBuff[u8ByteCtr] = (HIBYTE(u16Addr) & 0xE0) | (u8BeckhoffCmd << 2); u8ByteCtr++;
+	gau8DmaBuff[0] = (u16Addr & 0x1FE0) >> 5; 
+	gau8DmaBuff[1] = ((u16Addr & 0x001F) << 3) | 0x06;
+    gau8DmaBuff[2] = (HIBYTE(u16Addr) & 0xE0) | (u8BeckhoffCmd << 2); 
     
     /* Master can either wait for 240ns time or use Wait state byte
      * after last byte of addr/cmd or 
      * before initiating the clock for data phase. */
     
-    gau8DmaBuff[u8ByteCtr] = WAIT_STATE_BYTE;
-    gau8DmaBuff[u8ByteCtr+u32Length] = READ_TERMINATION_BYTE;
-    u8ByteCtr++;
-    memset(&gau8DmaBuff[u8ByteCtr],0, u32Length);
+    memset(&gau8DmaBuff[4],0, u32Length);
+    
+    gau8DmaBuff[3] = WAIT_STATE_BYTE;
+    gau8DmaBuff[3+u32Length] = READ_TERMINATION_BYTE;
+    
     
     /* DMA Write*/
 	DRV_SPITransfer(gau8DmaBuff, SPI_FASTREAD_SETUP_BYTES - 1);
-    
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
     /* DMA Read*/
-    DRV_SPIReceive(&gau8DmaBuff[u8ByteCtr], u32Length);
-    
-    memcpy(pu8Data, &gau8DmaBuff[u8ByteCtr],u32Length);
+    DRV_SPIReceive(&gau8DmaBuff[4], u32Length);
+    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+    memcpy(pu8Data, &gau8DmaBuff[4],u32Length);
 
 	SPIChipSelectDisable();
 }
@@ -2531,9 +2537,9 @@ void LAN9252SQI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT8 u8Len)
     This function shall be used only when PDI is selected as
 	LAN9252 Compatible SQI (0x80)
      
-    Input : u16Addr    -> Address of the RAM location to be read
-            *pu8Data -> Pointer to the data that is to be read
-			u16Len	 -> Number of bytes to be read from PDRAM location
+    Input : u16Addr   -> Address of the RAM location to be read
+            *pu8Data  -> Pointer to the data that is to be read
+			u16Len	  -> Number of bytes to be read from PDRAM location
 
     Output : None
 
@@ -2578,9 +2584,9 @@ void LAN9252SQI_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT16 u16Len)
     This function shall be used only when PDI is selected as
 	LAN9252 Compatible SQI (0x80)
      
-    Input : u16Addr    -> Address of the RAM location to be written
-            *pu8Data -> Pointer to the data that is to be written
-			u16Len	 -> Number of bytes to be written to PDRAM location
+    Input : u16Addr   -> Address of the RAM location to be written
+            *pu8Data  -> Pointer to the data that is to be written
+			u16Len	  -> Number of bytes to be written to PDRAM location
 
     Output : None
 
@@ -2623,8 +2629,8 @@ void LAN9252SQI_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT16 u16Len)
 	using 'Serial Write(0x02)' command supported by LAN9253 Compatible SPI. This function shall be used
 	only when PDI is selected as LAN9253 Compatible SPI (0x82)
      
-    Input : u16Adddr    -> Address of the register to be written
-            *pu8Data  -> Pointer to the data that is to be written
+    Input : u16Adddr   -> Address of the register to be written
+            *pu8Data   -> Pointer to the data that is to be written
 			u32Length  -> Number of bytes to be written 
 
     Output : None
