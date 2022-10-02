@@ -17,10 +17,6 @@
                 <sourceRootElem>../../../../Source/ESC</sourceRootElem>
                 <sourceRootElem>../../../../SOC_Portable/SAMD51</sourceRootElem>
                 <sourceRootElem>../src</sourceRootElem>
-                <sourceRootElem>../../../../../../../Previous readings/Latest_Revc_ESF - Copy change code/ESF/Demo/ESF_EVB_LAN9253/firmware/src/config/default</sourceRootElem>
-                <sourceRootElem>C:/Users/I69107/OneDrive - Microchip Technology Inc/Desktop/ectc</sourceRootElem>
-                <sourceRootElem>../../../../../../../Previous readings/New folder/Latest_Revc_ESF - Copy - Copy/ESF/Demo/ESF_EVB_LAN9253/firmware/src/config/default/driver</sourceRootElem>
-                <sourceRootElem>../../../../../../../Previous readings/Latest_Revc_ESF_Copy_change_code/ESF/Demo/ESF_EVB_LAN9253/firmware/src/config/default</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>
