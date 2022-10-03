@@ -50,7 +50,7 @@
  * Configuration parameter for frequency selection
  * Frequency value should be given in MHz.
  */
-#define ESF_PDI_FREQUENCY 20    
+#define ESF_PDI_FREQUENCY 60    
 
 /* Dummy Cycle Support is Enabled by Default, comment to disable*/
 #define IS_SUPPORT_DUMMY_CYCLE 
@@ -61,7 +61,7 @@
 #ifdef ESF_SPI_DMA_EN
 /* Dummy Bytes can be included when IS_SUPPORT_DUMMY_CYCLE is enabled, comment to disable*/
 /* This is used to disable intra and inter dummy bytes in DMA Data phase*/
-//#define INCLUDE_DUMMY
+#define INCLUDE_DUMMY
 #endif
 /*
  * LAN925x REV C board uses clock from LAN9253,

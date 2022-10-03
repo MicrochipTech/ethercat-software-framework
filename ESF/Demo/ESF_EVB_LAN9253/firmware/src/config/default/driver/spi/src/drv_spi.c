@@ -60,13 +60,13 @@
 /* This is the driver instance object array. */
 static DRV_SPI_OBJ gDrvSPIObj[DRV_SPI_INSTANCES_NUMBER];
 /* Dummy data being transmitted by TX DMA */
-static CACHE_ALIGN uint8_t txDummyData[CACHE_DUMMY_SIZE];
+static CACHE_ALIGN uint8_t txDummyData[DRV_SPI_CACHE_DUMMY_SIZE];
 /*RX and TX transfer Handle*/
 DRV_SPI_TRANSFER_HANDLE transferTxHandle;
 DRV_SPI_TRANSFER_HANDLE transferRxHandle;
 /*Rx and Tx transaction check*/
-volatile UINT8 gis_Tx_DMAComplete = 1;
-volatile UINT8 gis_Rx_DMAComplete = 1;
+volatile UINT8 gis_Tx_DMAComplete;
+volatile UINT8 gis_Rx_DMAComplete;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -1140,9 +1140,7 @@ void DRV_SPITransfer(UINT8 *const pu8Data, UINT32 u32Length)
 }
 
 bool _SPI_Rx(UINT8 * const pu8Data, UINT32 u32size)
-{
-    //static DRV_SPI_TRANSFER_HANDLE transferRxHandle;
-    
+{   
     DRV_SPI_ReadTransferAdd(handle, pu8Data, u32size, &transferRxHandle);
 
     if(transferRxHandle == DRV_SPI_TRANSFER_HANDLE_INVALID)

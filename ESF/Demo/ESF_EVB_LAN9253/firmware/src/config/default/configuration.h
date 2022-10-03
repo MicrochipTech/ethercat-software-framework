@@ -97,7 +97,7 @@ extern "C" {
 
 /* SPI Driver Common Configuration Options */
 #define DRV_SPI_INSTANCES_NUMBER              1
-#define CACHE_DUMMY_SIZE                     32
+#define DRV_SPI_CACHE_DUMMY_SIZE              32
 
 
 // *****************************************************************************

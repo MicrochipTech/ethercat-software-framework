@@ -97,6 +97,13 @@ DRV_SPI_TRANSFER_SETUP setup;
 
 typedef uintptr_t DRV_SPI_TRANSFER_HANDLE;
 
+/*RX and TX transfer Handle*/
+extern DRV_SPI_TRANSFER_HANDLE transferTxHandle;
+extern DRV_SPI_TRANSFER_HANDLE transferRxHandle;
+/*Rx and Tx transaction check*/
+extern volatile UINT8 gis_Tx_DMAComplete;
+extern volatile UINT8 gis_Rx_DMAComplete;
+
 // *****************************************************************************
 /* SPI Driver Invalid Transfer Handle
 
