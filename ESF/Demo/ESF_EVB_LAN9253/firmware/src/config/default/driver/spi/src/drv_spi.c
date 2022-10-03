@@ -65,8 +65,8 @@ static CACHE_ALIGN uint8_t txDummyData[DRV_SPI_CACHE_DUMMY_SIZE];
 DRV_SPI_TRANSFER_HANDLE transferTxHandle;
 DRV_SPI_TRANSFER_HANDLE transferRxHandle;
 /*Rx and Tx transaction check*/
-volatile UINT8 gis_Tx_DMAComplete;
-volatile UINT8 gis_Rx_DMAComplete;
+volatile UINT8 gis_Tx_DMAComplete = 1;
+volatile UINT8 gis_Rx_DMAComplete = 1;
 
 // *****************************************************************************
 // *****************************************************************************
