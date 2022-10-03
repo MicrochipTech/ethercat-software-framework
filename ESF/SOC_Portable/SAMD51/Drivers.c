@@ -52,7 +52,6 @@ volatile CHAR gchEtherCATQSPITransmission = false;
 /* Function declarations */
 static void SPIChipSelectDisable(void);
 static void SPIChipSelectEnable(void);
-static void PDI_Init_SYSTick_Interrupt();
 void EtherCAT_TransmissionFlagClear(void);
 void EtherCAT_QSPI_CallbackRegistration(void);
 void ECAT_SysTick_Handler(uintptr_t context);
@@ -61,6 +60,9 @@ static UINT8   EtherCAT_QSPITransmissionBusy(void);
 #elif (ESF_PDI == SQI)
 static UINT8 gau8rx_data[32] = {0};
 #endif
+
+static void PDI_Init_SYSTick_Interrupt();
+void ECAT_SysTick_Handler(uintptr_t context);
 
 void CRITICAL_SECTION_ENTER(void)
 {
@@ -919,6 +921,7 @@ void PDI_ClearTimer(void)
     Description:
     This function configure and enable the TIMER interrupt for 1ms
 *******************************************************************************/
+
 void PDI_Timer_Interrupt(void)
 {
     PDI_Init_SYSTick_Interrupt();
