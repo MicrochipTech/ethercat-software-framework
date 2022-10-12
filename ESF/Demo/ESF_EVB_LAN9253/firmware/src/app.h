@@ -67,7 +67,7 @@ extern "C" {
 /* This Version is application version and
  * gets updated whenever there is application change
  */
-#define APP_FW_VERSION  0x0123U  /* V1.23 */
+#define APP_FW_VERSION  0x0125U  /* V1.25 */
 
 // *****************************************************************************
 // *****************************************************************************
