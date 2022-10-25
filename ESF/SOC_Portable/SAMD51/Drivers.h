@@ -55,6 +55,7 @@
 #define SPI_FAST_READ 2
 #define SPI_WRITE 1
 #define DMA_BUFF_SIZE 2048
+#define AL_EVENT_SIZE 5
 #define INITIAL_DUMMY 0
 #define INTRA_DUMMY 1
 #define INTER_DUMMY 2

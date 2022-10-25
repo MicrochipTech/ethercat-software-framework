@@ -61,6 +61,7 @@
 #ifdef ESF_SPI_DMA_EN
 /* Dummy Bytes can be included when IS_SUPPORT_DUMMY_CYCLE is enabled, comment to disable*/
 /* This is used to disable intra and inter dummy bytes in DMA Data phase*/
+/* By Default dummy bytes should be included*/
 #define INCLUDE_DUMMY
 #endif
 /*

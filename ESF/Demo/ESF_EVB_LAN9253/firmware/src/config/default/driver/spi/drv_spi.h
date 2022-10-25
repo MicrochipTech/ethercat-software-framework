@@ -100,10 +100,11 @@ typedef uintptr_t DRV_SPI_TRANSFER_HANDLE;
 /*RX and TX transfer Handle*/
 extern DRV_SPI_TRANSFER_HANDLE transferTxHandle;
 extern DRV_SPI_TRANSFER_HANDLE transferRxHandle;
+extern DRV_SPI_TRANSFER_HANDLE transferTxRxHandle;
 /*Rx and Tx transaction check*/
 extern volatile UINT8 gis_Tx_DMAComplete;
 extern volatile UINT8 gis_Rx_DMAComplete;
-
+extern volatile UINT8 gis_TxRx_DMAComplete;
 // *****************************************************************************
 /* SPI Driver Invalid Transfer Handle
 
@@ -554,7 +555,18 @@ void DRV_SPIReceive(UINT8 *const pu8Data, UINT32 u32Length);
        Transfers data from the module through the SPI bus.
 */
 void DRV_SPITransfer(UINT8 *const pu8Data, UINT32 u32Length);
+//*******************************************************************************
+/*  Function:
+       void DRV_SPITransferReceive(UINT8 *const u8txData, UINT32 u32txLen,
+                                    UINT8 *const u8rxData, UINT32 u32rxLen);
 
+    Summary:
+       Write SPI DMA Data
+ 
+    Description:
+       Transfers and Receives data from the module through the SPI bus.
+*/
+void DRV_SPITransferReceive(UINT8 *const u8txData, UINT32 u32txLen,UINT8 *const u8rxData, UINT32 u32rxLen);
 //*******************************************************************************
 /*  Function:
        static bool _SPI_Tx(UINT8 *const pu8Data, UINT32 u32size)
@@ -565,7 +577,16 @@ void DRV_SPITransfer(UINT8 *const pu8Data, UINT32 u32Length);
        This routine checks if SPI Transfer is complete.
 */
 bool _SPI_Tx(UINT8 *const pu8Data, UINT32 u32size);
+//*******************************************************************************
+/*  Function:
+       bool _SPI_TxRx(UINT8 *const u8txData, UINT32 u32txLen,UINT8 *const u8rxData, UINT32 u32rxLen)
 
+    Summary:
+       Checks SPI Transfer and Receive
+    Description:
+       This routine checks if SPI Transfer and SPI Receive is complete.
+*/
+bool _SPI_TxRx(UINT8 *const u8txData, UINT32 u32txLen,UINT8 *const u8rxData, UINT32 u32rxLen);
 //*******************************************************************************
 /*  Function:
        static bool _SPI_Rx(UINT8 * const pu8Data, UINT32 u32size)
