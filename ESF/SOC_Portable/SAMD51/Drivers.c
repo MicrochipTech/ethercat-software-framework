@@ -162,15 +162,13 @@ void ESC_BYTE_TEST_Register_Read (UINT8 *pu8Data)
     gau8DmaBuff[2] = (UINT8)LOBYTE(LAN925x_BYTE_ORDER_REG);
    
     /* DMA Write*/
-    //DRV_SPITransfer(gau8DmaBuff, SPI_WRITE_SETUP_BYTES);
     DRV_SPITransferReceive(gau8DmaBuff, SPI_WRITE_SETUP_BYTES, gau8ALeventstore, SPI_WRITE_SETUP_BYTES);
     
     gEscALEvent.Byte[0] = gau8ALeventstore[1];
     gEscALEvent.Byte[1] = gau8ALeventstore[2];
     
     /* DMA Read*/
-    //DRV_SPIReceive(pu8Data, u8Len);
-    memset(gau8DmaBuff,0, u8Len);
+    memset(gau8DmaBuff, 0, u8Len);
     /*Include termination byte at the last byte to confirm SPI read is finished*/
     gau8DmaBuff[u8Len - 1] = READ_TERMINATION_BYTE;
 
@@ -669,7 +667,6 @@ void   HandleDataPhase(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8Ter
                 u8txData = *pu8Data++;
                 QSPI_Write(&u8txData, u8txLen);
                 QSPI_Sync_Wait();
-                MCHP_ESF_GPIO_SET(GPIO_T_MEA);
                 while(QSPI_IsBusy())
                 {
                     ;
@@ -688,7 +685,6 @@ void   HandleDataPhase(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8Ter
                         }
                     }
                 }
-                MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 #endif
             } while (--u32Length);
         }
@@ -709,7 +705,6 @@ void   HandleDataPhase(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8Ter
                     ;
                 }
                 *pu8Data++ = u8rxData;
-                MCHP_ESF_GPIO_SET(GPIO_T_MEA);
 #ifdef IS_SUPPORT_DUMMY_CYCLE
                 /* Add Intra DWORD dummy clocks, avoid for last byte */
                 u8DummyClkCnt = u8DummyValue;
@@ -724,7 +719,6 @@ void   HandleDataPhase(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8Ter
                             }
                         }      
                     }
-                MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
 #endif
             } while (--u32Length); 
         }
@@ -1072,7 +1066,6 @@ void    LAN9252SPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     
     gEscALEvent.Byte[0] = gau8ALeventstore[1];
     gEscALEvent.Byte[1] = gau8ALeventstore[2];
-    //DRV_SPITransfer(gau8DmaBuff, u8txLen);
     
     /* Get the Intra Byte and Inter Dword dummy clock count */     
     u8IntraDwordDummy = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
@@ -1158,7 +1151,6 @@ void   LAN9252SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     gau8DmaBuff[2] = (UINT8)u16Addr;
     
     /* DMA Write*/
-    //DRV_SPITransfer(gau8DmaBuff, u8txLen);
     DRV_SPITransferReceive(gau8DmaBuff, u8txLen, gau8ALeventstore, SPI_READ_SETUP_BYTES);
     
     gEscALEvent.Byte[0] = gau8ALeventstore[1];
@@ -1260,8 +1252,7 @@ void   LAN9252SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     gau8DmaBuff[2] = (UINT8)u16Addr;
     gau8DmaBuff[3] = u32Length;
     
-    /* DMA Write*/
-    //DRV_SPITransfer(gau8DmaBuff, u8txLen);  
+    /* DMA Write*/  
     DRV_SPITransferReceive(gau8DmaBuff, u8txLen, gau8ALeventstore, (SPI_FASTREAD_SETUP_BYTES - 1));
     
     gEscALEvent.Byte[0] = gau8ALeventstore[1];
@@ -1438,14 +1429,13 @@ void   LAN9252SPI_DMA_ReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Length
     u8IntraDwordDummy = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
     
     /* Setup phase and Dummy phase is transmitted together by DMA*/
-    u8txLen = SPI_READ_SETUP_BYTES + u8DummyClkCnt + u8StartAlignSize +(u8StartAlignSize * u8IntraDwordDummy);  
+    u8txLen = SPI_READ_SETUP_BYTES + u8DummyClkCnt + u8StartAlignSize + (u8StartAlignSize * u8IntraDwordDummy);  
 
     gau8DmaBuff[0] = CMD_SERIAL_READ;
     gau8DmaBuff[1] = (UINT8)PDRAM_LOWER_BYTE_ADDRESS;
     gau8DmaBuff[2] = (UINT8)PDRAM_HIGHER_BYTE_READ_ADDRESS;
     
     /* DMA Write*/
-    //DRV_SPITransfer(gau8DmaBuff, u8txLen);
     DRV_SPITransferReceive(gau8DmaBuff, u8txLen, gau8ALeventstore, SPI_READ_SETUP_BYTES);
     
     gEscALEvent.Byte[0] = gau8ALeventstore[1];
@@ -1642,12 +1632,10 @@ void    LAN9252SPI_DMA_FastReadPDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32L
     
         gEscALEvent.Byte[0] = gau8ALeventstore[1];
         gEscALEvent.Byte[1] = gau8ALeventstore[2];
-        //DRV_SPITransfer(gau8DmaBuff, u8txLen);
 	}
     else
     {
         /* DMA Write*/
-        //DRV_SPITransfer(gau8DmaBuff, (u8txLen - 1));
         DRV_SPITransferReceive(gau8DmaBuff, (u8txLen - 1), gau8ALeventstore, (SPI_FASTREAD_SETUP_BYTES - 1));
     
         gEscALEvent.Byte[0] = gau8ALeventstore[1];
@@ -1786,7 +1774,6 @@ void   LAN9252SPI_DMA_WritePDRAM(UINT8 *pu8Data, UINT16 u16Addr, UINT32 u32Lengt
 	gau8DmaBuff[2] = (UINT8)PDRAM_HIGHER_BYTE_WRITE_ADDRESS;
     
     /* DMA Write*/
-    //DRV_SPITransfer(gau8DmaBuff, u8txLen);
     DRV_SPITransferReceive(gau8DmaBuff, u8txLen, gau8ALeventstore, SPI_WRITE_SETUP_BYTES);
     
     gEscALEvent.Byte[0] = gau8ALeventstore[1];
@@ -1951,8 +1938,6 @@ void LAN9253SPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     gau8DmaBuff[2] = (UINT8)u16Addr;
     
     /* DMA Write*/
-    //DRV_SPITransfer(gau8DmaBuff, u8txLen);
-
     DRV_SPITransferReceive(gau8DmaBuff, u8txLen, gau8ALeventstore, SPI_WRITE_SETUP_BYTES);
     
     gEscALEvent.Byte[0] = gau8ALeventstore[1];
@@ -2043,7 +2028,6 @@ void   LAN9253SPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8data, UINT32 u32Length)
     gau8DmaBuff[2] = (UINT8)u16Addr;
     
     /* DMA Write*/
-    //DRV_SPITransfer(gau8DmaBuff, u8txLen);
     DRV_SPITransferReceive(gau8DmaBuff, u8txLen, gau8ALeventstore, SPI_READ_SETUP_BYTES);
     
     gEscALEvent.Byte[0] = gau8ALeventstore[1];
@@ -2220,7 +2204,6 @@ void   LAN9253SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     /* Send Transfer length */
     gau8DmaBuff[3] = (UINT8)(LOBYTE(u16XfrLen));
     
-    
 	/* Two byte Xfr length */
 	if (u32Length > ONE_BYTE_MAX_XFR_LEN)
 	{
@@ -2241,6 +2224,7 @@ void   LAN9253SPI_DMA_FastRead(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
         gEscALEvent.Byte[1] = gau8ALeventstore[2];
         
     }
+    /* For DWORD Alignment */
 	DRV_SPITransfer(gau8DmaBuff, u8AlignLen);	
 #ifndef IS_SUPPORT_DUMMY_CYCLE 
     u8txLen = 1;
@@ -2309,7 +2293,6 @@ void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 		;
 	}
 	
-	MCHP_ESF_GPIO_SET(GPIO_T_MEA);
     u8txData = (u16Addr & 0x1FE0) >> 5;
     QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
     QSPI_Sync_Wait();
@@ -2335,7 +2318,7 @@ void BeckhoffSPI_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     {
         ;
     }
-    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+    
 	HandleDataPhase(pu8Data, u32Length, SPI_WRITE, NOT_NULL);
 	
 	SPIChipSelectDisable();
@@ -2367,23 +2350,22 @@ void   BeckhoffSPI_DMA_Write(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	
     /* Setup phase is transmitted together by DMA, No dummy phase in Beckhoff mode*/
     u8txLen = SPI_WRITE_SETUP_BYTES;  
-	MCHP_ESF_GPIO_SET(GPIO_T_MEA);	
+		
 	gau8DmaBuff[0] = (u16Addr & 0x1FE0) >> 5;
     gau8DmaBuff[1] = ((u16Addr & 0x001F) << 3) | 0x06;
     gau8DmaBuff[2] = (HIBYTE(u16Addr) & 0xE0) | (u8BeckhoffCmd << 2);
     
     /* DMA Write*/
-    //DRV_SPITransfer(gau8DmaBuff, u8txLen);
     DRV_SPITransferReceive(gau8DmaBuff, u8txLen, gau8ALeventstore, SPI_WRITE_SETUP_BYTES);
     
     gEscALEvent.Byte[0] = gau8ALeventstore[1];
     gEscALEvent.Byte[1] = gau8ALeventstore[2];
-    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+    
     memcpy(gau8DmaBuff, pu8Data, u32txSize);
-    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+    
     /* DMA Write*/
     DRV_SPITransfer(gau8DmaBuff, u32txSize);
-    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+    
 	SPIChipSelectDisable();
 }
 
@@ -2416,7 +2398,6 @@ void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	{
 		;
 	}
-    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
 	u8txData = (u16Addr & 0x1FE0) >> 5;
 	QSPI_WriteRead(&u8txData, u8txLen, &u8rxData, u8rxLen);
 	QSPI_Sync_Wait();
@@ -2453,10 +2434,9 @@ void BeckhoffSPI_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	{
 		;
 	}
-	MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
-    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+	
     HandleDataPhase(pu8Data, u32Length, SPI_READ, NOT_NULL);
-	MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
+	
 	SPIChipSelectDisable();
 }
 
@@ -2483,7 +2463,7 @@ void   BeckhoffSPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
 	CSRLengthAlignment(u16Addr, &u32Length);
     
     SPIChipSelectEnable();
-    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
+    
 	/* AL Event register bits will be outputted on SPI line - 0x220, 0x221 and 0x222 */
 	gau8DmaBuff[0] = (u16Addr & 0x1FE0) >> 5; 
 	gau8DmaBuff[1] = ((u16Addr & 0x001F) << 3) | 0x06;
@@ -2492,27 +2472,22 @@ void   BeckhoffSPI_DMA_Read(UINT16 u16Addr, UINT8 *pu8Data, UINT32 u32Length)
     /* Master can either wait for 240ns time or use Wait state byte
      * after last byte of addr/cmd or 
      * before initiating the clock for data phase. */
-    
-    memset(&gau8DmaBuff[4],0, u32Length);
-    
+     
     gau8DmaBuff[3] = WAIT_STATE_BYTE;
+    /* DMA write*/
     DRV_SPITransferReceive(gau8DmaBuff, SPI_FASTREAD_SETUP_BYTES - 1, gau8ALeventstore, SPI_FASTREAD_SETUP_BYTES - 1);
     
     gEscALEvent.Byte[0] = gau8ALeventstore[1];
     gEscALEvent.Byte[1] = gau8ALeventstore[2];
     
-    memset(gau8DmaBuff,0, u32Length);
+    memset(gau8DmaBuff, 0, u32Length);
     
     gau8DmaBuff[u32Length - 1] = READ_TERMINATION_BYTE;
     
-    /* DMA Write*/
-	//DRV_SPITransfer(gau8DmaBuff, SPI_FASTREAD_SETUP_BYTES - 1);
-    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
-    MCHP_ESF_GPIO_SET(GPIO_T_MEA);
     /* DMA Read*/
     DRV_SPIReceive(gau8DmaBuff, u32Length);
-    MCHP_ESF_GPIO_CLEAR(GPIO_T_MEA);
-    memcpy(pu8Data, gau8DmaBuff,u32Length);
+    
+    memcpy(pu8Data, gau8DmaBuff, u32Length);
 
 	SPIChipSelectDisable();
 }

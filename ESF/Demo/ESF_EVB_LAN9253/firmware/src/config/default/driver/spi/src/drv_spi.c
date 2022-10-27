@@ -1152,21 +1152,21 @@ void DRV_SPITransferReceive(UINT8 *const u8txData, UINT32 u32txLen,UINT8 *const 
     {
         while ((true == ret) && (u32txLen > SPI_DMA_MAX_TX_SIZE) && (u32rxLen < SPI_DMA_MAX_RX_SIZE))
         {
-            ret = _SPI_TxRx(tx8Data, SPI_DMA_MAX_TX_SIZE,rx8Data, SPI_DMA_MAX_RX_SIZE);
+            ret = _SPI_TxRx(tx8Data, SPI_DMA_MAX_TX_SIZE, rx8Data, SPI_DMA_MAX_RX_SIZE);
             u32txLen -= SPI_DMA_MAX_TX_SIZE;
             tx8Data += SPI_DMA_MAX_TX_SIZE;
         }
         
         while ((true == ret) && (u32txLen < SPI_DMA_MAX_TX_SIZE) && (u32rxLen > SPI_DMA_MAX_RX_SIZE))
         {
-            ret = _SPI_TxRx(tx8Data, u32txLen,rx8Data, SPI_DMA_MAX_RX_SIZE);
+            ret = _SPI_TxRx(tx8Data, u32txLen, rx8Data, SPI_DMA_MAX_RX_SIZE);
             u32rxLen -= SPI_DMA_MAX_RX_SIZE;
             rx8Data += SPI_DMA_MAX_RX_SIZE;
         }
     
         while ((true == ret) && (u32txLen > SPI_DMA_MAX_TX_SIZE) && (u32rxLen > SPI_DMA_MAX_RX_SIZE))
         {
-            ret = _SPI_TxRx(tx8Data, SPI_DMA_MAX_TX_SIZE,rx8Data, SPI_DMA_MAX_RX_SIZE);
+            ret = _SPI_TxRx(tx8Data, SPI_DMA_MAX_TX_SIZE, rx8Data, SPI_DMA_MAX_RX_SIZE);
             u32rxLen -= SPI_DMA_MAX_RX_SIZE;
             rx8Data += SPI_DMA_MAX_RX_SIZE;
             u32rxLen -= SPI_DMA_MAX_RX_SIZE;
@@ -1176,7 +1176,7 @@ void DRV_SPITransferReceive(UINT8 *const u8txData, UINT32 u32txLen,UINT8 *const 
     
     else if ((true == ret) && (u32txLen >= 0) && (u32rxLen >= 0))
     {
-        ret = _SPI_TxRx(tx8Data, u32txLen,rx8Data,u32txLen);
+        ret = _SPI_TxRx(tx8Data, u32txLen, rx8Data, u32txLen);
     }
 }
 
@@ -1220,7 +1220,7 @@ bool _SPI_Tx(UINT8 *const pu8Data, UINT32 u32size)
 
 bool _SPI_TxRx(UINT8 *const u8txData, UINT32 u32txLen,UINT8 *const u8rxData, UINT32 u32rxLen)
 {
-    DRV_SPI_WriteReadTransferAdd(handle, u8txData, u32txLen,u8rxData,u32rxLen, &transferTxRxHandle);
+    DRV_SPI_WriteReadTransferAdd(handle, u8txData, u32txLen, u8rxData, u32rxLen, &transferTxRxHandle);
     
     if(transferTxRxHandle == DRV_SPI_TRANSFER_HANDLE_INVALID)
     {
@@ -1255,7 +1255,7 @@ void _APP_MyTransferEventHandler(DRV_SPI_TRANSFER_EVENT event,
                 gis_Rx_DMAComplete = 0; 
             }
 
-            if (transferTxRxHandle == t_handle)
+            else if (transferTxRxHandle == t_handle)
             {
                 //Checks for completion of SPI Receive
                 gis_TxRx_DMAComplete = 0; 

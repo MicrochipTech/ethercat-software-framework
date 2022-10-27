@@ -50,7 +50,7 @@
  * Configuration parameter for frequency selection
  * Frequency value should be given in MHz.
  */
-#define ESF_PDI_FREQUENCY 60    
+#define ESF_PDI_FREQUENCY 20    
 
 /* Dummy Cycle Support is Enabled by Default, comment to disable*/
 #define IS_SUPPORT_DUMMY_CYCLE 
