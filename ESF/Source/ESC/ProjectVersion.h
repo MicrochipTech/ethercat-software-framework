@@ -41,7 +41,7 @@
 extern "C" {
 #endif
 
-#define SYSTEM_FW_REV     0x0125U //v1.25 release
+#define SYSTEM_FW_REV     0x0126U //v1.26 release
 
 #ifdef	__cplusplus
 }
