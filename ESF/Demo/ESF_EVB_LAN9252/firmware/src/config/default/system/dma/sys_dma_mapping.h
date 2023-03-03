@@ -1,22 +1,24 @@
 /*******************************************************************************
-  NVIC PLIB Implementation
+  DMA System Service Mapping File
 
   Company:
     Microchip Technology Inc.
 
   File Name:
-    plib_nvic.c
+    sys_dma_mapping.h
 
   Summary:
-    NVIC PLIB Source File
+    DMA System Service mapping file.
 
   Description:
-    None
-
+    This header file contains the mapping of the APIs defined in the API header
+    to either the function implementations or macro implementation or the
+    specific variant implementation.
 *******************************************************************************/
 
-/*******************************************************************************
-* Copyright (C) 2010 Microchip Technology Inc. and its subsidiaries.
+//DOM-IGNORE-BEGIN
+/******************************************************************************
+* Copyright (C) 2018 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -37,43 +39,26 @@
 * ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
+//DOM-IGNORE-END
 
-#include "device.h"
-#include "plib_nvic.h"
+#ifndef SYS_DMA_MAPPING_H
+#define SYS_DMA_MAPPING_H
 
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: NVIC Implementation
+// Section: DMA System Service Mapping
 // *****************************************************************************
 // *****************************************************************************
 
-void NVIC_Initialize( void )
-{
-    /* Priority 0 to 7 and no sub-priority. 0 is the highest priority */
-    NVIC_SetPriorityGrouping( 0x04 );
+#include "peripheral/dmac/plib_dmac.h"
 
-    /* Enable NVIC Controller */
-    __DMB();
-    __enable_irq();
+#define SYS_DMA_ChannelCallbackRegister(channel, eventHandler, context)  DMAC_ChannelCallbackRegister((DMAC_CHANNEL)channel, (DMAC_CHANNEL_CALLBACK)eventHandler, context)
 
-    /* Enable the interrupt sources and configure the priorities as configured
-     * from within the "Interrupt Manager" of MHC. */
-    NVIC_SetPriority(SysTick_IRQn, 7);
-    NVIC_SetPriority(EIC_EXTINT_0_IRQn, 7);
-    NVIC_EnableIRQ(EIC_EXTINT_0_IRQn);
-    NVIC_SetPriority(EIC_EXTINT_1_IRQn, 7);
-    NVIC_EnableIRQ(EIC_EXTINT_1_IRQn);
-    NVIC_SetPriority(DMAC_0_IRQn, 7);
-    NVIC_EnableIRQ(DMAC_0_IRQn);
-    NVIC_SetPriority(DMAC_1_IRQn, 3);
-    NVIC_EnableIRQ(DMAC_1_IRQn);
-    NVIC_SetPriority(EIC_EXTINT_7_IRQn, 7);
-    NVIC_EnableIRQ(EIC_EXTINT_7_IRQn);
-    NVIC_SetPriority(QSPI_IRQn, 2);
-    NVIC_EnableIRQ(QSPI_IRQn);
+#define SYS_DMA_ChannelTransfer(channel, srcAddr, destAddr, blockSize)  DMAC_ChannelTransfer((DMAC_CHANNEL)channel, srcAddr, destAddr, blockSize)
 
+#define SYS_DMA_ChannelIsBusy(channel)  DMAC_ChannelIsBusy((DMAC_CHANNEL)channel)
 
+#define SYS_DMA_ChannelDisable(channel)  DMAC_ChannelDisable((DMAC_CHANNEL)channel)
 
-    return;
-}
+#endif // SYS_DMA_MAPPING_H

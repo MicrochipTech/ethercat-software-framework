@@ -1,5 +1,24 @@
 /*******************************************************************************
-* Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
+  Device Header File
+
+  Company:
+    Microchip Technology Inc.
+
+  File Name:
+    device.h
+
+  Summary:
+    This file includes the selected device from within the project.
+    The device will provide access to respective device packs.
+
+  Description:
+    None
+
+*******************************************************************************/
+
+// DOM-IGNORE-BEGIN
+/*******************************************************************************
+* Copyright (C) 2018 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -20,20 +39,27 @@
 * ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
+// DOM-IGNORE-END
 
-#ifndef TOOLCHAIN_SPECIFICS_H
-#define TOOLCHAIN_SPECIFICS_H
+#ifndef DEVICE_H
+#define DEVICE_H
 
+#pragma GCC diagnostic push
+#ifndef __cplusplus
+#pragma GCC diagnostic ignored "-Wnested-externs"
+#endif
+#pragma GCC diagnostic ignored "-Wsign-conversion"
+#pragma GCC diagnostic ignored "-Wattributes"
+#pragma GCC diagnostic ignored "-Wundef"
+#ifndef DONT_USE_PREDEFINED_CORE_HANDLERS
+    #define DONT_USE_PREDEFINED_CORE_HANDLERS
+#endif //DONT_USE_PREDEFINED_CORE_HANDLERS
+#ifndef DONT_USE_PREDEFINED_PERIPHERALS_HANDLERS
+    #define DONT_USE_PREDEFINED_PERIPHERALS_HANDLERS
+#endif //DONT_USE_PREDEFINED_PERIPHERALS_HANDLERS
+#include "samd51j19a.h"
+#pragma GCC diagnostic pop
+#include "device_cache.h"
+#include "toolchain_specifics.h"
 
-#include <sys/types.h>
-#define NO_INIT        __attribute__((section(".no_init")))
-#define SECTION(a)     __attribute__((__section__(a)))
-
-#define CACHE_LINE_SIZE    (16u)
-#define CACHE_ALIGN        __ALIGNED(CACHE_LINE_SIZE)
-
-#define CACHE_ALIGNED_SIZE_GET(size)     (size + ((size % CACHE_LINE_SIZE)? (CACHE_LINE_SIZE - (size % CACHE_LINE_SIZE)) : 0))
-
-
-#endif // end of header
-
+#endif //DEVICE_H

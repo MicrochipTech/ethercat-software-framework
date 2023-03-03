@@ -1,22 +1,22 @@
 /*******************************************************************************
-  NVIC PLIB Implementation
+ System Interrupts File
 
   Company:
     Microchip Technology Inc.
 
   File Name:
-    plib_nvic.c
+    interrupt.h
 
   Summary:
-    NVIC PLIB Source File
+    Interrupt vectors mapping
 
   Description:
-    None
+    This file contains declarations of device vectors used by Harmony 3
+ *******************************************************************************/
 
-*******************************************************************************/
-
+// DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2010 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2018 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -36,44 +36,34 @@
 * FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN
 * ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
-*******************************************************************************/
+ *******************************************************************************/
+// DOM-IGNORE-END
 
-#include "device.h"
-#include "plib_nvic.h"
+#ifndef INTERRUPTS_H
+#define INTERRUPTS_H
+
+// *****************************************************************************
+// *****************************************************************************
+// Section: Included Files
+// *****************************************************************************
+// *****************************************************************************
+#include <stdint.h>
+
 
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: NVIC Implementation
+// Section: Handler Routines
 // *****************************************************************************
 // *****************************************************************************
 
-void NVIC_Initialize( void )
-{
-    /* Priority 0 to 7 and no sub-priority. 0 is the highest priority */
-    NVIC_SetPriorityGrouping( 0x04 );
-
-    /* Enable NVIC Controller */
-    __DMB();
-    __enable_irq();
-
-    /* Enable the interrupt sources and configure the priorities as configured
-     * from within the "Interrupt Manager" of MHC. */
-    NVIC_SetPriority(SysTick_IRQn, 7);
-    NVIC_SetPriority(EIC_EXTINT_0_IRQn, 7);
-    NVIC_EnableIRQ(EIC_EXTINT_0_IRQn);
-    NVIC_SetPriority(EIC_EXTINT_1_IRQn, 7);
-    NVIC_EnableIRQ(EIC_EXTINT_1_IRQn);
-    NVIC_SetPriority(DMAC_0_IRQn, 7);
-    NVIC_EnableIRQ(DMAC_0_IRQn);
-    NVIC_SetPriority(DMAC_1_IRQn, 3);
-    NVIC_EnableIRQ(DMAC_1_IRQn);
-    NVIC_SetPriority(EIC_EXTINT_7_IRQn, 7);
-    NVIC_EnableIRQ(EIC_EXTINT_7_IRQn);
-    NVIC_SetPriority(QSPI_IRQn, 2);
-    NVIC_EnableIRQ(QSPI_IRQn);
+void Reset_Handler (void);
+void NonMaskableInt_Handler (void);
+void HardFault_Handler (void);
+void DMAC_0_Handler (void);
+void DMAC_1_Handler (void);
+void QSPI_InterruptHandler (void);
 
 
 
-    return;
-}
+#endif // INTERRUPTS_H

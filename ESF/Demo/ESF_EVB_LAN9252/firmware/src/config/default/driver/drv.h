@@ -1,18 +1,30 @@
 /*******************************************************************************
-  Project Version Header
- 
+  Driver Layer Interface Header
+
   Company:
     Microchip Technology Inc.
 
   File Name:
-    ProjectVersion.h
+    driver.h
+
+  Summary:
+    Driver layer data types and definitions.
 
   Description:
-    This header file maintains the FW release version of ESF
- ******************************************************************************/
+    This file defines the common macros and definitions for the driver layer
+    modules.
 
+  Remarks:
+    The parent directory to the "driver" directory should be added to the
+    compiler's search path for header files such that the following include
+    statement will successfully include this file.
+
+    #include "driver/driver.h"
+  *************************************************************************/
+
+//DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2018 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -32,20 +44,24 @@
 * FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN
 * ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
-*******************************************************************************/
+ *******************************************************************************/
+//DOM-IGNORE-END
 
-#ifndef _PROJECT_VERSION_H
-#define	_PROJECT_VERSION_H
+#ifndef DRIVER_H
+#define DRIVER_H
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
 
-#define SYSTEM_FW_REV     0x0127U //v1.27 release
+// *****************************************************************************
+// *****************************************************************************
+// Section: Included Files
+// *****************************************************************************
+// *****************************************************************************
 
-#ifdef	__cplusplus
-}
-#endif
+#include "driver/drv_common.h"
 
-#endif	/* _PROJECT_VERSION_H */
+
+#endif // DRIVER_H
+/*******************************************************************************
+ End of File
+*/
 

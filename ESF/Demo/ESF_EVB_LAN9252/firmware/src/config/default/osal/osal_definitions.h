@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2019 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -21,19 +21,8 @@
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
 
-#ifndef TOOLCHAIN_SPECIFICS_H
-#define TOOLCHAIN_SPECIFICS_H
+#ifndef __OSAL_DEFINITIONS_H
+#define __OSAL_DEFINITIONS_H
 
-
-#include <sys/types.h>
-#define NO_INIT        __attribute__((section(".no_init")))
-#define SECTION(a)     __attribute__((__section__(a)))
-
-#define CACHE_LINE_SIZE    (16u)
-#define CACHE_ALIGN        __ALIGNED(CACHE_LINE_SIZE)
-
-#define CACHE_ALIGNED_SIZE_GET(size)     (size + ((size % CACHE_LINE_SIZE)? (CACHE_LINE_SIZE - (size % CACHE_LINE_SIZE)) : 0))
-
-
-#endif // end of header
-
+#include "osal/osal_impl_basic.h"
+#endif//__OSAL_DEFINITIONS_H

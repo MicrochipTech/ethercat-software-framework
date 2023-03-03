@@ -1,22 +1,23 @@
 /*******************************************************************************
-  NVIC PLIB Implementation
+  Cache System Service Library Implementation Source File
 
-  Company:
+  Company
     Microchip Technology Inc.
 
-  File Name:
-    plib_nvic.c
+  File Name
+    sys_cache.c
 
-  Summary:
-    NVIC PLIB Source File
+  Summary
+    Cache System Service Library interface implementation.
 
-  Description:
-    None
+  Description
+    This file implements the interface to the Cache System Service Library.
 
 *******************************************************************************/
 
+// DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2010 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2019 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -37,43 +38,69 @@
 * ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
+// DOM-IGNORE-END
 
+// *****************************************************************************
+// *****************************************************************************
+// Section: Included Files
+// *****************************************************************************
+// *****************************************************************************
 #include "device.h"
-#include "plib_nvic.h"
+#include "device_cache.h"
+#include "system/cache/sys_cache.h"
 
-
 // *****************************************************************************
 // *****************************************************************************
-// Section: NVIC Implementation
+// Section: System Cache Interface Functions
 // *****************************************************************************
 // *****************************************************************************
-
-void NVIC_Initialize( void )
+void SYS_CACHE_EnableCaches (void)
 {
-    /* Priority 0 to 7 and no sub-priority. 0 is the highest priority */
-    NVIC_SetPriorityGrouping( 0x04 );
+}
 
-    /* Enable NVIC Controller */
-    __DMB();
-    __enable_irq();
+void SYS_CACHE_DisableCaches (void)
+{
+}
+void SYS_CACHE_EnableICache (void)
+{
+}
 
-    /* Enable the interrupt sources and configure the priorities as configured
-     * from within the "Interrupt Manager" of MHC. */
-    NVIC_SetPriority(SysTick_IRQn, 7);
-    NVIC_SetPriority(EIC_EXTINT_0_IRQn, 7);
-    NVIC_EnableIRQ(EIC_EXTINT_0_IRQn);
-    NVIC_SetPriority(EIC_EXTINT_1_IRQn, 7);
-    NVIC_EnableIRQ(EIC_EXTINT_1_IRQn);
-    NVIC_SetPriority(DMAC_0_IRQn, 7);
-    NVIC_EnableIRQ(DMAC_0_IRQn);
-    NVIC_SetPriority(DMAC_1_IRQn, 3);
-    NVIC_EnableIRQ(DMAC_1_IRQn);
-    NVIC_SetPriority(EIC_EXTINT_7_IRQn, 7);
-    NVIC_EnableIRQ(EIC_EXTINT_7_IRQn);
-    NVIC_SetPriority(QSPI_IRQn, 2);
-    NVIC_EnableIRQ(QSPI_IRQn);
+void SYS_CACHE_DisableICache (void)
+{
+}
 
+void SYS_CACHE_InvalidateICache (void)
+{
+}
 
+void SYS_CACHE_EnableDCache (void)
+{
+}
 
-    return;
+void SYS_CACHE_DisableDCache (void)
+{
+}
+
+void SYS_CACHE_InvalidateDCache (void)
+{
+}
+
+void SYS_CACHE_CleanDCache (void)
+{
+}
+
+void SYS_CACHE_CleanInvalidateDCache (void)
+{
+}
+
+void SYS_CACHE_InvalidateDCache_by_Addr (uint32_t *addr, int32_t size)
+{
+}
+
+void SYS_CACHE_CleanDCache_by_Addr (uint32_t *addr, int32_t size)
+{
+}
+
+void SYS_CACHE_CleanInvalidateDCache_by_Addr (uint32_t *addr, int32_t size)
+{
 }

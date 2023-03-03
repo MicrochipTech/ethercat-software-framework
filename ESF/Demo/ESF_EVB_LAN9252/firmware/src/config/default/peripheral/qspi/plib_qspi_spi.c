@@ -44,6 +44,8 @@
 #include "plib_qspi_spi.h"
 #include "string.h" // memmove
 #include "ESF_Config.h"
+#include "../../driver/spi/src/drv_spi_local.h"
+#include "driver/spi/drv_spi.h"
 
 qspi_spi_obj qspiObj;
 
@@ -202,7 +204,7 @@ bool QSPI_TransferSetup (QSPI_TRANSFER_SETUP * setup, uint32_t spiSourceClock )
     }
 
     /* Set up clock polarity, phase, and baud rate */
-    QSPI_REGS->QSPI_BAUD= (uint32_t)setup->clockPolarity | (uint32_t)setup->clockPhase | QSPI_BAUD_BAUD(scbr);
+    QSPI_REGS->QSPI_BAUD= (uint32_t)setup->clockPolarity | (uint32_t)setup->clockPhase | QSPI_BAUD_BAUD(GET_BAUD(ESF_PDI_FREQUENCY));
 
     /* Set up number of bits per transfer */
     QSPI_REGS->QSPI_CTRLB = (QSPI_REGS->QSPI_CTRLB & ~QSPI_CTRLB_DATALEN_Msk) | (uint32_t)setup->dataBits;

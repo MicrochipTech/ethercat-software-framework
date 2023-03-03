@@ -46,7 +46,16 @@
 #define MCHP_ESF_IS_PDI_FUNCTIONAL(pdata)				ESC_BYTE_TEST_Register_Read(pdata)
 
 #if (ESF_PDI == SPI)
-#ifdef _IS_SPI_INDIRECT_MODE_ACCESS
+#if defined(_IS_SPI_INDIRECT_MODE_ACCESS) && defined(ESF_SPI_DMA_EN)
+/* SPI Indirect mode Access */
+#define MCHP_ESF_PDI_WRITE(addr, pdata, len)            LAN9252SPI_DMA_Write(addr, pdata, len)
+#define MCHP_ESF_PDI_READ(addr, pdata, len)             LAN9252SPI_DMA_Read(addr, pdata, len)
+#define MCHP_ESF_PDI_FASTREAD(addr, pdata, len)         LAN9252SPI_DMA_FastRead(addr, pdata, len)
+#define MCHP_ESF_PDI_READ_PDRAM(pdata, addr, len)		LAN9252SPI_DMA_ReadPDRAM(pdata, addr, len)
+#define MCHP_ESF_PDI_FASTREAD_PDRAM(pdata, addr, len)	LAN9252SPI_DMA_FastReadPDRAM(pdata, addr, len)
+#define MCHP_ESF_PDI_WRITE_PDRAM(pdata, addr, len)		LAN9252SPI_DMA_WritePDRAM(pdata, addr, len)
+
+#elif defined(_IS_SPI_INDIRECT_MODE_ACCESS) && !defined(ESF_SPI_DMA_EN)
 /* SPI Indirect mode Access */
 #define MCHP_ESF_PDI_WRITE(addr, pdata, len)            LAN9252SPI_Write(addr, pdata, len)
 #define MCHP_ESF_PDI_READ(addr, pdata, len)             LAN9252SPI_Read(addr, pdata, len)
@@ -55,7 +64,16 @@
 #define MCHP_ESF_PDI_FASTREAD_PDRAM(pdata, addr, len)	LAN9252SPI_FastReadPDRAM(pdata, addr, len)
 #define MCHP_ESF_PDI_WRITE_PDRAM(pdata, addr, len)		LAN9252SPI_WritePDRAM(pdata, addr, len)
 
-#elif _IS_SPI_DIRECT_MODE_ACCESS
+#elif defined(_IS_SPI_DIRECT_MODE_ACCESS) && defined(ESF_SPI_DMA_EN)
+/* SPI Direct mode Access */
+#define MCHP_ESF_PDI_WRITE(addr, pdata, len)            LAN9253SPI_DMA_Write (addr, pdata, len)
+#define MCHP_ESF_PDI_READ(addr, pdata, len)             LAN9253SPI_DMA_Read (addr, pdata, len)
+#define MCHP_ESF_PDI_FASTREAD(addr, pdata, len)			LAN9253SPI_DMA_FastRead (addr, pdata, len)
+#define MCHP_ESF_PDI_READ_PDRAM(pdata, addr, len)		
+#define MCHP_ESF_PDI_FASTREAD_PDRAM(pdata, addr, len)	
+#define MCHP_ESF_PDI_WRITE_PDRAM(pdata, addr, len)	
+
+#elif defined(_IS_SPI_DIRECT_MODE_ACCESS) && !defined(ESF_SPI_DMA_EN)
 /* SPI Direct mode Access */
 #define MCHP_ESF_PDI_WRITE(addr, pdata, len)            LAN9253SPI_Write (addr, pdata, len)
 #define MCHP_ESF_PDI_READ(addr, pdata, len)             LAN9253SPI_Read (addr, pdata, len)
@@ -64,7 +82,16 @@
 #define MCHP_ESF_PDI_FASTREAD_PDRAM(pdata, addr, len)	
 #define MCHP_ESF_PDI_WRITE_PDRAM(pdata, addr, len)		
 
-#else
+#elif defined(_IS_SPI_BECKHOFF_MODE_ACCESS) && defined(ESF_SPI_DMA_EN)
+/* SPI Beckhoff mode Access */
+#define MCHP_ESF_PDI_WRITE(addr, pdata, len)            BeckhoffSPI_DMA_Write (addr, pdata, len)
+#define MCHP_ESF_PDI_READ(addr, pdata, len)				BeckhoffSPI_DMA_Read (addr, pdata, len)
+#define MCHP_ESF_PDI_FASTREAD(addr, pdata)			
+#define MCHP_ESF_PDI_READ_PDRAM(pdata, addr, len)		
+#define MCHP_ESF_PDI_FASTREAD_PDRAM(pdata, addr, len)	
+#define MCHP_ESF_PDI_WRITE_PDRAM(pdata, addr, len)
+
+#elif defined(_IS_SPI_BECKHOFF_MODE_ACCESS) && !defined(ESF_SPI_DMA_EN)
 /* SPI Beckhoff mode Access */
 #define MCHP_ESF_PDI_WRITE(addr, pdata, len)            BeckhoffSPI_Write (addr, pdata, len)
 #define MCHP_ESF_PDI_READ(addr, pdata, len)				BeckhoffSPI_Read (addr, pdata, len)

@@ -1779,4 +1779,17 @@ void HW_EscReadMailbox(MEM_ADDR *pmData, UINT16 u16Address, UINT16 u16Len) {
 void HW_SetLed(UINT8 u8RunLed, UINT8 u8ErrLed)
 {
 	/* Here RunLed is not used. Because on chip supported RUN Led is available*/
+    /* J2-340-Fix: Added the code handling to Error led.
+     * LAN9252 does not handle error led, so controlling through SAMD51
+     */
+#ifdef LAN9252_DEVICE
+    if (u8ErrLed)
+    {
+        MCHP_ESF_GPIO_SET(ERROR_LED);
+    }
+    else
+    {
+        MCHP_ESF_GPIO_CLEAR(ERROR_LED);
+    }
+#endif
 }

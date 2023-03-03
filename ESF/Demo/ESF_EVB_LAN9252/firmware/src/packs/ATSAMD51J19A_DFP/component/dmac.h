@@ -599,10 +599,10 @@
 #define DMAC_PRICTRL0_QOS2_Pos                _U_(21)                                              /**< (DMAC_PRICTRL0) Level 2 Quality of Service Position */
 #define DMAC_PRICTRL0_QOS2_Msk                (_U_(0x3) << DMAC_PRICTRL0_QOS2_Pos)                 /**< (DMAC_PRICTRL0) Level 2 Quality of Service Mask */
 #define DMAC_PRICTRL0_QOS2(value)             (DMAC_PRICTRL0_QOS2_Msk & ((value) << DMAC_PRICTRL0_QOS2_Pos))
-#define   DMAC_PRICTRL0_QOS2_REGULAR_Val      _U_(0x0)                                             /**< (DMAC_PRICTRL0) Regular delivery  */
-#define   DMAC_PRICTRL0_QOS2_SHORTAGE_Val     _U_(0x1)                                             /**< (DMAC_PRICTRL0) Bandwidth shortage  */
-#define   DMAC_PRICTRL0_QOS2_SENSITIVE_Val    _U_(0x2)                                             /**< (DMAC_PRICTRL0) Latency sensitive  */
-#define   DMAC_PRICTRL0_QOS2_CRITICAL_Val     _U_(0x3)                                             /**< (DMAC_PRICTRL0) Latency critical  */
+#define DMAC_PRICTRL0_QOS2_REGULAR_Val      _U_(0x0)                                             /**< (DMAC_PRICTRL0) Regular delivery  */
+#define DMAC_PRICTRL0_QOS2_SHORTAGE_Val     _U_(0x1)                                             /**< (DMAC_PRICTRL0) Bandwidth shortage  */
+#define DMAC_PRICTRL0_QOS2_SENSITIVE_Val    _U_(0x2)                                             /**< (DMAC_PRICTRL0) Latency sensitive  */
+#define DMAC_PRICTRL0_QOS2_CRITICAL_Val     _U_(0x3)                                             /**< (DMAC_PRICTRL0) Latency critical  */
 #define DMAC_PRICTRL0_QOS2_REGULAR            (DMAC_PRICTRL0_QOS2_REGULAR_Val << DMAC_PRICTRL0_QOS2_Pos) /**< (DMAC_PRICTRL0) Regular delivery Position  */
 #define DMAC_PRICTRL0_QOS2_SHORTAGE           (DMAC_PRICTRL0_QOS2_SHORTAGE_Val << DMAC_PRICTRL0_QOS2_Pos) /**< (DMAC_PRICTRL0) Bandwidth shortage Position  */
 #define DMAC_PRICTRL0_QOS2_SENSITIVE          (DMAC_PRICTRL0_QOS2_SENSITIVE_Val << DMAC_PRICTRL0_QOS2_Pos) /**< (DMAC_PRICTRL0) Latency sensitive Position  */
@@ -616,10 +616,10 @@
 #define DMAC_PRICTRL0_QOS3_Pos                _U_(29)                                              /**< (DMAC_PRICTRL0) Level 3 Quality of Service Position */
 #define DMAC_PRICTRL0_QOS3_Msk                (_U_(0x3) << DMAC_PRICTRL0_QOS3_Pos)                 /**< (DMAC_PRICTRL0) Level 3 Quality of Service Mask */
 #define DMAC_PRICTRL0_QOS3(value)             (DMAC_PRICTRL0_QOS3_Msk & ((value) << DMAC_PRICTRL0_QOS3_Pos))
-#define   DMAC_PRICTRL0_QOS3_REGULAR_Val      _U_(0x0)                                             /**< (DMAC_PRICTRL0) Regular delivery  */
-#define   DMAC_PRICTRL0_QOS3_SHORTAGE_Val     _U_(0x1)                                             /**< (DMAC_PRICTRL0) Bandwidth shortage  */
-#define   DMAC_PRICTRL0_QOS3_SENSITIVE_Val    _U_(0x2)                                             /**< (DMAC_PRICTRL0) Latency sensitive  */
-#define   DMAC_PRICTRL0_QOS3_CRITICAL_Val     _U_(0x3)                                             /**< (DMAC_PRICTRL0) Latency critical  */
+#define DMAC_PRICTRL0_QOS3_REGULAR_Val      _U_(0x0)                                             /**< (DMAC_PRICTRL0) Regular delivery  */
+#define DMAC_PRICTRL0_QOS3_SHORTAGE_Val     _U_(0x1)                                             /**< (DMAC_PRICTRL0) Bandwidth shortage  */
+#define DMAC_PRICTRL0_QOS3_SENSITIVE_Val    _U_(0x2)                                             /**< (DMAC_PRICTRL0) Latency sensitive  */
+#define DMAC_PRICTRL0_QOS3_CRITICAL_Val     _U_(0x3)                                             /**< (DMAC_PRICTRL0) Latency critical  */
 #define DMAC_PRICTRL0_QOS3_REGULAR            (DMAC_PRICTRL0_QOS3_REGULAR_Val << DMAC_PRICTRL0_QOS3_Pos) /**< (DMAC_PRICTRL0) Regular delivery Position  */
 #define DMAC_PRICTRL0_QOS3_SHORTAGE           (DMAC_PRICTRL0_QOS3_SHORTAGE_Val << DMAC_PRICTRL0_QOS3_Pos) /**< (DMAC_PRICTRL0) Bandwidth shortage Position  */
 #define DMAC_PRICTRL0_QOS3_SENSITIVE          (DMAC_PRICTRL0_QOS3_SENSITIVE_Val << DMAC_PRICTRL0_QOS3_Pos) /**< (DMAC_PRICTRL0) Latency sensitive Position  */
