@@ -2,16 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/esf_new_git/esf_new/ethercat-software-framework-public-new/ESF/Source/ESC/ESC_Utils.c</file>
-            <file>file:/D:/esf_new_git/esf_new/ethercat-software-framework-public-new/ESF/SOC_Portable/SAMD51/ESF_Config.h</file>
-            <file>file:/D:/esf_new_git/esf_new/ethercat-software-framework-public-new/ESF/Demo/ESF_EVB_LAN9253/firmware/src/config/default/peripheral/qspi/plib_qspi_spi.c</file>
-            <file>file:/D:/esf_new_git/esf_new/ethercat-software-framework-public-new/ESF/Demo/ESF_EVB_LAN9253/firmware/src/main.c</file>
-            <file>file:/D:/esf_new_git/esf_new/ethercat-software-framework-public-new/ESF/SOC_Portable/SAMD51/Drivers.c</file>
-            <file>file:/D:/esf_new_git/esf_new/ethercat-software-framework-public-new/ESF/Source/ESC/LAN925x.c</file>
-            <file>file:/D:/esf_new_git/esf_new/ethercat-software-framework-public-new/ESF/Demo/ESF_EVB_LAN9253/firmware/src/app.c</file>
-            <file>file:/D:/esf_new_git/esf_new/ethercat-software-framework-public-new/ESF/Demo/ESF_EVB_LAN9253/firmware/src/config/default/peripheral/clock/plib_clock.c</file>
-            <file>file:/D:/esf_new_git/esf_new/ethercat-software-framework-public-new/ESF/Source/SSC/esc.h</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

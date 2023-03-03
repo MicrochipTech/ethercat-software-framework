@@ -16,9 +16,9 @@
                 <sourceRootElem>../../../../Source/SSC</sourceRootElem>
                 <sourceRootElem>../../../../Source/ESC</sourceRootElem>
                 <sourceRootElem>../../../../SOC_Portable/SAMD51</sourceRootElem>
-                <sourceRootElem>../src</sourceRootElem>
                 <sourceRootElem>../../../../SOC_Portable/SAMD51_LAN952</sourceRootElem>
                 <sourceRootElem>../../../../SOC_Portable/SAMD51_LAN9252</sourceRootElem>
+                <sourceRootElem>../../..</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>
