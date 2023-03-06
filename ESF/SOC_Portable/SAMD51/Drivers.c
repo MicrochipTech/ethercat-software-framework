@@ -640,25 +640,29 @@ void  HandleDmaData(UINT8 *pu8Data, UINT8 *gau8DmaBuff, UINT8 u8IntraDwordDummy,
 *******************************************************************************/
 void   HandleDataPhase(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8TerminationByte)
 {
+#ifdef IS_SUPPORT_DUMMY_CYCLE
     UINT8 u8DummyClkCnt = 0, u8DummyValue = 0;
+#endif
     UINT8 u8txData = 0, u8txLen = 1 ;
     UINT8 u8rxData = 0, u8rxLen = 1 ;
     
     /*Beckhoff mode does not require dummy for data handling*/
 #if !defined(_IS_SPI_BECKHOFF_MODE_ACCESS)
-    /* Get the Intra DWORD dummy clock count */
-    if(mode == SPI_READ)
-    {
-        u8DummyValue = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
-    }
-    else if(mode == SPI_WRITE)
-    {
-        u8DummyValue = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
-    }
-    else
-    {
-        u8DummyValue = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
-    }
+    #ifdef IS_SUPPORT_DUMMY_CYCLE
+        /* Get the Intra DWORD dummy clock count */
+        if(mode == SPI_READ)
+        {
+            u8DummyValue = gau8DummyCntArr[SPI_READ_INTRA_DWORD_OFFSET];
+        }
+        else if(mode == SPI_WRITE)
+        {
+            u8DummyValue = gau8DummyCntArr[SPI_WRITE_INTRA_DWORD_OFFSET];
+        }
+        else
+        {
+            u8DummyValue = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
+        }
+    #endif
 #endif
     if(mode == SPI_WRITE)
        {
@@ -734,9 +738,10 @@ void   HandleDataPhase(UINT8 *pu8Data, UINT32 u32Length, UINT8 mode, UINT8 u8Ter
 *******************************************************************************/
 void   HandleDataAlignment(UINT8 u8Length, UINT8 mode, UINT8 u8TerminationByte)
 {
-    UINT8 u8DummyValue = 0, u8DummyClkCnt = 0;
     UINT8 u8rxData = 0, u8rxLen = 1;
     UINT8 u8txData = 0, u8txLen = 1;
+#ifdef IS_SUPPORT_DUMMY_CYCLE
+    UINT8 u8DummyValue = 0, u8DummyClkCnt = 0;
     /* Get the Intra DWORD dummy clock count */
     if(mode == SPI_READ)
        {
@@ -750,6 +755,7 @@ void   HandleDataAlignment(UINT8 u8Length, UINT8 mode, UINT8 u8TerminationByte)
        {
            u8DummyValue = gau8DummyCntArr[SPI_FASTREAD_INTRA_DWORD_OFFSET];
        }
+#endif
     while (u8Length--)
 	{
         if(mode == SPI_WRITE)
